@@ -6,8 +6,10 @@
       "components/*": ["components/*"],
       "jest/*": ["jest/*"],
       "styles/*": ["styles/*"],
-      "stories/*": ["stories/*"]
+      "stories/*": ["stories/*"],
+      "types/*": ["types/*"]
     },
+    "typeRoots": ["src/vendor/@types", "node_modules/@types"],
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
