@@ -1,10 +1,10 @@
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
-import { User } from 'types/User';
+import { BasicUser } from 'types/User';
 
 type GetServerSidePropsFn = (
   context: GetServerSidePropsContext,
-  user: User
+  user: BasicUser
 ) => Promise<{ props: object }>;
 
 export function withAuthServerSideProps(
@@ -13,7 +13,7 @@ export function withAuthServerSideProps(
   return async (context: GetServerSidePropsContext) => {
     const session = await getSession(context);
     const { resolvedUrl } = context;
-    if (!session || !session.user) {
+    if (!session?.user) {
       return {
         redirect: {
           permanent: false,
@@ -35,14 +35,7 @@ export function withAuthServerSideProps(
       }
     }
 
-    const {
-      user: { user: profile, ...rest },
-    } = session;
-
-    const user = {
-      ...profile,
-      ...rest,
-    } as User;
+    const { user } = session;
 
     if (getServerSidePropsFn) {
       const componentSSFnResponse = await getServerSidePropsFn(context, user);

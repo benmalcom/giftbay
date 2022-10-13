@@ -1,5 +1,3 @@
-import React from 'react';
-
 const SITE_BANNER =
   'https://cdn.jsdelivr.net/gh/wakaplug/wakaplug-assets@latest/meta-preview.png';
 
@@ -73,8 +71,9 @@ export const defaultPageHeader = {
 
 export const getDefaultMetaTags = () => defaultPageHeader.metas;
 export const getDefaultPageHeader = () => defaultPageHeader;
+/*
 
-export const updateAndGetPageHeader = pageHeader => {
+export const updateAndGetPageHeader = (pageHeader: { title: string; metas: any[]; }) => {
   const result = { ...defaultPageHeader };
   if (pageHeader?.title) result.title = pageHeader.title;
   if (pageHeader?.metas?.length) {
@@ -94,3 +93,4 @@ export const updateAndGetPageHeader = pageHeader => {
   }
   return result;
 };
+*/
