@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
-import { BasicUser } from 'types/User';
+import { BasicUser } from 'types/user';
 
 type GetServerSidePropsFn = (
   context: GetServerSidePropsContext,

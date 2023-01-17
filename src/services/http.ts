@@ -4,10 +4,9 @@ import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
 // Default config options
 const defaultOptions: AxiosRequestConfig = {
-  baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VERSION}`,
+  baseURL: `http://${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VERSION}`,
   headers: {
     'Content-Type': 'application/json',
-    'x-api-key': `${process.env.NEXT_PUBLIC_API_KEY}`,
     'Cache-Control': 'no-cache',
     Pragma: 'no-cache',
     Expires: '0',
@@ -19,11 +18,12 @@ const defaultOptions: AxiosRequestConfig = {
 const instance = axios.create(defaultOptions);
 
 instance.interceptors.request.use(
-  async (config: ComposeRequestType) => {
+  async (config: AxiosRequestConfig) => {
     const session = (await getSession()) as Session;
     if (session?.accessToken) {
-      // eslint-disable-next-line
       if (config.headers) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         config.headers['x-access-token'] = session?.accessToken;
       } else {
         config.headers = { 'x-access-token': session?.accessToken };
@@ -60,9 +60,13 @@ export default instance;
 
 export const createRequest = (config: AxiosRequestConfig) => instance(config);
 
-type ComposeRequestType = AxiosRequestConfig & {
+interface ComposeRequestType extends AxiosRequestConfig {
   payload?: object;
-};
+  headers?: {
+    'x-access-token': string;
+  };
+}
+
 export const composeRequestConfig = (config: ComposeRequestType) => {
   const { method = 'get', payload, params, headers, ...rest } = config;
   const requestConfig: ComposeRequestType = { method, ...rest };

@@ -1,13 +1,13 @@
-import { AxiosResponse } from 'axios';
 import { pick } from 'lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { composeRequestConfig, createRequest } from 'services/http';
-import { ApiResponse } from 'types/api';
+import { ApiResponseError } from 'types/api';
 
 const providers = [
   CredentialsProvider({
+    options: undefined,
     name: 'Credentials',
     id: 'credentials',
     // The credentials is used to generate a suitable form on the sign in page.
@@ -20,10 +20,10 @@ const providers = [
     async authorize(credentials) {
       const isRegister = !!credentials && 'isRegister' in credentials;
       const inputFields = ['email', 'password', 'verifyRedirectUrl'];
-      if (isRegister) inputFields.push('username', 'displayName');
+      if (isRegister) inputFields.push('name');
       const payload = pick(credentials, inputFields);
       const config = composeRequestConfig({
-        url: isRegister ? '/signUp' : '/signIn',
+        url: isRegister ? '/auth/register' : '/auth/login',
         payload,
         method: 'post',
       });
@@ -31,22 +31,22 @@ const providers = [
         const response = await createRequest(config);
         const {
           // flatten data object
-          data: { user: profileData, ...userData },
-          meta: { token },
-        } = response as AxiosResponse & ApiResponse;
+          user: { email, id, isEmailVerified },
+          tokens: {
+            access: { token },
+          }, // eslint-disable-next-line
+        } = response as Record<string, any>;
 
-        const user = pick({ ...userData, ...profileData }, [
-          'email',
-          'accountVerified',
-          'id',
-        ]);
-
-        return Object.assign({}, { data: user, token });
+        return Object.assign(
+          {},
+          { data: { email, id, isEmailVerified }, token }
+        );
         // eslint-disable-next-line
         // @ts-ignore
       } catch (e) {
+        console.log('e ', e);
         throw new Error(
-          (e as ApiResponse)?.meta?.error?.message ||
+          (e as ApiResponseError)?.message ||
             `Unable to ${isRegister ? 'register' : 'login'}`
         );
       }

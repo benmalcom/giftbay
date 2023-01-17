@@ -1,11 +1,21 @@
-import 'styles/globals.css';
 import { ChakraProvider } from '@chakra-ui/react';
+import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
+import React from 'react';
 import { Toaster } from 'react-hot-toast';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
 
-function MyApp({ Component, pageProps }: AppProps) {
+type NextPageWithLayout = NextPage & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Layout?: React.FC<any>;
+};
+
+type AppPropsWithLayout = AppProps<Record<string, never>> & {
+  Component: NextPageWithLayout;
+};
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const Layout = Component.Layout ?? React.Fragment;
   return (
     <ChakraProvider theme={theme}>
       <Toaster
@@ -14,7 +24,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         gutter={8}
         toastOptions={toastOptions}
       />
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </ChakraProvider>
   );
 }

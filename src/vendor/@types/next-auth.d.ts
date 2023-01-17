@@ -1,5 +1,4 @@
-import { JWT } from 'next-auth/jwt';
-import { BasicUser } from 'types/User';
+import { BasicUser } from 'types/user';
 
 type Token = {
   accessToken: string;
