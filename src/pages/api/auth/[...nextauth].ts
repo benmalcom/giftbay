@@ -33,13 +33,14 @@ const providers = [
           // flatten data object
           user: { email, id, isEmailVerified },
           tokens: {
-            access: { token },
+            access: { token: accessToken },
+            refresh: { token: refreshToken },
           }, // eslint-disable-next-line
         } = response as Record<string, any>;
 
         return Object.assign(
           {},
-          { data: { email, id, isEmailVerified }, token }
+          { data: { email, id, isEmailVerified }, accessToken, refreshToken }
         );
         // eslint-disable-next-line
         // @ts-ignore
@@ -63,7 +64,8 @@ const callbacks = {
     This is a good place to persist additional data like an access_token in the JWT.
     Subsequent invocations will only contain the token parameter. */
     if (user) {
-      token.accessToken = user.token;
+      token.accessToken = user.accessToken;
+      token.refreshToken = user.refreshToken;
       token.user = user.data;
     }
     return token;
@@ -72,6 +74,7 @@ const callbacks = {
   // @ts-ignore
   async session({ session, token }) {
     session.accessToken = token.accessToken;
+    session.refreshToken = token.refreshToken;
     session.user = token.user;
     return session;
   },

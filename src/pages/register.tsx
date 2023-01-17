@@ -12,7 +12,6 @@ import {
   useBreakpointValue,
   useColorModeValue,
   Link as ChakraLink,
-  Spinner,
   FormErrorMessage,
   Alert,
   AlertIcon,
@@ -192,8 +191,8 @@ export const Register = () => {
                 </FormControl>
               </Stack>
               <Stack spacing="6">
-                <Button type="submit" colorScheme="teal">
-                  {inFlight ? <Spinner size="sm" color="white" /> : 'Sign up'}
+                <Button type="submit" colorScheme="teal" isLoading={inFlight}>
+                  Sign up
                 </Button>
               </Stack>
             </Stack>
