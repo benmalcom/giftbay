@@ -9,12 +9,19 @@ export type SectionItem = {
   order: number;
 };
 
+export type JobFunctionType = {
+  id: string;
+  text: string;
+  jobRoleId: string;
+};
+
 export type JobRoleType = {
   id: string;
   name: string;
   company: string;
   location: string;
   duration: string;
+  jobFunctions: JobFunctionType[];
 };
 
 export type ContactsAndLinksType = {
@@ -41,10 +48,5 @@ export type Candidate = {
 export type SectionType = {
   id: string;
   name?: string;
-  items: Array<SectionItem & { content: JobRoleType | JobFunctionType[] }>;
-};
-
-export type JobFunctionType = {
-  id: string;
-  text: string;
+  items: Array<SectionItem & { content: JobRoleType }>;
 };

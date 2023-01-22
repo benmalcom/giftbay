@@ -12,10 +12,10 @@ import {
   PopoverCloseButton,
   Portal,
 } from '@chakra-ui/react';
+import { omit } from 'lodash';
 import React, { useRef } from 'react';
 import { AiFillDelete, AiOutlinePlus, AiOutlineEdit } from 'react-icons/ai';
 import { v4 as uuid } from 'uuid';
-import JobFunctions from 'components/resume/JobFunctions';
 import JobRole from 'components/resume/JobRole';
 import loremIpsum from 'data/loremIpsum.json';
 import {
@@ -26,7 +26,6 @@ import {
   SectionType,
 } from 'types/resume';
 import { ModalManager as AddSectionModalManager } from './AddSectionModal';
-import { ModalManager as JobFunctionsModalManager } from './JobFunctionsModal';
 import { ModalManager as JobRoleModalModalManager } from './JobRoleModal';
 
 type SectionProps = {
@@ -50,11 +49,11 @@ export const Section: React.FC<SectionProps> = ({
           (item.content as JobRoleType).id === values.id
       );
       if (index === -1) throw new Error('Job role not found');
-      const oldContent = sectionPayload.items[index].content;
+      const jobRole = sectionPayload.items[index].content;
       sectionPayload.items[index].content = Object.assign(
         {},
-        oldContent,
-        values
+        jobRole,
+        omit(values, 'jobFunctions')
       );
     } else {
       const jobRole = {
@@ -63,6 +62,7 @@ export const Section: React.FC<SectionProps> = ({
         content: {
           ...values,
           id: uuid(),
+          jobFunctions: [],
         },
       };
 
@@ -71,56 +71,67 @@ export const Section: React.FC<SectionProps> = ({
     updateSection(sectionPayload);
   };
 
-  const onSaveJobFunctions = (values: Record<string, number>) => {
+  const onAddJobFunctions = (
+    jobRoleId: string,
+    values: Record<string, number>
+  ) => {
     const jobFunctions = [];
     for (let i = 0; i < values.count; i++) {
-      jobFunctions.push({ id: uuid(), text: loremIpsum.text });
+      jobFunctions.push({ id: uuid(), text: loremIpsum.text, jobRoleId });
     }
 
     const sectionPayload = structuredClone(section);
-    const index = sectionPayload.items.findIndex(
-      item => item.type === SectionItemType.JobFunctions
+    const jobRoleIndex = sectionPayload.items.findIndex(
+      item =>
+        item.type === SectionItemType.JobRole && item.content.id === jobRoleId
     );
-    if (index > -1) {
-      const content = sectionPayload.items[index].content as JobFunctionType[];
-      content.push(...jobFunctions);
-      sectionPayload.items[index].content = content;
-    } else {
-      const sectionItem = {
-        type: SectionItemType.JobFunctions,
-        order: sectionPayload.items.length,
-        content: jobFunctions,
-      };
+    if (jobRoleIndex === -1) throw new Error('Cannot find job role');
 
-      sectionPayload.items.push(sectionItem);
-    }
-
+    const jobRole = sectionPayload.items[jobRoleIndex].content as JobRoleType;
+    jobRole.jobFunctions.push(...jobFunctions);
+    sectionPayload.items[jobRoleIndex].content = jobRole;
     updateSection(sectionPayload);
   };
 
   const onSaveJobFunction = (values: JobFunctionType) => {
     const sectionPayload = structuredClone(section);
-    const sectionItemIndex = sectionPayload.items.findIndex(
-      item => item.type === SectionItemType.JobFunctions
+    const jobRoleIndex = sectionPayload.items.findIndex(
+      item =>
+        item.type === SectionItemType.JobRole &&
+        item.content.id === values.jobRoleId
     );
-    if (sectionItemIndex === -1) throw new Error('Cannot find job functions');
-    const jobFunctions = sectionPayload.items[sectionItemIndex]
-      .content as JobFunctionType[];
-
+    if (jobRoleIndex === -1) throw new Error('Cannot find job role');
+    const jobRole = sectionPayload.items[jobRoleIndex].content;
+    const jobFunctions = jobRole.jobFunctions;
     const jobFunctionIndex = jobFunctions.findIndex(
       item => item.id === values.id
     );
     if (jobFunctionIndex === -1) throw new Error('Cannot find job function');
-
     const jobFunction = jobFunctions[jobFunctionIndex];
     jobFunctions[jobFunctionIndex] = Object.assign({}, jobFunction, values);
-
-    sectionPayload.items[sectionItemIndex].content = jobFunctions;
+    jobRole.jobFunctions = jobFunctions;
+    sectionPayload.items[jobRoleIndex].content = jobRole;
     updateSection(sectionPayload);
   };
 
   const onSaveSectionName = (values: Partial<SectionType>) => {
     updateSection({ ...section, ...values });
+  };
+
+  const onRemoveJobFunction = (jobFunctionId: string, jobRoleId: string) => {
+    const sectionPayload = structuredClone(section);
+    const jobRoleIndex = sectionPayload.items.findIndex(
+      item =>
+        item.type === SectionItemType.JobRole && item.content.id === jobRoleId
+    );
+    if (jobRoleIndex === -1) throw new Error('Cannot find job role');
+    const jobRole = sectionPayload.items[jobRoleIndex].content;
+    const jobFunctions = jobRole.jobFunctions;
+    jobRole.jobFunctions = jobFunctions.filter(
+      item => item.id !== jobFunctionId
+    );
+    sectionPayload.items[jobRoleIndex].content = jobRole;
+    updateSection(sectionPayload);
   };
 
   return (
@@ -137,7 +148,7 @@ export const Section: React.FC<SectionProps> = ({
             // @ts-ignore
             initialFocusRef={initRef}
           >
-            {({ isOpen, onClose }) => (
+            {({ onClose }) => (
               <>
                 <PopoverTrigger>
                   <Button
@@ -169,22 +180,6 @@ export const Section: React.FC<SectionProps> = ({
                           </Button>
                         )}
                         onSave={onSaveJobRole}
-                      />
-                      <JobFunctionsModalManager
-                        triggerFunc={(props: ModalTriggerFunctionProps) => (
-                          <Button
-                            size="xs"
-                            {...props}
-                            onClick={() => {
-                              props.trigger();
-                              onClose();
-                            }}
-                            mr="10px"
-                          >
-                            Job Responsibilities
-                          </Button>
-                        )}
-                        onSave={onSaveJobFunctions}
                       />
                     </PopoverBody>
                   </PopoverContent>
@@ -228,19 +223,18 @@ export const Section: React.FC<SectionProps> = ({
               key={(sectionItem.content as JobRoleType).id}
               onSave={onSaveJobRole}
               jobRole={sectionItem.content as JobRoleType}
+              onSaveJobFunction={onSaveJobFunction}
+              onAddJobFunctions={onAddJobFunctions}
+              onRemoveJobFunction={onRemoveJobFunction}
             />
           );
         }
-
+        /*
         if (sectionItem.type === SectionItemType.JobFunctions) {
           return (
-            <JobFunctions
-              key={sectionItem.order}
-              onSaveJobFunction={onSaveJobFunction}
-              jobFunctions={sectionItem.content as JobFunctionType[]}
-            />
+
           );
-        }
+        }*/
       })}
     </Stack>
   );

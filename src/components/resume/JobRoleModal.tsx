@@ -44,7 +44,7 @@ const schema = yup
       .min(2, 'Name must be at least 2 characters'),
     duration: yup
       .string()
-      .required('Company location is required')
+      .required('Employment duration is required')
       .min(14, 'Name must be at least 14 characters'),
   })
   .required();
