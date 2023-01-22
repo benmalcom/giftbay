@@ -4,7 +4,7 @@ import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
 // Default config options
 const defaultOptions: AxiosRequestConfig = {
-  baseURL: `http://${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VERSION}`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VERSION}`,
   headers: {
     'Content-Type': 'application/json',
     'Cache-Control': 'no-cache',

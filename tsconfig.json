@@ -7,7 +7,9 @@
       "jest/*": ["jest/*"],
       "styles/*": ["styles/*"],
       "stories/*": ["stories/*"],
-      "types/*": ["types/*"]
+      "types/*": ["types/*"],
+      "data/*": ["data/*"],
+      "hooks/*": ["hooks/*"]
     },
     "typeRoots": ["src/vendor/@types", "node_modules/@types"],
     "target": "es5",

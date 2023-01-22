@@ -1,37 +1,52 @@
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  FormLabel,
-  Heading,
-  HStack,
-  Input,
-  Stack,
-  Text,
-  useBreakpointValue,
-  useColorModeValue,
-  Link as ChakraLink,
-  FormErrorMessage,
-  Alert,
-  AlertIcon,
-} from '@chakra-ui/react';
+import { Container, VStack } from '@chakra-ui/react';
+import React from 'react';
 import { EditorLayout } from 'components/layouts';
+import { Resume, Controls } from 'components/resume';
+import { ResumeContextProvider } from 'components/ResumeContext';
+import resumeSample from 'data/resume.json';
+import useResumeContext from 'hooks/useResumeContext';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
 
 export const Editor = () => {
+  const { resume, addSection, updateSection, setCandidate, removeSection } =
+    useResumeContext();
+
   return (
     <Container
-      maxW="lg"
-      py={{ base: '12', md: '24' }}
+      maxW="7xl"
       px={{ base: '0', sm: '8' }}
+      h="fit-content"
+      justifyContent="center"
     >
-      Editor
+      <Resume
+        resume={resume}
+        addSection={addSection}
+        updateSection={updateSection}
+        setCandidate={setCandidate}
+        removeSection={removeSection}
+      />
     </Container>
   );
 };
 
-Editor.Layout = EditorLayout;
+type LayoutProps = {
+  children: React.ReactNode;
+};
+
+const EnhancedEditorLayout: React.FC<LayoutProps> = ({ children }) => {
+  return (
+    <EditorLayout>
+      <ResumeContextProvider initialResume={resumeSample}>
+        <VStack spacing={4}>
+          <Controls />
+          {children}
+        </VStack>
+      </ResumeContextProvider>
+    </EditorLayout>
+  );
+};
+
+Editor.Layout = EnhancedEditorLayout;
 export default Editor;
 
 export const getServerSideProps = withAuthServerSideProps(() => {

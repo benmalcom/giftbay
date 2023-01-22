@@ -37,7 +37,6 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
           ref={mergeRef}
           name="password"
           type={isOpen ? 'text' : 'password'}
-          autoComplete="current-password"
           {...props}
         />
       </InputGroup>

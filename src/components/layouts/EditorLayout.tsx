@@ -1,27 +1,15 @@
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  FormLabel,
-  Heading,
-  HStack,
-  Input,
-  Stack,
-  Text,
-  useBreakpointValue,
-  useColorModeValue,
-  Link as ChakraLink,
-  FormErrorMessage,
-  Alert,
-  AlertIcon,
-} from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
+import React from 'react';
 import NavBar from './NavBar';
 
-export const EditorLayout = () => {
+type LayoutProps = {
+  children: React.ReactNode;
+};
+export const EditorLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <Stack spacing="8">
+    <Stack w="full" align="center">
       <NavBar />
+      {children}
     </Stack>
   );
 };

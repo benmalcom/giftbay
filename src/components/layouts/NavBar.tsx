@@ -44,10 +44,11 @@ const NavBar = () => {
     await logOutUser();
   };
   return (
-    <Box as="section" pb={{ base: '12', md: '24' }}>
+    <Box as="section" w="full">
       <Box
         as="nav"
-        bg="bg-surface"
+        bg="white"
+        w="full"
         boxShadow={useColorModeValue('sm', 'sm-dark')}
       >
         <Container py={{ base: '4', lg: '5' }} maxW="7xl">
@@ -58,7 +59,9 @@ const NavBar = () => {
                 <ButtonGroup variant="link" spacing="8">
                   {links.map(item => (
                     <Link href={item.path} passHref key={item.path}>
-                      <Button as="a">{item.name}</Button>
+                      <Button as="a" textDecoration="none">
+                        {item.name}
+                      </Button>
                     </Link>
                   ))}
                 </ButtonGroup>

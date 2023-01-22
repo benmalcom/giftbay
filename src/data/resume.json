@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "name": "Benjamin Ikeji",
+    "headline": "Senior Frontend Engineer",
+    "contactsAndLinks": {
+      "email": "benjaminikeji@gmail.com",
+      "linkedIn": "https://linkedin.com/in/benikeji",
+      "github": "https://github.com/benmalcom"
+    }
+  },
+  "sections": [
+    {
+      "id": "2",
+      "title": "Work Experience",
+      "items": [
+        {
+          "order": 1,
+          "type": "JOB_ROLE",
+          "content": {
+            "id": "3",
+            "name": "Lead Frontend Engineer",
+            "duration": "01/2022 - Present",
+            "location": "San Francisco, CA",
+            "company": "Datatron Inc"
+          }
+        }
+      ]
+    }
+  ]
+}
