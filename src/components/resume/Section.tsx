@@ -10,7 +10,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React from 'react';
-import { AiFillDelete, AiOutlinePlus } from 'react-icons/ai';
+import { AiFillDelete, AiOutlinePlus, AiOutlineEdit } from 'react-icons/ai';
 import { v4 as uuid } from 'uuid';
 import JobFunctions from 'components/resume/JobFunctions';
 import JobRole from 'components/resume/JobRole';
@@ -22,6 +22,7 @@ import {
   SectionItemType,
   SectionType,
 } from 'types/resume';
+import { ModalManager as AddSectionModalManager } from './AddSectionModal';
 import { ModalManager as JobFunctionsModalManager } from './JobFunctionsModal';
 import { ModalManager as JobRoleModalModalManager } from './JobRoleModal';
 
@@ -111,11 +112,15 @@ export const Section: React.FC<SectionProps> = ({ section, updateSection }) => {
     updateSection(sectionPayload);
   };
 
+  const onSaveSectionName = (values: Partial<SectionType>) => {
+    updateSection({ ...section, ...values });
+  };
+
   return (
     <Stack w="full" spacing={3} my="20px">
       <Flex mb={0} justify="space-between" role="group">
         <Text textTransform="uppercase" color="#9c432f">
-          {section.title}
+          {section.name}
         </Text>
         <Flex>
           <Menu>
@@ -149,6 +154,23 @@ export const Section: React.FC<SectionProps> = ({ section, updateSection }) => {
               <MenuItem>Paragraph</MenuItem>
             </MenuList>
           </Menu>
+
+          <AddSectionModalManager
+            onSave={onSaveSectionName}
+            initialValues={{ name: section.name! }}
+            triggerFunc={(props: ModalTriggerFunctionProps) => (
+              <Button
+                size="xs"
+                display="none"
+                mr="10px"
+                {...props}
+                onClick={() => props.trigger()}
+                _groupHover={{ display: 'inline-block' }}
+              >
+                <AiOutlineEdit />
+              </Button>
+            )}
+          />
           <Button
             size="xs"
             display="none"

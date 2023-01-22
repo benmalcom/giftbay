@@ -40,7 +40,7 @@ export type Candidate = {
 
 export type SectionType = {
   id: string;
-  title?: string;
+  name?: string;
   items: Array<SectionItem & { content: JobRoleType | JobFunctionType[] }>;
 };
 
