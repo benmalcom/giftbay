@@ -44,11 +44,11 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
       placeholder="Enter text here"
       size="sm"
       w="full"
-      rows={2}
       onBlur={onClickReveal}
       fontSize="16px"
       {...props.inputProps}
       onChange={handleChange}
+      boxShadow="sm"
       value={value}
       _focus={{ boxShadow: 'none' }}
     />
@@ -56,6 +56,7 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
     <Box
       w="full"
       onDoubleClick={onClickReveal}
+      boxSizing="border-box"
       _hover={{
         border: '1px dashed gray',
         cursor: 'pointer',

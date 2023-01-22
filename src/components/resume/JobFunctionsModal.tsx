@@ -47,7 +47,7 @@ const JobFunctions: React.FC<FormProps> = ({ onSave, isOpen, onClose }) => {
     formState: { errors = {} },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { count: 1 },
+    defaultValues: { count: 3 },
   });
 
   const onSubmit = (values: FormValuesType) => {

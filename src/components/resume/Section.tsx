@@ -2,14 +2,17 @@ import {
   Button,
   Divider,
   Flex,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Stack,
   Text,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverCloseButton,
+  Portal,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useRef } from 'react';
 import { AiFillDelete, AiOutlinePlus, AiOutlineEdit } from 'react-icons/ai';
 import { v4 as uuid } from 'uuid';
 import JobFunctions from 'components/resume/JobFunctions';
@@ -28,12 +31,16 @@ import { ModalManager as JobRoleModalModalManager } from './JobRoleModal';
 
 type SectionProps = {
   section: SectionType;
-  addSection(): void;
   updateSection(section: SectionType): void;
   removeSection(id: string): void;
 };
 
-export const Section: React.FC<SectionProps> = ({ section, updateSection }) => {
+export const Section: React.FC<SectionProps> = ({
+  section,
+  updateSection,
+  removeSection,
+}) => {
+  const initRef = useRef();
   const onSaveJobRole = (values: JobRoleType) => {
     const sectionPayload = structuredClone(section);
     if (values.id) {
@@ -123,37 +130,68 @@ export const Section: React.FC<SectionProps> = ({ section, updateSection }) => {
           {section.name}
         </Text>
         <Flex>
-          <Menu>
-            <MenuButton
-              as={Button}
-              size="xs"
-              display="none"
-              mr="10px"
-              _groupHover={{ display: 'inline-block' }}
-            >
-              <AiOutlinePlus />
-            </MenuButton>
-            <MenuList>
-              <JobRoleModalModalManager
-                triggerFunc={(props: ModalTriggerFunctionProps) => (
-                  <MenuItem {...props} onClick={() => props.trigger()}>
-                    Job Role
-                  </MenuItem>
-                )}
-                onSave={onSaveJobRole}
-              />
-              <JobFunctionsModalManager
-                triggerFunc={(props: ModalTriggerFunctionProps) => (
-                  <MenuItem {...props} onClick={() => props.trigger()}>
-                    Job Functions
-                  </MenuItem>
-                )}
-                onSave={onSaveJobFunctions}
-              />
-
-              <MenuItem>Paragraph</MenuItem>
-            </MenuList>
-          </Menu>
+          <Popover
+            closeOnBlur={false}
+            placement="left"
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            initialFocusRef={initRef}
+          >
+            {({ isOpen, onClose }) => (
+              <>
+                <PopoverTrigger>
+                  <Button
+                    size="xs"
+                    display="none"
+                    mr="10px"
+                    _groupHover={{ display: 'inline-block' }}
+                  >
+                    <AiOutlinePlus />
+                  </Button>
+                </PopoverTrigger>
+                <Portal>
+                  <PopoverContent>
+                    <PopoverHeader>Add section contents</PopoverHeader>
+                    <PopoverCloseButton />
+                    <PopoverBody py="10px">
+                      <JobRoleModalModalManager
+                        triggerFunc={(props: ModalTriggerFunctionProps) => (
+                          <Button
+                            size="xs"
+                            {...props}
+                            onClick={() => {
+                              props.trigger();
+                              onClose();
+                            }}
+                            mr="10px"
+                          >
+                            Job Role
+                          </Button>
+                        )}
+                        onSave={onSaveJobRole}
+                      />
+                      <JobFunctionsModalManager
+                        triggerFunc={(props: ModalTriggerFunctionProps) => (
+                          <Button
+                            size="xs"
+                            {...props}
+                            onClick={() => {
+                              props.trigger();
+                              onClose();
+                            }}
+                            mr="10px"
+                          >
+                            Job Responsibilities
+                          </Button>
+                        )}
+                        onSave={onSaveJobFunctions}
+                      />
+                    </PopoverBody>
+                  </PopoverContent>
+                </Portal>
+              </>
+            )}
+          </Popover>
 
           <AddSectionModalManager
             onSave={onSaveSectionName}
@@ -175,6 +213,7 @@ export const Section: React.FC<SectionProps> = ({ section, updateSection }) => {
             size="xs"
             display="none"
             _groupHover={{ display: 'inline-block' }}
+            onClick={() => removeSection(section.id)}
           >
             <AiFillDelete color="red" />
           </Button>

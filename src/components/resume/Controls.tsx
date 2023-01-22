@@ -1,6 +1,8 @@
 import { Flex, Button } from '@chakra-ui/react';
 import React from 'react';
 import useResumeContext from 'hooks/useResumeContext';
+import { ModalTriggerFunctionProps } from 'types/resume';
+import { ModalManager as AddSectionModalManager } from './AddSectionModal';
 
 export const Controls = () => {
   const { addSection } = useResumeContext();
@@ -14,9 +16,14 @@ export const Controls = () => {
       bg="white"
     >
       <Flex>
-        <Button size="sm" onClick={() => addSection()}>
-          New Section
-        </Button>
+        <AddSectionModalManager
+          onSave={values => addSection(values.name)}
+          triggerFunc={(props: ModalTriggerFunctionProps) => (
+            <Button size="sm" {...props} onClick={() => props.trigger()}>
+              New Section
+            </Button>
+          )}
+        />
       </Flex>
     </Flex>
   );

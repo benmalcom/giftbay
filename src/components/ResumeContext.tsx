@@ -5,7 +5,7 @@ import { ResumeType, Candidate, SectionType } from 'types/resume';
 export type ResumeContextType = {
   resume: ResumeType;
   setCandidate(candidate: Partial<Candidate>): void;
-  addSection(): void;
+  addSection(name: string): void;
   updateSection(section: SectionType): void;
   removeSection(id: string): void;
 };
@@ -83,10 +83,10 @@ export const ResumeContextProvider: React.FC<ResumeContextProviderType> = ({
   const setCandidate = (candidate: Partial<Candidate>) => {
     dispatch({ type: ActionTypes.SetCandidate, payload: candidate });
   };
-  const addSection = () => {
+  const addSection = (name: string) => {
     dispatch({
       type: ActionTypes.AddSection,
-      payload: { id: uuidV4(), items: [] },
+      payload: { id: uuidV4(), name, items: [] },
     });
   };
   const updateSection = (section: SectionType) => {

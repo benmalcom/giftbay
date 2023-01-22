@@ -84,7 +84,7 @@ const AddSectionModal: React.FC<FormProps> = ({
                         id="name"
                         type="text"
                         {...register('name')}
-                        placeholder="E.g 3"
+                        placeholder="Section name"
                         errorBorderColor="red.300"
                       />
                       <FormErrorMessage>
