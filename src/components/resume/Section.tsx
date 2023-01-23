@@ -2,23 +2,24 @@ import {
   Button,
   Divider,
   Flex,
-  Stack,
-  Text,
   Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
   PopoverBody,
   PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   Portal,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
 import { omit } from 'lodash';
 import React, { useRef } from 'react';
-import { AiFillDelete, AiOutlinePlus, AiOutlineEdit } from 'react-icons/ai';
+import { AiFillDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import { v4 as uuid } from 'uuid';
 import JobRole from 'components/resume/JobRole';
 import loremIpsum from 'data/loremIpsum.json';
 import {
+  InlineListType,
   JobFunctionType,
   JobRoleType,
   ModalTriggerFunctionProps,
@@ -26,6 +27,8 @@ import {
   SectionType,
 } from 'types/resume';
 import { ModalManager as AddSectionModalManager } from './AddSectionModal';
+import InlineList from './InlineList';
+import { ModalManager as InlineListModalModalManager } from './InlineListModal';
 import { ModalManager as JobRoleModalModalManager } from './JobRoleModal';
 
 type SectionProps = {
@@ -101,7 +104,7 @@ export const Section: React.FC<SectionProps> = ({
         item.content.id === values.jobRoleId
     );
     if (jobRoleIndex === -1) throw new Error('Cannot find job role');
-    const jobRole = sectionPayload.items[jobRoleIndex].content;
+    const jobRole = sectionPayload.items[jobRoleIndex].content as JobRoleType;
     const jobFunctions = jobRole.jobFunctions;
     const jobFunctionIndex = jobFunctions.findIndex(
       item => item.id === values.id
@@ -125,12 +128,55 @@ export const Section: React.FC<SectionProps> = ({
         item.type === SectionItemType.JobRole && item.content.id === jobRoleId
     );
     if (jobRoleIndex === -1) throw new Error('Cannot find job role');
-    const jobRole = sectionPayload.items[jobRoleIndex].content;
+    const jobRole = sectionPayload.items[jobRoleIndex].content as JobRoleType;
     const jobFunctions = jobRole.jobFunctions;
     jobRole.jobFunctions = jobFunctions.filter(
       item => item.id !== jobFunctionId
     );
     sectionPayload.items[jobRoleIndex].content = jobRole;
+    updateSection(sectionPayload);
+  };
+
+  const onSaveInlineList = (values: InlineListType) => {
+    const sectionPayload = structuredClone(section);
+    if (values.id) {
+      const index = sectionPayload.items.findIndex(
+        item =>
+          item.type === SectionItemType.InlineList &&
+          (item.content as InlineListType).id === values.id
+      );
+      if (index === -1) throw new Error('Inline list not found');
+      const inlineList = sectionPayload.items[index].content;
+      sectionPayload.items[index].content = Object.assign(
+        {},
+        inlineList,
+        values
+      );
+    } else {
+      const inlineList = {
+        type: SectionItemType.InlineList,
+        order: sectionPayload.items.length,
+        content: {
+          ...values,
+          id: uuid(),
+          sectionId: sectionPayload.id,
+        },
+      };
+
+      sectionPayload.items.push(inlineList);
+    }
+    updateSection(sectionPayload);
+  };
+
+  const onRemoveInlineList = (inlineListId: string) => {
+    const sectionPayload = structuredClone(section);
+    const inlineListIndex = sectionPayload.items.findIndex(
+      item =>
+        item.type === SectionItemType.InlineList &&
+        item.content.id === inlineListId
+    );
+    if (inlineListIndex === -1) throw new Error('Cannot find inline list');
+    sectionPayload.items.splice(inlineListIndex, 1);
     updateSection(sectionPayload);
   };
 
@@ -181,6 +227,23 @@ export const Section: React.FC<SectionProps> = ({
                         )}
                         onSave={onSaveJobRole}
                       />
+
+                      <InlineListModalModalManager
+                        triggerFunc={(props: ModalTriggerFunctionProps) => (
+                          <Button
+                            size="xs"
+                            {...props}
+                            onClick={() => {
+                              props.trigger();
+                              onClose();
+                            }}
+                            mr="10px"
+                          >
+                            Inline List
+                          </Button>
+                        )}
+                        onSave={onSaveInlineList}
+                      />
                     </PopoverBody>
                   </PopoverContent>
                 </Portal>
@@ -214,7 +277,6 @@ export const Section: React.FC<SectionProps> = ({
           </Button>
         </Flex>
       </Flex>
-
       <Divider orientation="horizontal" colorScheme="teal" h="2px" />
       {section.items.map(sectionItem => {
         if (sectionItem.type === SectionItemType.JobRole) {
@@ -229,12 +291,16 @@ export const Section: React.FC<SectionProps> = ({
             />
           );
         }
-        /*
-        if (sectionItem.type === SectionItemType.JobFunctions) {
+        if (sectionItem.type === SectionItemType.InlineList) {
           return (
-
+            <InlineList
+              key={(sectionItem.content as InlineListType).id}
+              onSave={onSaveInlineList}
+              onRemoveInlineList={onRemoveInlineList}
+              inlineList={sectionItem.content as InlineListType}
+            />
           );
-        }*/
+        }
       })}
     </Stack>
   );

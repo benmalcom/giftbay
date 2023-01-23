@@ -48,5 +48,12 @@ export type Candidate = {
 export type SectionType = {
   id: string;
   name?: string;
-  items: Array<SectionItem & { content: JobRoleType }>;
+  items: Array<SectionItem & { content: JobRoleType | InlineListType }>;
+};
+
+export type InlineListType = {
+  id: string;
+  name: string;
+  content: string;
+  sectionId: string;
 };
