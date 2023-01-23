@@ -18,8 +18,8 @@ export const Controls = () => {
       <Flex>
         <AddSectionModalManager
           onSave={values => addSection(values.name)}
-          triggerFunc={(props: ModalTriggerFunctionProps) => (
-            <Button size="sm" {...props} onClick={() => props.trigger()}>
+          triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
+            <Button size="sm" {...rest} onClick={() => trigger()}>
               New Section
             </Button>
           )}

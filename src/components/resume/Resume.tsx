@@ -9,7 +9,6 @@ import Section from './Section';
 type ResumeProps = {
   resume: ResumeType;
   setCandidate(candidate: Partial<Candidate>): void;
-  addSection(): void;
   updateSection(section: SectionType): void;
   removeSection(id: string): void;
 };
@@ -17,12 +16,16 @@ export const Resume: React.FC<ResumeProps> = ({
   resume,
   removeSection,
   updateSection,
-  addSection,
   setCandidate,
 }) => {
   useEffect(() => {
     if (!resume) return;
   }, [resume]);
+
+  const hasName = !!resume!.candidate?.name;
+  const hasHeadline = !!resume!.candidate?.headline;
+  const hasSummary = !!resume!.candidate?.summary;
+  const hasContactsAndLinks = !!resume!.candidate?.contactsAndLinks;
 
   return (
     <Flex
@@ -32,38 +35,49 @@ export const Resume: React.FC<ResumeProps> = ({
       p="0.5in"
       boxShadow="sm"
       bg="white"
-      fontFamily="Arial, Helvetica, sans-serif"
+      fontFamily="Roboto, Arial, Helvetica, sans-serif"
     >
-      <EditableLabel
-        displayNode={Heading}
-        text={resume!.candidate?.name}
-        onChange={value => setCandidate({ name: value })}
-        displayNodeProps={{
-          fontSize: '24pt',
-          color: '#84210c',
-        }}
-      />
-      <EditableLabel
-        displayNode={Text}
-        text={resume!.candidate?.headline}
-        onChange={value => setCandidate({ headline: value })}
-        displayNodeProps={{
-          fontSize: '14pt',
-          fontWeight: 500,
-          color: '#717276',
-        }}
-      />
-      <ContactsAndLinks
-        onSave={values => setCandidate({ contactsAndLinks: values })}
-        contactsAndLinks={resume!.candidate?.contactsAndLinks}
-      />
+      {hasName && (
+        <EditableLabel
+          displayNode={Heading}
+          text={resume!.candidate?.name}
+          onChange={value => setCandidate({ name: value })}
+          showRemoveButton
+          onRemove={() => setCandidate({ name: '' })}
+          displayNodeProps={{
+            fontSize: '24pt',
+            color: '#84210c',
+          }}
+        />
+      )}
+      {hasHeadline && (
+        <EditableLabel
+          displayNode={Text}
+          text={resume!.candidate?.headline}
+          onChange={value => setCandidate({ headline: value })}
+          showRemoveButton
+          onRemove={() => setCandidate({ headline: '' })}
+          displayNodeProps={{
+            fontSize: '15pt',
+            fontWeight: 400,
+            color: '#717276',
+          }}
+        />
+      )}
+      {hasContactsAndLinks && (
+        <ContactsAndLinks
+          onSave={values => setCandidate({ contactsAndLinks: values })}
+          contactsAndLinks={resume!.candidate?.contactsAndLinks}
+          showRemoveButton
+          onRemove={() => setCandidate({ contactsAndLinks: undefined })}
+        />
+      )}
       {resume.sections.map(section => (
         <Section
           key={section.id}
           section={section}
           removeSection={removeSection}
           updateSection={updateSection}
-          addSection={addSection}
         />
       ))}
     </Flex>

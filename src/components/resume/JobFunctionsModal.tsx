@@ -74,7 +74,9 @@ const JobFunctions: React.FC<FormProps> = ({ onSave, isOpen, onClose }) => {
                 <Stack spacing="6">
                   <Stack spacing="5">
                     <FormControl isRequired isInvalid={Boolean(errors.count)}>
-                      <FormLabel htmlFor="count">Count</FormLabel>
+                      <FormLabel htmlFor="count">
+                        Number of List Items
+                      </FormLabel>
                       <Input
                         id="count"
                         type="number"

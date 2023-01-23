@@ -17,10 +17,12 @@ export type JobFunctionType = {
 
 export type JobRoleType = {
   id: string;
+  sectionId: string;
   name: string;
   company: string;
   location: string;
   duration: string;
+  isInline?: boolean;
   jobFunctions: JobFunctionType[];
 };
 
@@ -42,6 +44,7 @@ export type ResumeType = {
 export type Candidate = {
   name: string;
   headline: string;
+  summary?: string;
   contactsAndLinks: ContactsAndLinksType;
 };
 

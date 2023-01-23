@@ -14,10 +14,11 @@ import {
   FormLabel,
   Input,
   FormErrorMessage,
+  Checkbox,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { JobRoleType } from 'types/resume';
 
@@ -46,6 +47,7 @@ const schema = yup
       .string()
       .required('Employment duration is required')
       .min(14, 'Name must be at least 14 characters'),
+    isInline: yup.boolean(),
   })
   .required();
 
@@ -59,9 +61,10 @@ const JobRoleModal: React.FC<FormProps> = ({
     register,
     handleSubmit,
     formState: { errors = {} },
+    control,
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: initialValues,
+    defaultValues: { isInline: false, ...(initialValues || {}) },
   });
 
   const onSubmit = (values: Record<string, unknown>) => {
@@ -145,6 +148,25 @@ const JobRoleModal: React.FC<FormProps> = ({
                         {errors?.duration?.message &&
                           errors.duration.message.toString()}
                       </FormErrorMessage>
+                    </FormControl>
+                    <FormControl>
+                      <FormLabel>
+                        <Controller
+                          control={control}
+                          render={({ field: { onChange, onBlur, value } }) => (
+                            <Checkbox
+                              id="isInline"
+                              onChange={onChange}
+                              checked={!!value}
+                              onBlur={onBlur}
+                              colorScheme="teal"
+                            >
+                              Single Line?
+                            </Checkbox>
+                          )}
+                          name="isInline"
+                        />
+                      </FormLabel>
                     </FormControl>
                   </Stack>
                   <Stack spacing="1" direction="row" justifyContent="end">

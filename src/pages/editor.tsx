@@ -8,7 +8,7 @@ import useResumeContext from 'hooks/useResumeContext';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
 
 export const Editor = () => {
-  const { resume, addSection, updateSection, setCandidate, removeSection } =
+  const { resume, updateSection, setCandidate, removeSection } =
     useResumeContext();
 
   return (
@@ -20,7 +20,6 @@ export const Editor = () => {
     >
       <Resume
         resume={resume}
-        addSection={addSection}
         updateSection={updateSection}
         setCandidate={setCandidate}
         removeSection={removeSection}

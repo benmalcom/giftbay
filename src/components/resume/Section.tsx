@@ -65,6 +65,7 @@ export const Section: React.FC<SectionProps> = ({
         content: {
           ...values,
           id: uuid(),
+          sectionId: sectionPayload.id,
           jobFunctions: [],
         },
       };
@@ -180,6 +181,17 @@ export const Section: React.FC<SectionProps> = ({
     updateSection(sectionPayload);
   };
 
+  const onRemoveJobRole = (jobRoleId: string) => {
+    const sectionPayload = structuredClone(section);
+    const inlineListIndex = sectionPayload.items.findIndex(
+      item =>
+        item.type === SectionItemType.JobRole && item.content.id === jobRoleId
+    );
+    if (inlineListIndex === -1) throw new Error('Cannot find job role');
+    sectionPayload.items.splice(inlineListIndex, 1);
+    updateSection(sectionPayload);
+  };
+
   return (
     <Stack w="full" spacing={3} my="20px">
       <Flex mb={0} justify="space-between" role="group">
@@ -212,12 +224,15 @@ export const Section: React.FC<SectionProps> = ({
                     <PopoverCloseButton />
                     <PopoverBody py="10px">
                       <JobRoleModalModalManager
-                        triggerFunc={(props: ModalTriggerFunctionProps) => (
+                        triggerFunc={({
+                          trigger,
+                          ...rest
+                        }: ModalTriggerFunctionProps) => (
                           <Button
                             size="xs"
-                            {...props}
+                            {...rest}
                             onClick={() => {
-                              props.trigger();
+                              trigger();
                               onClose();
                             }}
                             mr="10px"
@@ -229,12 +244,15 @@ export const Section: React.FC<SectionProps> = ({
                       />
 
                       <InlineListModalModalManager
-                        triggerFunc={(props: ModalTriggerFunctionProps) => (
+                        triggerFunc={({
+                          trigger,
+                          ...rest
+                        }: ModalTriggerFunctionProps) => (
                           <Button
                             size="xs"
-                            {...props}
+                            {...rest}
                             onClick={() => {
-                              props.trigger();
+                              trigger();
                               onClose();
                             }}
                             mr="10px"
@@ -254,13 +272,13 @@ export const Section: React.FC<SectionProps> = ({
           <AddSectionModalManager
             onSave={onSaveSectionName}
             initialValues={{ name: section.name! }}
-            triggerFunc={(props: ModalTriggerFunctionProps) => (
+            triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
               <Button
                 size="xs"
                 display="none"
                 mr="10px"
-                {...props}
-                onClick={() => props.trigger()}
+                {...rest}
+                onClick={() => trigger()}
                 _groupHover={{ display: 'inline-block' }}
               >
                 <AiOutlineEdit />
@@ -288,6 +306,7 @@ export const Section: React.FC<SectionProps> = ({
               onSaveJobFunction={onSaveJobFunction}
               onAddJobFunctions={onAddJobFunctions}
               onRemoveJobFunction={onRemoveJobFunction}
+              onRemove={onRemoveJobRole}
             />
           );
         }

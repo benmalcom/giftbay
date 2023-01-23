@@ -6,6 +6,7 @@ import {
   Text,
   TextProps,
   HeadingProps,
+  CloseButton,
 } from '@chakra-ui/react';
 import React, { useState, useRef, useEffect } from 'react';
 
@@ -15,6 +16,8 @@ type EditableInputProps = {
   onChange?(value: string): void;
   displayNode?: React.ElementType;
   displayNodeProps?: TextProps | HeadingProps;
+  showRemoveButton?: boolean;
+  onRemove?(): void;
 };
 export const EditableLabel: React.FC<EditableInputProps> = props => {
   const [value, setValue] = useState(props.text);
@@ -57,6 +60,8 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
       w="full"
       onDoubleClick={onClickReveal}
       boxSizing="border-box"
+      position="relative"
+      role="group"
       _hover={{
         border: '1px dashed gray',
         cursor: 'pointer',
@@ -64,6 +69,18 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
       }}
     >
       <DisplayComponent {...props.displayNodeProps}>{value}</DisplayComponent>
+      {props.showRemoveButton && (
+        <CloseButton
+          size="sm"
+          color="red"
+          position="absolute"
+          top="-10px"
+          right="-20px"
+          display="none"
+          _groupHover={{ display: 'inline-block' }}
+          onClick={() => props.onRemove?.()}
+        />
+      )}
     </Box>
   );
 };

@@ -19,7 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { ContactsAndLinksType } from 'types/global';
+import { ContactsAndLinksType } from 'types/resume';
 
 type FormProps = {
   onSave(values: ContactsAndLinksType): void;
