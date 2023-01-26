@@ -39,6 +39,7 @@ export type ModalTriggerFunctionProps = {
 export type ResumeType = {
   candidate: Candidate;
   sections: SectionType[];
+  settings: ResumeSettingsType;
 };
 
 export type Candidate = {
@@ -52,6 +53,17 @@ export type SectionType = {
   id: string;
   name?: string;
   items: Array<SectionItem & { content: JobRoleType | InlineListType }>;
+};
+
+export type ResumeSettingsType = {
+  colors: {
+    accent: string;
+    common: string;
+    jobFunctions: string;
+    jobRoleName: string;
+    jobRoleDuration: string;
+    jobRoleCompanyLocation: string;
+  };
 };
 
 export type InlineListType = {

@@ -21,6 +21,7 @@ import {
   JobFunctionType,
   JobRoleType,
   ModalTriggerFunctionProps,
+  ResumeSettingsType,
 } from 'types/resume';
 import { ModalManager as JobRoleModalManager } from './JobRoleModal';
 
@@ -31,6 +32,7 @@ type JobRoleProps = {
   onRemoveJobFunction(jobFunctionId: string, jobRoleId: string): void;
   onRemove(jobRoleId: string): void;
   jobRole: JobRoleType;
+  settings: ResumeSettingsType;
 };
 
 export const JobRole: React.FC<JobRoleProps> = ({
@@ -40,6 +42,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
   onAddJobFunctions,
   onRemoveJobFunction,
   onRemove,
+  settings,
 }) => {
   const initRef = useRef();
   const getCtaButtons = () => (
@@ -125,7 +128,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
             <Text
               sx={{
                 '@media screen, print': {
-                  color: '#58595c',
+                  color: settings.colors.jobRoleName,
                   fontWeight: 600,
                 },
               }}
@@ -136,7 +139,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
             <Text
               sx={{
                 '@media screen, print': {
-                  color: '#606165',
+                  color: settings.colors.jobRoleCompanyLocation,
                 },
               }}
             >
@@ -147,7 +150,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
             color="#342f31"
             sx={{
               '@media screen, print': {
-                color: '#342f31',
+                color: settings.colors.jobRoleDuration,
               },
             }}
           >
@@ -167,7 +170,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
               <Text
                 sx={{
                   '@media screen, print': {
-                    color: '#717276',
+                    color: settings.colors.jobRoleCompanyLocation,
                   },
                 }}
               >
@@ -176,7 +179,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
               <Text
                 sx={{
                   '@media screen, print': {
-                    color: '#342f32',
+                    color: settings.colors.jobRoleDuration,
                   },
                 }}
               >
@@ -197,7 +200,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
               size="sm"
               sx={{
                 '@media screen, print': {
-                  color: '#717276',
+                  color: settings.colors.jobRoleName,
                 },
               }}
             >
@@ -209,6 +212,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
       )}
 
       <JobFunctions
+        settings={settings}
         onSaveJobFunction={onSaveJobFunction}
         jobFunctions={jobRole.jobFunctions}
         onRemoveJobFunction={onRemoveJobFunction}

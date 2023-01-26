@@ -1,6 +1,10 @@
 import React, { useReducer } from 'react';
 import { v4 as uuidV4 } from 'uuid';
 import { ResumeType, Candidate, SectionType } from 'types/resume';
+import resumeReducer, {
+  ActionTypes,
+  ResumeReducerAction,
+} from './resumeReducer';
 
 export type ResumeContextType = {
   resume: ResumeType;
@@ -8,59 +12,7 @@ export type ResumeContextType = {
   addSection(name: string): void;
   updateSection(section: SectionType): void;
   removeSection(id: string): void;
-};
-
-export enum ActionTypes {
-  SetCandidate = 'SET_CANDIDATE',
-  AddSection = 'ADD_SECTION',
-  UpdateSection = 'UPDATE_SECTION',
-  DeleteSection = 'DELETE_SECTION',
-}
-
-type ResumeReducerAction = {
-  type: string;
-  payload: Partial<Candidate> | Partial<SectionType>;
-};
-
-export const resumeReducer = (
-  state: ResumeType,
-  action: ResumeReducerAction
-): ResumeType => {
-  switch (action.type) {
-    case ActionTypes.SetCandidate:
-      return {
-        ...state,
-        candidate: Object.assign({}, state.candidate, action.payload),
-      };
-    case ActionTypes.AddSection: {
-      return {
-        ...state,
-        sections: [...state.sections, action.payload as SectionType],
-      };
-    }
-    case ActionTypes.UpdateSection: {
-      const sections = state.sections.slice();
-      const payload = action.payload as SectionType;
-      const index = sections.findIndex(item => item.id === payload.id);
-      if (index > -1) {
-        sections[index] = Object.assign({}, sections[index], payload);
-      }
-
-      return {
-        ...state,
-        sections,
-      };
-    }
-    case ActionTypes.DeleteSection: {
-      const payload = action.payload as SectionType;
-      return {
-        ...state,
-        sections: state.sections.filter(section => section.id !== payload.id),
-      };
-    }
-    default:
-      return state;
-  }
+  updateResumeSettings(values: Record<string, string>): void;
 };
 
 export const ResumeContext = React.createContext<ResumeContextType | undefined>(
@@ -76,7 +28,7 @@ export const ResumeContextProvider: React.FC<ResumeContextProviderType> = ({
   initialResume,
   children,
 }) => {
-  const [state, dispatch] = useReducer<
+  const [resume, dispatch] = useReducer<
     (state: ResumeType, action: ResumeReducerAction) => ResumeType
   >(resumeReducer, initialResume);
 
@@ -96,14 +48,18 @@ export const ResumeContextProvider: React.FC<ResumeContextProviderType> = ({
     dispatch({ type: ActionTypes.DeleteSection, payload: { id } });
   };
 
+  const updateResumeSettings = (values: Record<string, string>) =>
+    dispatch({ type: ActionTypes.UpdateSettings, payload: values });
+
   return (
     <ResumeContext.Provider
       value={{
-        resume: state,
+        resume,
         setCandidate,
         addSection,
         updateSection,
         removeSection,
+        updateResumeSettings,
       }}
     >
       {children}

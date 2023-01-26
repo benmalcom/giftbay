@@ -1,18 +1,20 @@
 import { ListItem, UnorderedList, CloseButton } from '@chakra-ui/react';
 import React from 'react';
 import { EditableLabel } from 'components/form';
-import { JobFunctionType } from 'types/resume';
+import { JobFunctionType, ResumeSettingsType } from 'types/resume';
 
 type JobFunctionsProps = {
   onSaveJobFunction(values: JobFunctionType): void;
   onRemoveJobFunction(jobFunctionId: string, jobRoleId: string): void;
   jobFunctions: JobFunctionType[];
+  settings: ResumeSettingsType;
 };
 
 export const JobFunctions: React.FC<JobFunctionsProps> = ({
   onSaveJobFunction,
   jobFunctions,
   onRemoveJobFunction,
+  settings,
 }) => {
   return (
     <UnorderedList ml={10}>
@@ -21,7 +23,7 @@ export const JobFunctions: React.FC<JobFunctionsProps> = ({
           key={item.id}
           sx={{
             '@media screen, print': {
-              color: '#58595c',
+              color: settings.colors.common,
               lineHeight: '160%',
               position: 'relative',
               fontSize: '11pt',

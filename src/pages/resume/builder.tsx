@@ -1,8 +1,8 @@
 import { VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { ResumeContextProvider } from 'components/contexts/ResumeContext';
 import { BuilderLayout } from 'components/layouts';
 import { Resume, Controls } from 'components/resume';
-import { ResumeContextProvider } from 'components/ResumeContext';
 import resumeSample from 'data/resume.json';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
 import useResumeContext from 'hooks/useResumeContext';

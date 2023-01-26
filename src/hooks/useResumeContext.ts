@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ResumeContext } from 'components/ResumeContext';
+import { ResumeContext } from 'components/contexts/ResumeContext';
 
 function useResumeContext() {
   const context = useContext(ResumeContext);

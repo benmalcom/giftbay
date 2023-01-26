@@ -23,6 +23,7 @@ import {
   JobFunctionType,
   JobRoleType,
   ModalTriggerFunctionProps,
+  ResumeSettingsType,
   SectionItemType,
   SectionType,
 } from 'types/resume';
@@ -33,6 +34,7 @@ import { ModalManager as JobRoleModalModalManager } from './JobRoleModal';
 
 type SectionProps = {
   section: SectionType;
+  settings: ResumeSettingsType;
   updateSection(section: SectionType): void;
   removeSection(id: string): void;
 };
@@ -41,6 +43,7 @@ export const Section: React.FC<SectionProps> = ({
   section,
   updateSection,
   removeSection,
+  settings,
 }) => {
   const initRef = useRef();
   const onSaveJobRole = (values: JobRoleType) => {
@@ -202,7 +205,7 @@ export const Section: React.FC<SectionProps> = ({
         <Text
           sx={{
             '@media screen, print': {
-              color: '#9c432f',
+              color: settings.colors.accent,
               textTransform: 'uppercase',
               fontSize: '10pt',
             },
@@ -304,6 +307,7 @@ export const Section: React.FC<SectionProps> = ({
         if (sectionItem.type === SectionItemType.JobRole) {
           return (
             <JobRole
+              settings={settings}
               key={(sectionItem.content as JobRoleType).id}
               onSave={onSaveJobRole}
               jobRole={sectionItem.content as JobRoleType}
@@ -317,6 +321,7 @@ export const Section: React.FC<SectionProps> = ({
         if (sectionItem.type === SectionItemType.InlineList) {
           return (
             <InlineList
+              settings={settings}
               key={(sectionItem.content as InlineListType).id}
               onSave={onSaveInlineList}
               onRemoveInlineList={onRemoveInlineList}

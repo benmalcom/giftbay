@@ -132,7 +132,7 @@ export const Resume: React.FC<ResumeProps> = ({
           displayNodeProps={{
             sx: {
               fontSize: '24pt',
-              color: '#9c432f',
+              color: resume.settings.colors.accent,
               marginBottom: '6px',
               fontWeight: 400,
             },
@@ -150,7 +150,7 @@ export const Resume: React.FC<ResumeProps> = ({
             sx: {
               fontSize: '15pt',
               fontWeight: 400,
-              color: '#58595c',
+              color: resume.settings.colors.common,
             },
           }}
         />
@@ -174,13 +174,14 @@ export const Resume: React.FC<ResumeProps> = ({
             sx: {
               fontSize: '20px',
               fontWeight: 400,
-              color: '#58595c',
+              color: resume.settings.colors.common,
             },
           }}
         />
       )}
       {resume.sections.map(section => (
         <Section
+          settings={resume.settings}
           key={section.id}
           section={section}
           removeSection={removeSection}

@@ -100,5 +100,15 @@
         }
       ]
     }
-  ]
+  ],
+  "settings": {
+    "colors": {
+      "accent": "#9c432f",
+      "common": "#58595c",
+      "jobFunctions": "#58595c",
+      "jobRoleName": "#58595c",
+      "jobRoleDuration": "#342f31",
+      "jobRoleCompanyLocation": "#606165"
+    }
+  }
 }
