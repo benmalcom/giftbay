@@ -39,15 +39,19 @@ export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
                 key={item}
                 sx={{
                   '@media screen, print': {
-                    fontWeight: 400,
-                    color: '#717276',
+                    fontWeight: 500,
+                    color: '#58595c',
                     float: 'left',
                     marginLeft: 5,
+                    fontSize: '11.5pt',
                     listStyleType: 'disc',
                     ':first-of-type': {
                       marginLeft: 0,
                       listStyleType: 'none',
                     },
+                  },
+                  '@media print': {
+                    marginRight: '5pt',
                   },
                 }}
               >

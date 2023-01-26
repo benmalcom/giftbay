@@ -53,6 +53,7 @@ const NavBar = () => {
                 </ButtonGroup>
                 <HStack spacing="3">
                   <IconButton
+                    title="Logout"
                     colorScheme="red"
                     onClick={handleLogOut}
                     variant="ghost"

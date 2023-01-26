@@ -40,8 +40,9 @@ export const InlineList: React.FC<InlineListProps> = ({
               <Text
                 sx={{
                   '@media screen, print': {
-                    color: '#717276',
+                    color: '#58595c',
                     fontWeight: 600,
+                    fontSize: '11pt',
                   },
                 }}
               >
@@ -51,7 +52,8 @@ export const InlineList: React.FC<InlineListProps> = ({
                 sx={{
                   '@media screen, print': {
                     marginLeft: 1,
-                    color: '#717276',
+                    color: '#58595c',
+                    fontSize: '10.5pt',
                   },
                 }}
               >

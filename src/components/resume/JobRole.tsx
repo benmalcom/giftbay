@@ -125,7 +125,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
             <Text
               sx={{
                 '@media screen, print': {
-                  color: '#717276',
+                  color: '#58595c',
                   fontWeight: 600,
                 },
               }}
@@ -136,7 +136,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
             <Text
               sx={{
                 '@media screen, print': {
-                  color: '#717276',
+                  color: '#606165',
                 },
               }}
             >

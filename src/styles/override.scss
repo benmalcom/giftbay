@@ -1,22 +1,24 @@
 @media print {
   @page {
-    size: A4 portrait !important;
+    size: A4 portrait;
     background-color: #ffffff !important;
-    padding: 0 !important;
-    margin: 0.1in 0 !important;
+    padding: 30px 0;
+    margin: 0.1in 0;
+    margin-top: 30px;
+  }
+  @page:first {
+    margin-top: 0 !important;
   }
   hr {
-    margin: 0 !important;
+    margin: 0;
   }
   html {
     -webkit-print-color-adjust: exact;
   }
   body {
-    background-size: 21cm 29.7cm !important;
+    background-size: 21cm 29.7cm;
     background-color: #ffffff !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  h2 {
+    padding: 0;
+    margin: 0;
   }
 }

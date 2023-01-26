@@ -1,5 +1,5 @@
 import { VStack } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { BuilderLayout } from 'components/layouts';
 import { Resume, Controls } from 'components/resume';
 import { ResumeContextProvider } from 'components/ResumeContext';
@@ -14,8 +14,10 @@ export const Builder = () => {
   const { resume, updateSection, setCandidate, removeSection } =
     useResumeContext();
   const isGeneratePDF = useIsPDFGeneratePage();
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const onGenerate = () => {
+    setIsGeneratingPDF(true);
     generatePDF()
       .then(data => {
         const blob = new Blob([data as unknown as BlobPart], {
@@ -28,7 +30,8 @@ export const Builder = () => {
         window.URL.revokeObjectURL(data as unknown as string);
         link.remove();
       })
-      .catch(err => console.log('Error ', err));
+      .catch(err => console.log('Error ', err))
+      .finally(() => setIsGeneratingPDF(false));
   };
 
   return (
@@ -38,7 +41,7 @@ export const Builder = () => {
       height="max-content"
       boxSizing="border-box"
     >
-      <Controls onGenerate={onGenerate} />
+      <Controls onGenerate={onGenerate} isGeneratingPDF={isGeneratingPDF} />
       <Resume
         resume={resume}
         updateSection={updateSection}

@@ -130,8 +130,12 @@ export const Resume: React.FC<ResumeProps> = ({
           showRemoveButton
           onRemove={() => setCandidate({ name: '' })}
           displayNodeProps={{
-            fontSize: '32px',
-            color: '#84210c',
+            sx: {
+              fontSize: '24pt',
+              color: '#9c432f',
+              marginBottom: '6px',
+              fontWeight: 400,
+            },
           }}
         />
       )}
@@ -143,9 +147,11 @@ export const Resume: React.FC<ResumeProps> = ({
           showRemoveButton
           onRemove={() => setCandidate({ headline: '' })}
           displayNodeProps={{
-            fontSize: '20px',
-            fontWeight: 400,
-            color: '#717276',
+            sx: {
+              fontSize: '15pt',
+              fontWeight: 400,
+              color: '#58595c',
+            },
           }}
         />
       )}
@@ -165,9 +171,11 @@ export const Resume: React.FC<ResumeProps> = ({
           showRemoveButton
           onRemove={() => setCandidate({ summary: '' })}
           displayNodeProps={{
-            fontSize: '20px',
-            fontWeight: 400,
-            color: '#717276',
+            sx: {
+              fontSize: '20px',
+              fontWeight: 400,
+              color: '#58595c',
+            },
           }}
         />
       )}

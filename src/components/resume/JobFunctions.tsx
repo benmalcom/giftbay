@@ -21,9 +21,10 @@ export const JobFunctions: React.FC<JobFunctionsProps> = ({
           key={item.id}
           sx={{
             '@media screen, print': {
-              color: '#717276',
+              color: '#58595c',
               lineHeight: '160%',
               position: 'relative',
+              fontSize: '11pt',
               ':last-of-type': {
                 marginBottom: 0,
               },

@@ -8,8 +8,12 @@ import { ModalManager as AddSectionModalManager } from './AddSectionModal';
 
 type ControlsProps = {
   onGenerate(): void;
+  isGeneratingPDF?: boolean;
 };
-export const Controls: React.FC<ControlsProps> = ({ onGenerate }) => {
+export const Controls: React.FC<ControlsProps> = ({
+  onGenerate,
+  isGeneratingPDF,
+}) => {
   const { addSection } = useResumeContext();
   const generatePDF = useIsPDFGeneratePage();
   if (generatePDF) return null;
@@ -38,7 +42,7 @@ export const Controls: React.FC<ControlsProps> = ({ onGenerate }) => {
           )}
         />
       </Flex>
-      <Button size="sm" onClick={onGenerate}>
+      <Button size="sm" onClick={onGenerate} isLoading={isGeneratingPDF}>
         <AiFillFilePdf color="red" style={{ marginRight: '2px' }} />
         Generate PDF
       </Button>

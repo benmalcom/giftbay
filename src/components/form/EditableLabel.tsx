@@ -75,7 +75,7 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
       <DisplayComponent
         sx={{
           '@media screen, print': {
-            ...props.displayNodeProps,
+            ...props.displayNodeProps?.sx,
           },
         }}
       >
