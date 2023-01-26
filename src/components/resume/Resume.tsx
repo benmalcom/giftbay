@@ -1,9 +1,28 @@
 /* eslint-disable  @typescript-eslint/no-non-null-assertion */
-import { Heading, Text, Flex } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import {
+  Heading,
+  Text,
+  Flex,
+  PopoverTrigger,
+  Button,
+  PopoverHeader,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverBody,
+  Portal,
+  Popover,
+} from '@chakra-ui/react';
+import React, { useEffect, useRef } from 'react';
+import { AiOutlineMenu } from 'react-icons/ai';
 import { EditableLabel } from 'components/form';
+import { ModalManager as CandidateInformationModalManager } from 'components/resume/CandidateInformationModal';
 import ContactsAndLinks from 'components/resume/ContactsAndLinks';
-import { Candidate, ResumeType, SectionType } from 'types/resume';
+import {
+  Candidate,
+  ModalTriggerFunctionProps,
+  ResumeType,
+  SectionType,
+} from 'types/resume';
 import Section from './Section';
 
 type ResumeProps = {
@@ -18,6 +37,8 @@ export const Resume: React.FC<ResumeProps> = ({
   updateSection,
   setCandidate,
 }) => {
+  const initRef = useRef();
+
   useEffect(() => {
     if (!resume) return;
   }, [resume]);
@@ -29,14 +50,78 @@ export const Resume: React.FC<ResumeProps> = ({
 
   return (
     <Flex
-      flexDir="column"
-      boxSizing="border-box"
-      w="950px"
-      p="0.5in"
-      boxShadow="sm"
-      bg="white"
-      fontFamily="Roboto, Arial, Helvetica, sans-serif"
+      id="resume"
+      sx={{
+        '@media screen, print': {
+          width: '100%',
+          height: 'fit-content',
+          flexDir: 'column',
+          boxSizing: 'border-box',
+          backgroundColor: '#FFFFFF',
+          position: 'relative',
+          fontFamily: 'Arial, Helvetica, sans-serif',
+        },
+        '@media screen': {
+          boxShadow:
+            '0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        },
+      }}
+      p="40px 48px"
     >
+      <Popover
+        closeOnBlur={false}
+        placement="left"
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        initialFocusRef={initRef}
+      >
+        {({ onClose }) => (
+          <>
+            <PopoverTrigger>
+              <Button
+                size="xs"
+                mr="10px"
+                top="0"
+                right="-10px"
+                position="absolute"
+                borderRadius={0}
+                display="none"
+              >
+                <AiOutlineMenu />
+              </Button>
+            </PopoverTrigger>
+            <Portal>
+              <PopoverContent>
+                <PopoverHeader>Candidate Information</PopoverHeader>
+                <PopoverCloseButton />
+                <PopoverBody py="10px">
+                  <CandidateInformationModalManager
+                    triggerFunc={({
+                      trigger,
+                      ...rest
+                    }: ModalTriggerFunctionProps) => (
+                      <Button
+                        className="candidate-ctas"
+                        size="xs"
+                        {...rest}
+                        onClick={() => {
+                          trigger();
+                          onClose();
+                        }}
+                        mr="10px"
+                      >
+                        Job Role
+                      </Button>
+                    )}
+                    onSave={() => console.log('')}
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </Portal>
+          </>
+        )}
+      </Popover>
+
       {hasName && (
         <EditableLabel
           displayNode={Heading}
@@ -45,7 +130,7 @@ export const Resume: React.FC<ResumeProps> = ({
           showRemoveButton
           onRemove={() => setCandidate({ name: '' })}
           displayNodeProps={{
-            fontSize: '24pt',
+            fontSize: '32px',
             color: '#84210c',
           }}
         />
@@ -58,7 +143,7 @@ export const Resume: React.FC<ResumeProps> = ({
           showRemoveButton
           onRemove={() => setCandidate({ headline: '' })}
           displayNodeProps={{
-            fontSize: '15pt',
+            fontSize: '20px',
             fontWeight: 400,
             color: '#717276',
           }}
@@ -72,6 +157,20 @@ export const Resume: React.FC<ResumeProps> = ({
           onRemove={() => setCandidate({ contactsAndLinks: undefined })}
         />
       )}
+      {hasSummary && (
+        <EditableLabel
+          displayNode={Text}
+          text={resume!.candidate?.summary}
+          onChange={value => setCandidate({ summary: value })}
+          showRemoveButton
+          onRemove={() => setCandidate({ summary: '' })}
+          displayNodeProps={{
+            fontSize: '20px',
+            fontWeight: 400,
+            color: '#717276',
+          }}
+        />
+      )}
       {resume.sections.map(section => (
         <Section
           key={section.id}
@@ -83,5 +182,7 @@ export const Resume: React.FC<ResumeProps> = ({
     </Flex>
   );
 };
+
+Resume.displayName = 'Resume';
 
 export default Resume;

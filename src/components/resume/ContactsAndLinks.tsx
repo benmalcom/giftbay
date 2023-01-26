@@ -34,14 +34,22 @@ export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
           {...rest}
         >
           <UnorderedList mx={0}>
-            {Object.values(contactsAndLinks).map((item, index) => (
+            {Object.values(contactsAndLinks).map(item => (
               <ListItem
                 key={item}
-                fontWeight={400}
-                color="#717276"
-                float="left"
-                ml={index === 0 ? 0 : 5}
-                listStyleType={index === 0 ? 'none' : 'disc'}
+                sx={{
+                  '@media screen, print': {
+                    fontWeight: 400,
+                    color: '#717276',
+                    float: 'left',
+                    marginLeft: 5,
+                    listStyleType: 'disc',
+                    ':first-of-type': {
+                      marginLeft: 0,
+                      listStyleType: 'none',
+                    },
+                  },
+                }}
               >
                 {item}
               </ListItem>

@@ -193,12 +193,31 @@ export const Section: React.FC<SectionProps> = ({
   };
 
   return (
-    <Stack w="full" spacing={3} my="20px">
-      <Flex mb={0} justify="space-between" role="group">
-        <Text textTransform="uppercase" color="#9c432f">
+    <Stack
+      sx={{
+        '@media screen, print': { margin: '20px 0', gap: 3, width: '100%' },
+      }}
+    >
+      <Flex mb={0} role="group">
+        <Text
+          sx={{
+            '@media screen, print': {
+              color: '#9c432f',
+              textTransform: 'uppercase',
+            },
+          }}
+        >
           {section.name}
         </Text>
-        <Flex>
+        <Flex
+          sx={{
+            '@media screen, print': {
+              marginLeft: '20px',
+              display: 'none',
+            },
+          }}
+          _groupHover={{ display: 'inline-block' }}
+        >
           <Popover
             closeOnBlur={false}
             placement="left"
@@ -209,12 +228,7 @@ export const Section: React.FC<SectionProps> = ({
             {({ onClose }) => (
               <>
                 <PopoverTrigger>
-                  <Button
-                    size="xs"
-                    display="none"
-                    mr="10px"
-                    _groupHover={{ display: 'inline-block' }}
-                  >
+                  <Button size="xs" mr="10px">
                     <AiOutlinePlus />
                   </Button>
                 </PopoverTrigger>
@@ -271,31 +285,20 @@ export const Section: React.FC<SectionProps> = ({
 
           <AddSectionModalManager
             onSave={onSaveSectionName}
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             initialValues={{ name: section.name! }}
             triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
-              <Button
-                size="xs"
-                display="none"
-                mr="10px"
-                {...rest}
-                onClick={() => trigger()}
-                _groupHover={{ display: 'inline-block' }}
-              >
+              <Button size="xs" mr="10px" {...rest} onClick={() => trigger()}>
                 <AiOutlineEdit />
               </Button>
             )}
           />
-          <Button
-            size="xs"
-            display="none"
-            _groupHover={{ display: 'inline-block' }}
-            onClick={() => removeSection(section.id)}
-          >
+          <Button size="xs" onClick={() => removeSection(section.id)}>
             <AiFillDelete color="red" />
           </Button>
         </Flex>
       </Flex>
-      <Divider orientation="horizontal" colorScheme="teal" h="2px" />
+      <Divider orientation="horizontal" colorScheme="blackAlpha" mt={0} />
       {section.items.map(sectionItem => {
         if (sectionItem.type === SectionItemType.JobRole) {
           return (

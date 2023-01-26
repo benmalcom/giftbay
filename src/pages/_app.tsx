@@ -5,6 +5,7 @@ import React from 'react';
 import { Toaster } from 'react-hot-toast';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
+import 'styles/override.scss';
 
 type NextPageWithLayout = NextPage & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

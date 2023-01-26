@@ -1,35 +1,21 @@
-import { HamburgerIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import {
   Flex,
   Box,
-  useDisclosure,
-  Stack,
-  Link as ChakraLink,
-  Text,
-  Heading,
   Container,
   useColorModeValue,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
   Button,
   IconButton,
-  Avatar,
   useBreakpointValue,
   HStack,
   ButtonGroup,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
+import { AiOutlinePoweroff } from 'react-icons/ai';
 import { FiMenu } from 'react-icons/fi';
 import Logo from 'components/Logo';
+import { logOutUser } from 'services/auth';
 import { APP_BASE_URL } from 'utils/constants';
-import { logOutUser } from '../../services/auth';
 
 const links = [
   { name: 'History', path: '/history' },
@@ -66,9 +52,13 @@ const NavBar = () => {
                   ))}
                 </ButtonGroup>
                 <HStack spacing="3">
-                  <Button colorScheme="teal" onClick={handleLogOut}>
-                    Logout
-                  </Button>
+                  <IconButton
+                    colorScheme="red"
+                    onClick={handleLogOut}
+                    variant="ghost"
+                    icon={<AiOutlinePoweroff fontSize="1.25rem" />}
+                    aria-label="Open Menu"
+                  />
                 </HStack>
               </Flex>
             ) : (

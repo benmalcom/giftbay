@@ -8,6 +8,10 @@ const styles = {
       color: mode('gray.800', 'whiteAlpha.900')(props),
       bg: mode('#F7FAFC', 'gray.800')(props),
       lineHeight: 'base',
+      ' > :last-child': {
+        overflow: 'hidden',
+        marginBottom: '-1px',
+      },
     },
     '*::placeholder': {
       color: mode('gray.400', 'whiteAlpha.400')(props),

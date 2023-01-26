@@ -43,7 +43,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
 }) => {
   const initRef = useRef();
   const getCtaButtons = () => (
-    <Flex>
+    <Flex display="none" _groupHover={{ display: 'inline-block' }} ml="15px">
       <Popover
         closeOnBlur={false}
         placement="left"
@@ -54,12 +54,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
         {({ onClose }) => (
           <>
             <PopoverTrigger>
-              <Button
-                size="xs"
-                display="none"
-                mr="10px"
-                _groupHover={{ display: 'inline-block' }}
-              >
+              <Button size="xs" mr="10px">
                 <AiOutlinePlus />
               </Button>
             </PopoverTrigger>
@@ -97,56 +92,115 @@ export const JobRole: React.FC<JobRoleProps> = ({
         onSave={onSave}
         initialValues={jobRole}
         triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
-          <Button
-            size="xs"
-            display="none"
-            mr="10px"
-            {...rest}
-            onClick={() => trigger()}
-            _groupHover={{ display: 'inline-block' }}
-          >
+          <Button size="xs" mr="10px" {...rest} onClick={() => trigger()}>
             <AiOutlineEdit />
           </Button>
         )}
       />
-      <Button
-        size="xs"
-        display="none"
-        _groupHover={{ display: 'inline-block' }}
-        onClick={() => onRemove(jobRole.id)}
-      >
+      <Button size="xs" onClick={() => onRemove(jobRole.id)}>
         <AiFillDelete color="red" />
       </Button>
     </Flex>
   );
 
   return (
-    <Box w="full">
+    <Box
+      w="full"
+      sx={{
+        '@media screen, print': {
+          width: '100%',
+        },
+      }}
+    >
       {jobRole.isInline ? (
-        <Flex justify="space-between" align="center" mb="10px">
+        <Flex
+          sx={{
+            '@media screen, print': {
+              alignItems: 'center',
+              marginBottom: '10px',
+            },
+          }}
+        >
           <Flex>
-            <Text color="#717276" fontWeight={600}>
+            <Text
+              sx={{
+                '@media screen, print': {
+                  color: '#717276',
+                  fontWeight: 600,
+                },
+              }}
+            >
               {jobRole.name},
             </Text>
             &nbsp;
-            <Text color="#717276">
+            <Text
+              sx={{
+                '@media screen, print': {
+                  color: '#717276',
+                },
+              }}
+            >
               {jobRole.company}, {jobRole.location}
             </Text>
           </Flex>
-          <Text color="#342f31">{jobRole.duration}</Text>
+          <Text
+            color="#342f31"
+            sx={{
+              '@media screen, print': {
+                color: '#342f31',
+              },
+            }}
+          >
+            {jobRole.duration}
+          </Text>
         </Flex>
       ) : (
         <>
           <Stack>
-            <Flex justify="space-between">
-              <Text color="#717276">
+            <Flex
+              sx={{
+                '@media screen, print': {
+                  justifyContent: 'space-between',
+                },
+              }}
+            >
+              <Text
+                sx={{
+                  '@media screen, print': {
+                    color: '#717276',
+                  },
+                }}
+              >
                 {jobRole.company}, {jobRole.location}
               </Text>
-              <Text color="#342f31">{jobRole.duration}</Text>
+              <Text
+                sx={{
+                  '@media screen, print': {
+                    color: '#342f32',
+                  },
+                }}
+              >
+                {jobRole.duration}
+              </Text>
             </Flex>
           </Stack>
-          <Flex mb="10px" justify="space-between" role="group">
-            <Heading as="h5" size="sm" color="#717276">
+          <Flex
+            sx={{
+              '@media screen, print': {
+                marginBottom: '10px',
+              },
+            }}
+            role="group"
+          >
+            <Heading
+              as="h5"
+              size="sm"
+              sx={{
+                '@media screen, print': {
+                  color: '#717276',
+                },
+              }}
+            >
               {jobRole.name}
             </Heading>
             {getCtaButtons()}

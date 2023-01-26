@@ -11,7 +11,7 @@ const defaultOptions: AxiosRequestConfig = {
     Pragma: 'no-cache',
     Expires: '0',
   },
-  timeout: 3000,
+  timeout: 10000,
 };
 
 // Create instance
@@ -62,9 +62,7 @@ export const createRequest = (config: AxiosRequestConfig) => instance(config);
 
 interface ComposeRequestType extends AxiosRequestConfig {
   payload?: object;
-  headers?: {
-    'x-access-token': string;
-  };
+  headers?: Record<string, string>;
 }
 
 export const composeRequestConfig = (config: ComposeRequestType) => {

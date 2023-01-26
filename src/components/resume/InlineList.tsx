@@ -21,9 +21,13 @@ export const InlineList: React.FC<InlineListProps> = ({
       triggerFunc={(props: ModalTriggerFunctionProps) => (
         <Box
           role="group"
-          w="full"
-          boxSizing="border-box"
-          position="relative"
+          sx={{
+            '@media screen, print': {
+              width: '100%',
+              boxSizing: 'border-box',
+              position: 'relative',
+            },
+          }}
           _hover={{
             border: '1px dashed gray',
             cursor: 'pointer',
@@ -33,10 +37,24 @@ export const InlineList: React.FC<InlineListProps> = ({
         >
           <Stack>
             <Flex>
-              <Text color="#717276" fontWeight={600}>
+              <Text
+                sx={{
+                  '@media screen, print': {
+                    color: '#717276',
+                    fontWeight: 600,
+                  },
+                }}
+              >
                 {inlineList.name}:
               </Text>
-              <Text color="#717276" ml={1}>
+              <Text
+                sx={{
+                  '@media screen, print': {
+                    marginLeft: 1,
+                    color: '#717276',
+                  },
+                }}
+              >
                 {inlineList.content}
               </Text>
             </Flex>

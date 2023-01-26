@@ -19,9 +19,16 @@ export const JobFunctions: React.FC<JobFunctionsProps> = ({
       {jobFunctions.map(item => (
         <ListItem
           key={item.id}
-          color="#717276"
-          lineHeight="160%"
-          position="relative"
+          sx={{
+            '@media screen, print': {
+              color: '#717276',
+              lineHeight: '160%',
+              position: 'relative',
+              ':last-of-type': {
+                marginBottom: 0,
+              },
+            },
+          }}
           role="group"
         >
           <EditableLabel

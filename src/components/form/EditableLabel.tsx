@@ -57,18 +57,30 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
     />
   ) : (
     <Box
-      w="full"
       onDoubleClick={onClickReveal}
-      boxSizing="border-box"
-      position="relative"
       role="group"
+      sx={{
+        '@media screen, print': {
+          width: '100%',
+          position: 'relative',
+          boxSizing: 'border-box',
+        },
+      }}
       _hover={{
         border: '1px dashed gray',
         cursor: 'pointer',
         borderRadius: '2px',
       }}
     >
-      <DisplayComponent {...props.displayNodeProps}>{value}</DisplayComponent>
+      <DisplayComponent
+        sx={{
+          '@media screen, print': {
+            ...props.displayNodeProps,
+          },
+        }}
+      >
+        {value}
+      </DisplayComponent>
       {props.showRemoveButton && (
         <CloseButton
           size="sm"

@@ -11,6 +11,9 @@ export function withAuthServerSideProps(
   return async (context: GetServerSidePropsContext) => {
     const session = await getSession(context);
     const { resolvedUrl } = context;
+    if (resolvedUrl === '/resume/builder?generatePDF=true')
+      return { props: {} };
+
     if (!session?.user) {
       return {
         redirect: {
