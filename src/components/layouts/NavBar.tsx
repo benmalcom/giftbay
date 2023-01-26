@@ -18,8 +18,8 @@ import { logOutUser } from 'services/auth';
 import { APP_BASE_URL } from 'utils/constants';
 
 const links = [
-  { name: 'History', path: '/history' },
-  { name: 'Settings', path: '/settings' },
+  { name: 'History', path: '/history', visible: false },
+  { name: 'Settings', path: '/settings', visible: true },
 ];
 
 const NavBar = () => {
@@ -43,13 +43,15 @@ const NavBar = () => {
             {isDesktop ? (
               <Flex justify="space-between" flex="1">
                 <ButtonGroup variant="link" spacing="8">
-                  {links.map(item => (
-                    <Link href={item.path} passHref key={item.path}>
-                      <Button as="a" textDecoration="none">
-                        {item.name}
-                      </Button>
-                    </Link>
-                  ))}
+                  {links
+                    .filter(item => item.visible)
+                    .map(item => (
+                      <Link href={item.path} passHref key={item.path}>
+                        <Button as="a" textDecoration="none">
+                          {item.name}
+                        </Button>
+                      </Link>
+                    ))}
                 </ButtonGroup>
                 <HStack spacing="3">
                   <IconButton
