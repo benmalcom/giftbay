@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 
-const Home = () => {
+const HomePrivate = () => {
   return (
     <Box as="section" bg="#F7FAFC">
       <Container py={{ base: '16', md: '24' }} mt={{ base: '16', md: '24' }}>
@@ -66,4 +66,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePrivate;

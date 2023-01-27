@@ -8,12 +8,14 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { Logo } from 'components';
 
-const Home = () => {
+const HomePublic = () => {
   return (
     <Box as="section" bg="#F7FAFC">
       <Container py={{ base: '16', md: '24' }} mt={{ base: '16', md: '24' }}>
         <Stack spacing={{ base: '8', md: '10' }}>
+          <Logo />
           <Stack align="center" maxW="2xl">
             <Heading
               size={useBreakpointValue({
@@ -48,7 +50,7 @@ const Home = () => {
             direction={{ base: 'column', sm: 'row' }}
             justify="center"
           >
-            <Link href="/login" passHref>
+            <Link href="/register" passHref>
               <Button
                 as="a"
                 colorScheme="teal"
@@ -66,4 +68,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePublic;

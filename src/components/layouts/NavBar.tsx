@@ -5,15 +5,15 @@ import {
   useColorModeValue,
   Button,
   IconButton,
-  useBreakpointValue,
   HStack,
   ButtonGroup,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { AiOutlinePoweroff } from 'react-icons/ai';
-import { FiMenu } from 'react-icons/fi';
 import Logo from 'components/Logo';
+import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
 import { logOutUser } from 'services/auth';
 import { APP_BASE_URL } from 'utils/constants';
 
@@ -23,24 +23,24 @@ const links = [
 ];
 
 const NavBar = () => {
-  const isDesktop = useBreakpointValue({ base: false, lg: true });
+  const boxShadow = useColorModeValue('sm', 'sm-dark');
+  const isGeneratePDF = useIsPDFGeneratePage();
+  const { status: sessionStatus } = useSession();
 
   const handleLogOut = async () => {
     signOut({ callbackUrl: APP_BASE_URL });
     await logOutUser();
   };
+
+  if (isGeneratePDF) return null;
+
   return (
     <Box as="section" w="full">
-      <Box
-        as="nav"
-        bg="white"
-        w="full"
-        boxShadow={useColorModeValue('sm', 'sm-dark')}
-      >
+      <Box as="nav" bg="white" w="full" boxShadow={boxShadow}>
         <Container py={{ base: '4', lg: '5' }} maxW="7xl">
           <HStack spacing="10" justify="space-between">
             <Logo />
-            {isDesktop ? (
+            {sessionStatus === 'authenticated' ? (
               <Flex justify="space-between" flex="1">
                 <ButtonGroup variant="link" spacing="8">
                   {links
@@ -65,11 +65,15 @@ const NavBar = () => {
                 </HStack>
               </Flex>
             ) : (
-              <IconButton
-                variant="ghost"
-                icon={<FiMenu fontSize="1.25rem" />}
-                aria-label="Open Menu"
-              />
+              <Flex justify="end">
+                <ButtonGroup variant="link" spacing="8">
+                  <Link href="/login" passHref>
+                    <Button as="a" textDecoration="none">
+                      Sign In
+                    </Button>
+                  </Link>
+                </ButtonGroup>
+              </Flex>
             )}
           </HStack>
         </Container>

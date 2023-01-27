@@ -1,8 +1,10 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
+import { SessionProvider } from 'next-auth/react';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
+import { NavBar } from 'components/layouts';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
 import 'styles/override.scss';
@@ -25,9 +27,12 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         gutter={8}
         toastOptions={toastOptions}
       />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <SessionProvider>
+        <NavBar />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </SessionProvider>
     </ChakraProvider>
   );
 }
