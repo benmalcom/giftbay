@@ -10,9 +10,11 @@ export function withAuthServerSideProps(
 ) {
   return async (context: GetServerSidePropsContext) => {
     const session = await getSession(context);
-    const { resolvedUrl } = context;
-    if (resolvedUrl === '/resume/builder?generatePDF=true')
+    const { resolvedUrl, res } = context;
+    if (resolvedUrl?.startsWith('/resume/builder?generatePDF=true')) {
+      res.setHeader('Cache-Control', 'no-store');
       return { props: {} };
+    }
 
     if (!session?.user) {
       return {

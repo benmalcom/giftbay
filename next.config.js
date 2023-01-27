@@ -1,9 +1,20 @@
 /** @type {import('next').NextConfig} */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const CircularDependencyPlugin = require("circular-dependency-plugin");
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  /*headers: () => [
+    {
+      source: '/resume/builder',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'no-store',
+        },
+      ],
+    },
+  ],*/
   webpack: config => {
     // don't resolve 'fs' module on the client to prevent this error on build --> Error: Can't resolve 'fs'
     config.plugins = [
@@ -23,7 +34,7 @@ const nextConfig = {
       }),
     ];
     return config;
-  }
-}
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
