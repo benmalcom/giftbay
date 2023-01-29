@@ -1,8 +1,7 @@
-import { pick } from 'lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { composeRequestConfig, createRequest } from 'services/http';
+import { loginOrRegister, refreshAccessToken } from 'services/auth';
 import { ApiResponseError } from 'types/api';
 
 const providers = [
@@ -10,46 +9,31 @@ const providers = [
     options: undefined,
     name: 'Credentials',
     id: 'credentials',
-    // The credentials is used to generate a suitable form on the sign in page.
-    // You can specify whatever fields you are expecting to be submitted.
-    // e.g. domain, username, password, 2FA token, etc.
-    // You can pass any HTML attribute to the <input> tag through the object.
     credentials: {},
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     async authorize(credentials) {
-      const isRegister = !!credentials && 'isRegister' in credentials;
-      const inputFields = ['email', 'password', 'verifyRedirectUrl'];
-      if (isRegister) inputFields.push('name');
-      const payload = pick(credentials, inputFields);
-      const config = composeRequestConfig({
-        url: isRegister ? '/auth/register' : '/auth/login',
-        payload,
-        method: 'post',
-      });
       try {
-        const response = await createRequest(config);
+        const { data } = await loginOrRegister(credentials);
         const {
-          // flatten data object
-          user: { email, id, isEmailVerified },
+          user: { email, id, isEmailVerified, name },
           tokens: {
-            access: { token: accessToken },
+            access: { token: accessToken, expires: accessTokenExpiry },
             refresh: { token: refreshToken },
           }, // eslint-disable-next-line
-        } = response as Record<string, any>;
+        } = data as Record<string, any>;
 
         return Object.assign(
           {},
-          { data: { email, id, isEmailVerified }, accessToken, refreshToken }
+          {
+            data: { email, id, isEmailVerified, name },
+            accessToken,
+            refreshToken,
+            accessTokenExpiry,
+          }
         );
-        // eslint-disable-next-line
-        // @ts-ignore
       } catch (e) {
-        console.log('e ', e);
-        throw new Error(
-          (e as ApiResponseError)?.message ||
-            `Unable to ${isRegister ? 'register' : 'login'}`
-        );
+        throw new Error((e as ApiResponseError)?.message || 'Operation failed');
       }
     },
   }),
@@ -66,17 +50,33 @@ const callbacks = {
     if (user) {
       token.accessToken = user.accessToken;
       token.refreshToken = user.refreshToken;
+      token.accessTokenExpiry = user.accessTokenExpiry;
       token.user = user.data;
     }
-    return token;
+    // If accessTokenExpiry is 24 hours, we have to refresh token before 24 hours pass.
+    const shouldRefreshTime = Math.round(
+      token.accessTokenExpiry - 60 * 60 * 1000 - Date.now()
+    );
+
+    // If the token is still valid, just return it.
+    if (shouldRefreshTime > 0) {
+      return Promise.resolve(token);
+    }
+
+    // If the call arrives after 23 hours have passed, we allow to refresh the token.
+    token = refreshAccessToken(token);
+    return Promise.resolve(token);
   },
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async session({ session, token }) {
+    // Here we pass accessToken to the client to be used in authentication with your API
     session.accessToken = token.accessToken;
-    session.refreshToken = token.refreshToken;
     session.user = token.user;
-    return session;
+    session.accessTokenExpiry = token.accessTokenExpiry;
+    session.error = token.error;
+
+    return Promise.resolve(session);
   },
 };
 

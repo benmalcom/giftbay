@@ -6,7 +6,7 @@ const nextConfig = {
   swcMinify: true,
   /*headers: () => [
     {
-      source: '/resume/builder',
+      source: '/builder/builder',
       headers: [
         {
           key: 'Cache-Control',

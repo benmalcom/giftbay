@@ -1,17 +1,23 @@
 import { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
-import { BasicUser } from 'types/user';
+import { User } from 'types/user';
 
 export function withAuthServerSideProps(
   getServerSidePropsFn: (
     context: GetServerSidePropsContext,
-    user: BasicUser
+    user: User
   ) => Record<string, unknown>
 ) {
   return async (context: GetServerSidePropsContext) => {
     const session = await getSession(context);
     const { resolvedUrl, res } = context;
-    if (resolvedUrl?.startsWith('/resume/builder?generatePDF=true')) {
+    const url = new URL(resolvedUrl, process.env.NEXT_PUBLIC_APP_BASE_URL);
+
+    const isPDFRequest =
+      /^\/builder\/[a-zA-Z0-9]{24}$/.test(url.pathname) &&
+      url.searchParams.has('generatePDF');
+
+    if (isPDFRequest) {
       res.setHeader('Cache-Control', 'no-store');
       return { props: {} };
     }

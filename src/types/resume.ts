@@ -72,3 +72,9 @@ export type InlineListType = {
   content: string;
   sectionId: string;
 };
+
+export type ResumeData = {
+  id: string;
+  contents?: string;
+  fileContents?: string;
+};

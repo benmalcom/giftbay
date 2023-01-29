@@ -1,7 +1,7 @@
 import { VStack } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import { ResumeContextProvider } from 'components/contexts/ResumeContext';
-import { BuilderLayout } from 'components/layouts';
 import { Resume, Controls } from 'components/resume';
 import resumeSample from 'data/resume.json';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
@@ -13,13 +13,19 @@ import { withAuthServerSideProps } from 'utils/serverSideProps';
 export const Builder = () => {
   const { resume, updateSection, setCandidate, removeSection } =
     useResumeContext();
+  const router = useRouter();
   const isGeneratePDF = useIsPDFGeneratePage();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
+  useEffect(() => {
+    if (!router.isReady) return;
+  }, [router.isReady]);
+
   const onGenerate = () => {
     setIsGeneratingPDF(true);
-    generatePDF()
-      .then(data => {
+    const { resumeId } = router.query;
+    generatePDF(resumeId as string)
+      .then(({ data }) => {
         const blob = new Blob([data as unknown as BlobPart], {
           type: 'application/pdf',
         });
@@ -40,6 +46,7 @@ export const Builder = () => {
       width={isGeneratePDF ? 'full' : '950px'}
       height="max-content"
       boxSizing="border-box"
+      margin="0 auto"
     >
       <Controls onGenerate={onGenerate} isGeneratingPDF={isGeneratingPDF} />
       <Resume
@@ -58,11 +65,9 @@ type LayoutProps = {
 
 const EnhancedBuilderLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <BuilderLayout>
-      <ResumeContextProvider initialResume={resumeSample as ResumeType}>
-        {children}
-      </ResumeContextProvider>
-    </BuilderLayout>
+    <ResumeContextProvider initialResume={resumeSample as ResumeType}>
+      {children}
+    </ResumeContextProvider>
   );
 };
 

@@ -34,15 +34,21 @@ const NavBar = () => {
 
   if (isGeneratePDF) return null;
 
+  const isAuthenticated = sessionStatus === 'authenticated';
+
   return (
     <Box as="section" w="full">
       <Box as="nav" bg="white" w="full" boxShadow={boxShadow}>
         <Container py={{ base: '4', lg: '5' }} maxW="7xl">
           <HStack spacing="10" justify="space-between">
-            <Logo />
-            {sessionStatus === 'authenticated' ? (
-              <Flex justify="space-between" flex="1">
-                <ButtonGroup variant="link" spacing="8">
+            <Link href={isAuthenticated ? '/overview' : '/'} passHref>
+              <a>
+                <Logo />
+              </a>
+            </Link>
+            {isAuthenticated ? (
+              <Flex justify="end" flex="1">
+                <ButtonGroup variant="link" spacing="8" mr={5}>
                   {links
                     .filter(item => item.visible)
                     .map(item => (

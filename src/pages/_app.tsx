@@ -2,8 +2,9 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { RefreshTokenHandler } from 'components';
 import { NavBar } from 'components/layouts';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
@@ -18,6 +19,7 @@ type AppPropsWithLayout = AppProps<Record<string, never>> & {
   Component: NextPageWithLayout;
 };
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const [interval, setInterval] = useState(0);
   const Layout = Component.Layout ?? React.Fragment;
   return (
     <ChakraProvider theme={theme}>
@@ -27,10 +29,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         gutter={8}
         toastOptions={toastOptions}
       />
-      <SessionProvider>
+      <SessionProvider session={pageProps.session} refetchInterval={interval}>
         <NavBar />
         <Layout>
           <Component {...pageProps} />
+          <RefreshTokenHandler setInterval={setInterval} />
         </Layout>
       </SessionProvider>
     </ChakraProvider>

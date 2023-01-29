@@ -48,7 +48,7 @@ const Home = () => {
             direction={{ base: 'column', sm: 'row' }}
             justify="center"
           >
-            <Link href="/login" passHref>
+            <Link href="/register" passHref>
               <Button
                 as="a"
                 colorScheme="teal"

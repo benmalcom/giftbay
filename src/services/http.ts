@@ -24,9 +24,9 @@ instance.interceptors.request.use(
       if (config.headers) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        config.headers['x-access-token'] = session?.accessToken;
+        config.headers.Authorization = `Bearer ${session?.accessToken}`;
       } else {
-        config.headers = { 'x-access-token': session?.accessToken };
+        config.headers = { Authorization: `Bearer ${session?.accessToken}` };
       }
     }
     return config;
@@ -35,7 +35,7 @@ instance.interceptors.request.use(
 );
 // Add a response interceptor
 instance.interceptors.response.use(
-  response => response.data,
+  response => response,
   error => {
     if (error.response) {
       if (error.code === 'ECONNABORTED')
@@ -58,8 +58,6 @@ instance.interceptors.response.use(
 );
 export default instance;
 
-export const createRequest = (config: AxiosRequestConfig) => instance(config);
-
 interface ComposeRequestType extends AxiosRequestConfig {
   payload?: object;
   headers?: Record<string, string>;
@@ -74,16 +72,12 @@ export const composeRequestConfig = (config: ComposeRequestType) => {
   if (params && !isEmpty(params)) {
     requestConfig.params = params;
   }
-  // Remove cached requests
-  if (method === 'get') {
-    if (requestConfig.params) {
-      requestConfig.params.t = new Date().getTime();
-    } else {
-      requestConfig.params = { t: new Date().getTime() };
-    }
-  }
+
   if (headers) {
     requestConfig.headers = headers;
   }
   return requestConfig;
 };
+
+export const createRequest = (config: ComposeRequestType) =>
+  instance(composeRequestConfig(config));
