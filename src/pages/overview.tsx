@@ -9,6 +9,7 @@ import {
   AlertIcon,
   Heading,
   Spinner,
+  Skeleton,
 } from '@chakra-ui/react';
 import { AxiosResponse } from 'axios';
 import Router from 'next/router';
@@ -72,11 +73,11 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
         <Heading as="h4" size="md" mb={7} fontWeight={500}>
           Welcome, {user.name}.
         </Heading>
-        <Alert status="success" variant="subtle">
+        <Alert status="info" variant="subtle">
           <AlertIcon />
           Data uploaded to the server. Fire on!
         </Alert>
-        <Flex mt={10}>
+        <Flex mt={10} gridGap={10}>
           <VStack
             onClick={onCreateResume}
             boxShadow={useColorModeValue('sm', 'sm-dark')}
@@ -84,7 +85,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
             border="1px dashed gray"
             borderRadius={3}
             h="300px"
-            w="300px"
+            w="250px"
             justify="center"
             cursor={inCreateFlight ? 'default' : 'pointer'}
             _hover={{
@@ -107,6 +108,10 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
               </>
             )}
           </VStack>
+          <Skeleton h="300px" w="250px" isLoaded={!inGetFlight}>
+            <Box>Hello World!</Box>
+            <VStack>Hello World! 2</VStack>
+          </Skeleton>
         </Flex>
       </Container>
     </Box>

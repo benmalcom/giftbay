@@ -21,13 +21,9 @@ instance.interceptors.request.use(
   async (config: AxiosRequestConfig) => {
     const session = (await getSession()) as Session;
     if (session?.accessToken) {
-      if (config.headers) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        config.headers.Authorization = `Bearer ${session?.accessToken}`;
-      } else {
-        config.headers = { Authorization: `Bearer ${session?.accessToken}` };
-      }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      config.headers.Authorization = `Bearer ${session?.accessToken}`;
     }
     return config;
   },
@@ -43,6 +39,10 @@ instance.interceptors.response.use(
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       throw error.response.data;
+    }
+    // Do nothing for canceled requests
+    else if (error.code === 'ERR_CANCELED') {
+      return;
     } else if (error.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of

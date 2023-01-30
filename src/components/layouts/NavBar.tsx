@@ -47,8 +47,13 @@ const NavBar = () => {
               </a>
             </Link>
             {isAuthenticated ? (
-              <Flex justify="end" flex="1">
+              <Flex justify="space-between" flex="1">
                 <ButtonGroup variant="link" spacing="8" mr={5}>
+                  <Link href="/overview" passHref key="/overview">
+                    <Button as="a" textDecoration="none">
+                      Home
+                    </Button>
+                  </Link>
                   {links
                     .filter(item => item.visible)
                     .map(item => (

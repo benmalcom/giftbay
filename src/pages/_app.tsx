@@ -1,6 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
+import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import React, { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -15,12 +16,13 @@ type NextPageWithLayout = NextPage & {
   Layout?: React.FC<any>;
 };
 
-type AppPropsWithLayout = AppProps<Record<string, never>> & {
+type AppPropsWithLayout = AppProps<Record<string, Session>> & {
   Component: NextPageWithLayout;
 };
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [interval, setInterval] = useState(0);
   const Layout = Component.Layout ?? React.Fragment;
+  console.log('interval ', interval);
   return (
     <ChakraProvider theme={theme}>
       <Toaster
