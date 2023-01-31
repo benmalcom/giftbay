@@ -1,4 +1,4 @@
-import { ResumeType } from 'types/resume';
+import { ResumeData, ResumeType } from 'types/resume';
 import { composeRequestConfig, createRequest } from './http';
 
 export const generatePDF = async (resumeId: string) => {
@@ -13,7 +13,7 @@ export const generatePDF = async (resumeId: string) => {
 
 export const updateResume = async (
   resumeId: string,
-  payload: Partial<ResumeType>
+  payload: Partial<ResumeData>
 ) => {
   return await createRequest(
     composeRequestConfig({

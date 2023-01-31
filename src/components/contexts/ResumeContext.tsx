@@ -1,6 +1,11 @@
 import React, { useReducer } from 'react';
 import { v4 as uuidV4 } from 'uuid';
-import { ResumeType, Candidate, SectionType } from 'types/resume';
+import {
+  ResumeType,
+  Candidate,
+  SectionType,
+  ResumeSettingsType,
+} from 'types/resume';
 import resumeReducer, {
   ActionTypes,
   ResumeReducerAction,
@@ -12,7 +17,7 @@ export type ResumeContextType = {
   addSection(name: string): void;
   updateSection(section: SectionType): void;
   removeSection(id: string): void;
-  updateResumeSettings(values: Record<string, string>): void;
+  updateResumeSettings(values: Partial<ResumeSettingsType>): void;
 };
 
 export const ResumeContext = React.createContext<ResumeContextType | undefined>(
@@ -48,7 +53,7 @@ export const ResumeContextProvider: React.FC<ResumeContextProviderType> = ({
     dispatch({ type: ActionTypes.DeleteSection, payload: { id } });
   };
 
-  const updateResumeSettings = (values: Record<string, string>) =>
+  const updateResumeSettings = (values: Partial<ResumeSettingsType>) =>
     dispatch({ type: ActionTypes.UpdateSettings, payload: values });
 
   return (

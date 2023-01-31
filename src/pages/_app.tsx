@@ -22,7 +22,6 @@ type AppPropsWithLayout = AppProps<Record<string, Session>> & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [interval, setInterval] = useState(0);
   const Layout = Component.Layout ?? React.Fragment;
-  console.log('interval ', interval);
   return (
     <ChakraProvider theme={theme}>
       <Toaster

@@ -64,6 +64,7 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
           width: '100%',
           position: 'relative',
           boxSizing: 'border-box',
+          marginTop: '0 !important',
         },
       }}
       _hover={{
@@ -74,9 +75,7 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
     >
       <DisplayComponent
         sx={{
-          '@media screen, print': {
-            ...props.displayNodeProps?.sx,
-          },
+          ...props.displayNodeProps?.sx,
         }}
       >
         {value}

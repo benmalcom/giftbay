@@ -2,7 +2,7 @@ export enum SectionItemType {
   JobRole = 'JOB_ROLE',
   JobFunctions = 'JOB_FUNCTIONS',
   InlineList = 'INLINE_LIST',
-  Paragraph = 'PARAGRAPH',
+  SectionParagraph = 'SECTION_PARAGRAPH',
 }
 export type SectionItem = {
   type: SectionItemType;
@@ -13,6 +13,12 @@ export type JobFunctionType = {
   id: string;
   text: string;
   jobRoleId: string;
+};
+
+export type SectionParagraphType = {
+  id: string;
+  text: string;
+  sectionId: string;
 };
 
 export type JobRoleType = {
@@ -52,13 +58,19 @@ export type Candidate = {
 export type SectionType = {
   id: string;
   name?: string;
-  items: Array<SectionItem & { content: JobRoleType | InlineListType }>;
+  items: Array<
+    SectionItem & {
+      content: JobRoleType | InlineListType | SectionParagraphType;
+    }
+  >;
 };
 
 export type ResumeSettingsType = {
   colors: {
     accent: string;
     common: string;
+    candidateHeadline: string;
+    candidateContactsAndLinks: string;
     jobFunctions: string;
     jobRoleName: string;
     jobRoleDuration: string;
@@ -74,7 +86,8 @@ export type InlineListType = {
 };
 
 export type ResumeData = {
-  id: string;
+  id?: string;
+  user: string;
   contents?: string;
   fileContents?: string;
 };

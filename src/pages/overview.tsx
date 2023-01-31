@@ -15,6 +15,7 @@ import { AxiosResponse } from 'axios';
 import Router from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import ResumePDF from 'components/resume/ResumePDF';
 import { createResume, getUserResumes } from 'services/resume';
 import { ResumeData } from 'types/resume';
 import { User } from 'types/user';
@@ -26,6 +27,7 @@ type OverviewProps = {
 const Overview: React.FC<OverviewProps> = ({ user }) => {
   const [inCreateFlight, setInCreateFlight] = useState(false);
   const [inGetFlight, setInGetFlight] = useState(false);
+  const [resumeData, setResumeData] = useState<ResumeData[]>([]);
 
   const onCreateResume = () => {
     setInCreateFlight(true);
@@ -39,13 +41,13 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
       .finally(() => setInCreateFlight(false));
   };
 
+  console.log('resumeData ', resumeData);
+
   const fetchResumes = useCallback(
     (abortSignal: AbortSignal) => {
       setInGetFlight(true);
       getUserResumes(user.id, abortSignal)
-        .then(response => {
-          console.log('response ', response);
-        })
+        .then(response => setResumeData(response?.data.results))
         .catch(err => {
           console.log('err ', err);
         })
@@ -70,19 +72,23 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
         mt={{ base: '8', md: '12' }}
         maxW="5xl"
       >
-        <Heading as="h4" size="md" mb={7} fontWeight={500}>
-          Welcome, {user.name}.
-        </Heading>
-        <Alert status="info" variant="subtle">
+        <Flex mb={7} align="center">
+          <Text mr={1}>Welcome,</Text>
+          <Heading as="h5" size="sm" fontWeight={500}>
+            {user.name}.
+          </Heading>
+        </Flex>
+
+        <Alert status="warning" variant="left-accent">
           <AlertIcon />
-          Data uploaded to the server. Fire on!
+          Create new Resumes. Re-use old ones.
         </Alert>
         <Flex mt={10} gridGap={10}>
           <VStack
             onClick={onCreateResume}
             boxShadow={useColorModeValue('sm', 'sm-dark')}
             as="a"
-            border="1px dashed gray"
+            border="1px dashed teal"
             borderRadius={3}
             h="300px"
             w="250px"
@@ -97,21 +103,24 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
               <Spinner size="xl" />
             ) : (
               <>
-                <AiOutlinePlus
-                  size={50}
-                  fontWeight={400}
-                  color="blackAlpha.700"
-                />
+                <AiOutlinePlus size={50} fontWeight={400} color="gray" />
                 <Text fontSize="lg" fontWeight={500} color="blackAlpha.700">
                   Blank Resume
                 </Text>
               </>
             )}
           </VStack>
-          <Skeleton h="300px" w="250px" isLoaded={!inGetFlight}>
-            <Box>Hello World!</Box>
-            <VStack>Hello World! 2</VStack>
-          </Skeleton>
+          <Flex>
+            {resumeData
+              ?.filter(item => item.fileContents)
+              .map(data => {
+                return (
+                  <Skeleton isLoaded={!inGetFlight} key={data.id}>
+                    <ResumePDF resumeData={data} />
+                  </Skeleton>
+                );
+              })}
+          </Flex>
         </Flex>
       </Container>
     </Box>

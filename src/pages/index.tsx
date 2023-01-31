@@ -23,7 +23,7 @@ const Home = () => {
                 '2xl': '2xl',
               })}
             >
-              Resume Builder
+              {process.env.NEXT_PUBLIC_APP_NAME}
             </Heading>
             <Text
               textAlign="center"

@@ -16,6 +16,7 @@ import { omit } from 'lodash';
 import React, { useRef } from 'react';
 import { AiFillDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import { v4 as uuid } from 'uuid';
+import { EditableLabel } from 'components/form';
 import JobRole from 'components/resume/JobRole';
 import loremIpsum from 'data/loremIpsum.json';
 import {
@@ -25,6 +26,7 @@ import {
   ModalTriggerFunctionProps,
   ResumeSettingsType,
   SectionItemType,
+  SectionParagraphType,
   SectionType,
 } from 'types/resume';
 import { ModalManager as AddSectionModalManager } from './AddSectionModal';
@@ -172,42 +174,60 @@ export const Section: React.FC<SectionProps> = ({
     updateSection(sectionPayload);
   };
 
-  const onRemoveInlineList = (inlineListId: string) => {
+  const onRemoveSectionItem = (itemId: string, sectionItemType: string) => {
     const sectionPayload = structuredClone(section);
-    const inlineListIndex = sectionPayload.items.findIndex(
-      item =>
-        item.type === SectionItemType.InlineList &&
-        item.content.id === inlineListId
+    const sectionItemIndex = sectionPayload.items.findIndex(
+      item => item.type === sectionItemType && item.content.id === itemId
     );
-    if (inlineListIndex === -1) throw new Error('Cannot find inline list');
-    sectionPayload.items.splice(inlineListIndex, 1);
+    if (sectionItemIndex === -1)
+      throw new Error(`Cannot find ${sectionItemType.toString()}`);
+    sectionPayload.items.splice(sectionItemIndex, 1);
     updateSection(sectionPayload);
   };
 
-  const onRemoveJobRole = (jobRoleId: string) => {
+  const onAddParagraph = () => {
     const sectionPayload = structuredClone(section);
-    const inlineListIndex = sectionPayload.items.findIndex(
+    const paragraph = {
+      type: SectionItemType.SectionParagraph,
+      order: sectionPayload.items.length,
+      content: {
+        text: loremIpsum.text,
+        id: uuid(),
+        sectionId: sectionPayload.id,
+      },
+    };
+
+    sectionPayload.items.push(paragraph);
+    updateSection(sectionPayload);
+  };
+  const onChangeParagraph = (paragraphId: string, text: string) => {
+    const sectionPayload = structuredClone(section);
+    const index = sectionPayload.items.findIndex(
       item =>
-        item.type === SectionItemType.JobRole && item.content.id === jobRoleId
+        item.type === SectionItemType.SectionParagraph &&
+        (item.content as SectionParagraphType).id === paragraphId
     );
-    if (inlineListIndex === -1) throw new Error('Cannot find job role');
-    sectionPayload.items.splice(inlineListIndex, 1);
+    if (index === -1) throw new Error('Paragraph not found');
+    const paragraph = sectionPayload.items[index]
+      .content as SectionParagraphType;
+    paragraph.text = text;
+    sectionPayload.items[index].content = paragraph;
     updateSection(sectionPayload);
   };
 
   return (
     <Stack
       sx={{
-        '@media screen, print': { margin: '20px 0', gap: 3, width: '100%' },
+        '@media screen, print': { marginTop: '15px', gap: 3, width: '100%' },
       }}
     >
-      <Flex mb={0} role="group">
+      <Flex mb={0} mt={0} role="group">
         <Text
           sx={{
             '@media screen, print': {
               color: settings.colors.accent,
               textTransform: 'uppercase',
-              fontSize: '10pt',
+              fontSize: '10.5pt',
             },
           }}
         >
@@ -280,6 +300,9 @@ export const Section: React.FC<SectionProps> = ({
                         )}
                         onSave={onSaveInlineList}
                       />
+                      <Button size="xs" onClick={onAddParagraph} mr="10px">
+                        Paragraph
+                      </Button>
                     </PopoverBody>
                   </PopoverContent>
                 </Portal>
@@ -302,7 +325,13 @@ export const Section: React.FC<SectionProps> = ({
           </Button>
         </Flex>
       </Flex>
-      <Divider orientation="horizontal" colorScheme="blackAlpha" mt={0} />
+      <Divider
+        orientation="horizontal"
+        colorScheme="blackAlpha"
+        sx={{
+          marginTop: '0 !important',
+        }}
+      />
       {section.items.map(sectionItem => {
         if (sectionItem.type === SectionItemType.JobRole) {
           return (
@@ -314,7 +343,9 @@ export const Section: React.FC<SectionProps> = ({
               onSaveJobFunction={onSaveJobFunction}
               onAddJobFunctions={onAddJobFunctions}
               onRemoveJobFunction={onRemoveJobFunction}
-              onRemove={onRemoveJobRole}
+              onRemove={jobRoleId =>
+                onRemoveSectionItem(jobRoleId, SectionItemType.JobRole)
+              }
             />
           );
         }
@@ -324,8 +355,38 @@ export const Section: React.FC<SectionProps> = ({
               settings={settings}
               key={(sectionItem.content as InlineListType).id}
               onSave={onSaveInlineList}
-              onRemoveInlineList={onRemoveInlineList}
+              onRemoveInlineList={inlineListId =>
+                onRemoveSectionItem(inlineListId, SectionItemType.InlineList)
+              }
               inlineList={sectionItem.content as InlineListType}
+            />
+          );
+        }
+
+        if (sectionItem.type === SectionItemType.SectionParagraph) {
+          const paragraph = sectionItem.content as SectionParagraphType;
+          return (
+            <EditableLabel
+              key={paragraph.id}
+              text={paragraph.text}
+              onChange={text => onChangeParagraph(paragraph.id, text)}
+              showRemoveButton
+              displayNodeProps={{
+                sx: {
+                  color: settings.colors.common,
+                  position: 'relative',
+                  fontSize: '11pt',
+                  '@media print': {
+                    fontSize: '10.5pt',
+                  },
+                },
+              }}
+              onRemove={() =>
+                onRemoveSectionItem(
+                  paragraph.id,
+                  SectionItemType.SectionParagraph
+                )
+              }
             />
           );
         }

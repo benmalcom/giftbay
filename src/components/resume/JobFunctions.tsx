@@ -21,15 +21,18 @@ export const JobFunctions: React.FC<JobFunctionsProps> = ({
       {jobFunctions.map(item => (
         <ListItem
           key={item.id}
+          fontSize="11pt"
           sx={{
             '@media screen, print': {
               color: settings.colors.common,
               lineHeight: '160%',
               position: 'relative',
-              fontSize: '11pt',
               ':last-of-type': {
                 marginBottom: 0,
               },
+            },
+            '@media print': {
+              fontSize: '10.5pt',
             },
           }}
           role="group"

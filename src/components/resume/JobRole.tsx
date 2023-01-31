@@ -44,6 +44,98 @@ export const JobRole: React.FC<JobRoleProps> = ({
   onRemove,
   settings,
 }) => {
+  return (
+    <Box
+      w="full"
+      sx={{
+        '@media screen, print': {
+          width: '100%',
+          marginTop: '0 !important',
+        },
+      }}
+    >
+      {jobRole.isInline ? (
+        <InLineJobTitle jobRole={jobRole} settings={settings} />
+      ) : (
+        <NonInLineJobTitle
+          jobRole={jobRole}
+          settings={settings}
+          onSave={onSave}
+          onRemove={onRemove}
+          onAddJobFunctions={onAddJobFunctions}
+        />
+      )}
+
+      <JobFunctions
+        settings={settings}
+        onSaveJobFunction={onSaveJobFunction}
+        jobFunctions={jobRole.jobFunctions}
+        onRemoveJobFunction={onRemoveJobFunction}
+      />
+    </Box>
+  );
+};
+
+JobRole.displayName = 'JobRole';
+
+export default JobRole;
+
+type JobTitleProps = {
+  jobRole: JobRoleType;
+  settings: ResumeSettingsType;
+};
+
+const InLineJobTitle: React.FC<JobTitleProps> = ({ jobRole, settings }) => (
+  <Flex
+    sx={{
+      '@media screen, print': {
+        alignItems: 'center',
+        marginBottom: '10px',
+      },
+    }}
+  >
+    <Flex>
+      <Text
+        sx={{
+          '@media screen, print': {
+            color: settings.colors.jobRoleName,
+            fontWeight: 600,
+          },
+        }}
+      >
+        {jobRole.name},
+      </Text>
+      &nbsp;
+      <Text
+        sx={{
+          '@media screen, print': {
+            color: settings.colors.jobRoleCompanyLocation,
+          },
+        }}
+      >
+        {jobRole.company}, {jobRole.location}
+      </Text>
+    </Flex>
+    <Text
+      color="#342f31"
+      sx={{
+        '@media screen, print': {
+          color: settings.colors.jobRoleDuration,
+        },
+      }}
+    >
+      {jobRole.duration}
+    </Text>
+  </Flex>
+);
+
+const NonInLineJobTitle: React.FC<
+  JobTitleProps & {
+    onSave(values: JobRoleType): void;
+    onAddJobFunctions(jobRoleId: string, values: Record<string, number>): void;
+    onRemove(jobRoleId: string): void;
+  }
+> = ({ jobRole, settings, onAddJobFunctions, onSave, onRemove }) => {
   const initRef = useRef();
   const getCtaButtons = () => (
     <Flex display="none" _groupHover={{ display: 'inline-block' }} ml="15px">
@@ -107,47 +199,25 @@ export const JobRole: React.FC<JobRoleProps> = ({
   );
 
   return (
-    <Box
-      w="full"
-      sx={{
-        '@media screen, print': {
-          width: '100%',
-        },
-      }}
-    >
-      {jobRole.isInline ? (
+    <>
+      <Stack>
         <Flex
           sx={{
             '@media screen, print': {
-              alignItems: 'center',
-              marginBottom: '10px',
+              justifyContent: 'space-between',
             },
           }}
         >
-          <Flex>
-            <Text
-              sx={{
-                '@media screen, print': {
-                  color: settings.colors.jobRoleName,
-                  fontWeight: 600,
-                },
-              }}
-            >
-              {jobRole.name},
-            </Text>
-            &nbsp;
-            <Text
-              sx={{
-                '@media screen, print': {
-                  color: settings.colors.jobRoleCompanyLocation,
-                },
-              }}
-            >
-              {jobRole.company}, {jobRole.location}
-            </Text>
-          </Flex>
           <Text
-            color="#342f31"
+            sx={{
+              '@media screen, print': {
+                color: settings.colors.jobRoleCompanyLocation,
+              },
+            }}
+          >
+            {jobRole.company}, {jobRole.location}
+          </Text>
+          <Text
             sx={{
               '@media screen, print': {
                 color: settings.colors.jobRoleDuration,
@@ -157,70 +227,31 @@ export const JobRole: React.FC<JobRoleProps> = ({
             {jobRole.duration}
           </Text>
         </Flex>
-      ) : (
-        <>
-          <Stack>
-            <Flex
-              sx={{
-                '@media screen, print': {
-                  justifyContent: 'space-between',
-                },
-              }}
-            >
-              <Text
-                sx={{
-                  '@media screen, print': {
-                    color: settings.colors.jobRoleCompanyLocation,
-                  },
-                }}
-              >
-                {jobRole.company}, {jobRole.location}
-              </Text>
-              <Text
-                sx={{
-                  '@media screen, print': {
-                    color: settings.colors.jobRoleDuration,
-                  },
-                }}
-              >
-                {jobRole.duration}
-              </Text>
-            </Flex>
-          </Stack>
-          <Flex
-            sx={{
-              '@media screen, print': {
-                marginBottom: '10px',
-              },
-            }}
-            role="group"
-          >
-            <Heading
-              as="h5"
-              size="sm"
-              sx={{
-                '@media screen, print': {
-                  color: settings.colors.jobRoleName,
-                },
-              }}
-            >
-              {jobRole.name}
-            </Heading>
-            {getCtaButtons()}
-          </Flex>
-        </>
-      )}
-
-      <JobFunctions
-        settings={settings}
-        onSaveJobFunction={onSaveJobFunction}
-        jobFunctions={jobRole.jobFunctions}
-        onRemoveJobFunction={onRemoveJobFunction}
-      />
-    </Box>
+      </Stack>
+      <Flex
+        sx={{
+          '@media screen, print': {
+            marginBottom: '10px',
+          },
+        }}
+        role="group"
+      >
+        <Heading
+          as="h6"
+          size="sm"
+          sx={{
+            '@media screen, print': {
+              color: settings.colors.jobRoleName,
+            },
+            '@media print': {
+              fontSize: '11pt',
+            },
+          }}
+        >
+          {jobRole.name}
+        </Heading>
+        {getCtaButtons()}
+      </Flex>
+    </>
   );
 };
-
-JobRole.displayName = 'JobRole';
-
-export default JobRole;

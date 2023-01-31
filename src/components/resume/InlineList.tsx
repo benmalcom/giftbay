@@ -32,6 +32,7 @@ export const InlineList: React.FC<InlineListProps> = ({
               width: '100%',
               boxSizing: 'border-box',
               position: 'relative',
+              marginTop: '0 !important',
             },
           }}
           _hover={{

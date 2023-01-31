@@ -54,7 +54,6 @@ const schema = yup
       .string()
       .typeError('Must be valid characters')
       .required('Candidate headline is required'),
-    summary: yup.string().typeError('Must be valid characters'),
   })
   .required();
 
@@ -124,20 +123,6 @@ const ContactsAndLinksModal: React.FC<FormProps> = ({
                       <FormErrorMessage>
                         {errors?.headline?.message &&
                           errors.headline.message.toString()}
-                      </FormErrorMessage>
-                    </FormControl>
-
-                    <FormControl isInvalid={Boolean(errors.summary)}>
-                      <FormLabel htmlFor="summary">Summary/Profile</FormLabel>
-                      <Textarea
-                        id="summary"
-                        {...register('summary')}
-                        placeholder="Candidate Summary"
-                        errorBorderColor="red.300"
-                      />
-                      <FormErrorMessage>
-                        {errors?.summary?.message &&
-                          errors.summary.message.toString()}
                       </FormErrorMessage>
                     </FormControl>
                   </Stack>

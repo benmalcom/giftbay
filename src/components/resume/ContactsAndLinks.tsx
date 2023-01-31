@@ -8,6 +8,7 @@ type ContactInformationProps = {
   contactsAndLinks: ContactsAndLinksType;
   showRemoveButton?: boolean;
   onRemove?(): void;
+  color: string;
 };
 
 export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
@@ -15,6 +16,7 @@ export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
   contactsAndLinks,
   showRemoveButton,
   onRemove,
+  color,
 }) => {
   return (
     <ContactsAndLinksModalManager
@@ -30,6 +32,7 @@ export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
             border: '1px dashed gray',
             cursor: 'pointer',
             borderRadius: '2px',
+            padding: 0,
           }}
           {...rest}
         >
@@ -37,14 +40,15 @@ export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
             {Object.values(contactsAndLinks).map(item => (
               <ListItem
                 key={item}
+                fontSize="11pt"
                 sx={{
                   '@media screen, print': {
-                    fontWeight: 500,
-                    color: '#58595c',
+                    fontWeight: 400,
+                    color,
                     float: 'left',
                     marginLeft: 5,
-                    fontSize: '11.5pt',
                     listStyleType: 'disc',
+                    fontFamily: 'Roboto, Ariel',
                     ':first-of-type': {
                       marginLeft: 0,
                       listStyleType: 'none',
@@ -52,6 +56,7 @@ export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
                   },
                   '@media print': {
                     marginRight: '5pt',
+                    fontSize: '10.5pt',
                   },
                 }}
               >

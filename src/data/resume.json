@@ -11,6 +11,21 @@
   },
   "sections": [
     {
+      "id": "1",
+      "name": "Profile",
+      "items": [
+        {
+          "order": 1,
+          "type": "SECTION_PARAGRAPH",
+          "content": {
+            "id": "1",
+            "sectionId": "1",
+            "text": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+          }
+        }
+      ]
+    },
+    {
       "id": "2",
       "name": "Work Experience",
       "items": [
@@ -105,8 +120,10 @@
     "colors": {
       "accent": "#9c432f",
       "common": "#58595c",
+      "candidateHeadline": "#58595c",
+      "candidateContactsAndLinks": "#505153",
       "jobFunctions": "#58595c",
-      "jobRoleName": "#58595c",
+      "jobRoleName": "#606165",
       "jobRoleDuration": "#342f31",
       "jobRoleCompanyLocation": "#606165"
     }

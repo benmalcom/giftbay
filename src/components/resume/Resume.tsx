@@ -17,6 +17,7 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import { EditableLabel } from 'components/form';
 import { ModalManager as CandidateInformationModalManager } from 'components/resume/CandidateInformationModal';
 import ContactsAndLinks from 'components/resume/ContactsAndLinks';
+import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
 import {
   Candidate,
   ModalTriggerFunctionProps,
@@ -37,6 +38,7 @@ export const Resume: React.FC<ResumeProps> = ({
   updateSection,
   setCandidate,
 }) => {
+  const isGeneratePDF = useIsPDFGeneratePage();
   const initRef = useRef();
 
   useEffect(() => {
@@ -50,16 +52,16 @@ export const Resume: React.FC<ResumeProps> = ({
 
   return (
     <Flex
+      width={isGeneratePDF ? 'full' : '950px'}
       id="resume"
       sx={{
         '@media screen, print': {
-          width: '100%',
           height: 'fit-content',
           flexDir: 'column',
           boxSizing: 'border-box',
           backgroundColor: '#FFFFFF',
           position: 'relative',
-          fontFamily: 'Arial, Helvetica, sans-serif',
+          fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
         },
         '@media screen': {
           boxShadow:
@@ -135,6 +137,10 @@ export const Resume: React.FC<ResumeProps> = ({
               color: resume.settings.colors.accent,
               marginBottom: '6px',
               fontWeight: 400,
+              fontFamily: 'Verdana, Ariel',
+              '@media print': {
+                fontSize: '21pt',
+              },
             },
           }}
         />
@@ -148,9 +154,12 @@ export const Resume: React.FC<ResumeProps> = ({
           onRemove={() => setCandidate({ headline: '' })}
           displayNodeProps={{
             sx: {
-              fontSize: '15pt',
+              fontSize: '13pt',
               fontWeight: 400,
-              color: resume.settings.colors.common,
+              color: resume.settings.colors.candidateHeadline,
+              '@media print': {
+                fontSize: '12pt',
+              },
             },
           }}
         />
@@ -161,6 +170,7 @@ export const Resume: React.FC<ResumeProps> = ({
           contactsAndLinks={resume!.candidate?.contactsAndLinks}
           showRemoveButton
           onRemove={() => setCandidate({ contactsAndLinks: undefined })}
+          color={resume.settings.colors.candidateContactsAndLinks}
         />
       )}
       {hasSummary && (
@@ -172,9 +182,13 @@ export const Resume: React.FC<ResumeProps> = ({
           onRemove={() => setCandidate({ summary: '' })}
           displayNodeProps={{
             sx: {
-              fontSize: '20px',
+              margin: '10pt 0',
               fontWeight: 400,
+              fontSize: '11.5pt',
               color: resume.settings.colors.common,
+              '@media print': {
+                fontSize: '11pt',
+              },
             },
           }}
         />

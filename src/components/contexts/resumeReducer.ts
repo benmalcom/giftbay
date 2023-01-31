@@ -16,7 +16,10 @@ export enum ActionTypes {
 
 export type ResumeReducerAction = {
   type: string;
-  payload: Partial<Candidate> | Partial<SectionType>;
+  payload:
+    | Partial<Candidate>
+    | Partial<SectionType>
+    | Partial<ResumeSettingsType>;
 };
 
 const resumeReducer = (
@@ -27,7 +30,7 @@ const resumeReducer = (
     case ActionTypes.SetCandidate:
       return {
         ...state,
-        candidate: Object.assign({}, state.candidate, action.payload),
+        candidate: merge(state.candidate, action.payload),
       };
     case ActionTypes.AddSection: {
       return {
