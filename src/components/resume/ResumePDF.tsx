@@ -8,9 +8,15 @@ import { ResumeData } from 'types/resume';
 
 type ResumePDFProps = {
   resumeData: ResumeData;
+  onCreateResume(payload: Record<string, unknown>): void;
+  inCreateFlight?: boolean;
 };
 
-const ResumePDF: React.FC<ResumePDFProps> = ({ resumeData }) => {
+const ResumePDF: React.FC<ResumePDFProps> = ({
+  resumeData,
+  inCreateFlight,
+  onCreateResume,
+}) => {
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   const [, setNumPages] = useState(null);
 
@@ -19,6 +25,13 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ resumeData }) => {
     setNumPages(numPages);
   };
   const fileUrl = usePDFObjectUrl(resumeData.fileContents!);
+
+  const onDuplicate = () => {
+    onCreateResume({
+      contents: resumeData.contents,
+      fileContents: resumeData.fileContents,
+    });
+  };
 
   return (
     <Flex
@@ -50,10 +63,16 @@ const ResumePDF: React.FC<ResumePDFProps> = ({ resumeData }) => {
         _groupHover={{ display: 'flex' }}
         justify="center"
       >
-        <Button size="sm" m={1}>
+        <Button
+          size="sm"
+          m={1}
+          onClick={onDuplicate}
+          isLoading={inCreateFlight}
+        >
           <AiFillFilePdf color="red" style={{ marginRight: '2px' }} />
-          Quick look
+          Duplicate
         </Button>
+
         <Link href={`/builder/${resumeData.id}`}>
           <Button as="a" size="sm" m={1} colorScheme="orange">
             <AiOutlineEdit style={{ marginRight: '2px' }} />

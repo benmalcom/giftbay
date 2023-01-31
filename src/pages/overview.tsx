@@ -29,9 +29,9 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
   const [inGetFlight, setInGetFlight] = useState(false);
   const [resumeData, setResumeData] = useState<ResumeData[]>([]);
 
-  const onCreateResume = () => {
+  const onCreateResume = (payload?: Record<string, unknown>) => {
     setInCreateFlight(true);
-    createResume({ user: user.id })
+    createResume({ user: user.id, ...payload })
       .then(({ data }: AxiosResponse<ResumeData>) =>
         Router.push(`/builder/${data.id}`)
       )
@@ -40,8 +40,6 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
       })
       .finally(() => setInCreateFlight(false));
   };
-
-  console.log('resumeData ', resumeData);
 
   const fetchResumes = useCallback(
     (abortSignal: AbortSignal) => {
@@ -85,7 +83,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
         </Alert>
         <Flex mt={10} gridGap={10}>
           <VStack
-            onClick={onCreateResume}
+            onClick={() => onCreateResume()}
             boxShadow={useColorModeValue('sm', 'sm-dark')}
             as="a"
             border="1px dashed teal"
@@ -110,17 +108,19 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
               </>
             )}
           </VStack>
-          <Flex>
-            {resumeData
-              ?.filter(item => item.fileContents)
-              .map(data => {
-                return (
-                  <Skeleton isLoaded={!inGetFlight} key={data.id}>
-                    <ResumePDF resumeData={data} />
-                  </Skeleton>
-                );
-              })}
-          </Flex>
+          {resumeData
+            ?.filter(item => item.fileContents)
+            .map(data => {
+              return (
+                <Skeleton isLoaded={!inGetFlight} key={data.id}>
+                  <ResumePDF
+                    resumeData={data}
+                    onCreateResume={onCreateResume}
+                    inCreateFlight={inCreateFlight}
+                  />
+                </Skeleton>
+              );
+            })}
         </Flex>
       </Container>
     </Box>
