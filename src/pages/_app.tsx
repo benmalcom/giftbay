@@ -6,10 +6,13 @@ import { SessionProvider } from 'next-auth/react';
 import React, { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { RefreshTokenHandler } from 'components';
+import { ResumeContextProvider } from 'components/contexts/ResumeContext';
 import { NavBar } from 'components/layouts';
+import resumeSample from 'data/resume.json';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
 import 'styles/override.scss';
+import { ResumeType } from 'types/resume';
 
 type NextPageWithLayout = NextPage & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,11 +34,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         toastOptions={toastOptions}
       />
       <SessionProvider session={pageProps.session} refetchInterval={interval}>
-        <NavBar />
-        <Layout>
-          <Component {...pageProps} />
-          <RefreshTokenHandler setInterval={setInterval} />
-        </Layout>
+        <ResumeContextProvider initialResume={resumeSample as ResumeType}>
+          <NavBar />
+          <Layout>
+            <Component {...pageProps} />
+            <RefreshTokenHandler setInterval={setInterval} />
+          </Layout>
+        </ResumeContextProvider>
       </SessionProvider>
     </ChakraProvider>
   );

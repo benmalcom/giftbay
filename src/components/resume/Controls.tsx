@@ -10,25 +10,31 @@ import {
 import React from 'react';
 import { AiFillFilePdf } from 'react-icons/ai';
 import InputColor from 'react-input-color';
+import { ResumeContextType } from 'components/contexts';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
-import useResumeContext from 'hooks/useResumeContext';
-import { Candidate, ModalTriggerFunctionProps, ResumeType } from 'types/resume';
+import { ModalTriggerFunctionProps } from 'types/resume';
 import { ModalManager as AddSectionModalManager } from './AddSectionModal';
 import { ModalManager as CandidateInformationModalManager } from './CandidateInformationModal';
 
-type ControlsProps = {
+type ControlsProps = Pick<
+  ResumeContextType,
+  'resume' | 'addSection' | 'updateResumeSettings' | 'setCandidate'
+> & {
   onGenerate(): void;
+  onSaveResume(): void;
   isGeneratingPDF?: boolean;
-  setCandidate(values: Partial<Candidate>): void;
-  resume: ResumeType;
+  isSavingResume?: boolean;
 };
 export const Controls: React.FC<ControlsProps> = ({
   onGenerate,
   isGeneratingPDF,
   setCandidate,
   resume,
+  addSection,
+  updateResumeSettings,
+  onSaveResume,
+  isSavingResume,
 }) => {
-  const { addSection, updateResumeSettings } = useResumeContext();
   const generatePDF = useIsPDFGeneratePage();
 
   if (generatePDF) return null;
@@ -49,6 +55,27 @@ export const Controls: React.FC<ControlsProps> = ({
         </Heading>
         <Divider />
         <Flex w="full" justify="space-around">
+          <Button
+            size="sm"
+            colorScheme="teal"
+            onClick={onSaveResume}
+            disabled={isSavingResume}
+          >
+            {isSavingResume ? 'Saving...' : 'Save changes'}
+          </Button>
+
+          <Button size="sm" onClick={onGenerate} isLoading={isGeneratingPDF}>
+            <AiFillFilePdf color="red" style={{ marginRight: '2px' }} />
+            Generate PDF
+          </Button>
+        </Flex>
+      </Stack>
+      <Stack spacing={3}>
+        <Heading as="h5" size="sm" color="muted">
+          Candidate
+        </Heading>
+        <Divider />
+        <Flex w="full" justify="space-around">
           <CandidateInformationModalManager
             onSave={values => setCandidate(values)}
             initialValues={resume.candidate}
@@ -63,11 +90,19 @@ export const Controls: React.FC<ControlsProps> = ({
               </Button>
             )}
           />
-
-          <Button size="sm" onClick={onGenerate} isLoading={isGeneratingPDF}>
-            <AiFillFilePdf color="red" style={{ marginRight: '2px' }} />
-            Generate PDF
-          </Button>
+          <AddSectionModalManager
+            onSave={values => addSection(values.name)}
+            triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
+              <Button
+                size="sm"
+                colorScheme="orange"
+                {...rest}
+                onClick={() => trigger()}
+              >
+                New Section
+              </Button>
+            )}
+          />
         </Flex>
       </Stack>
       <Stack spacing={4}>
@@ -83,19 +118,6 @@ export const Controls: React.FC<ControlsProps> = ({
             </Badge>
           ))}
         </Stack>
-        <AddSectionModalManager
-          onSave={values => addSection(values.name)}
-          triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
-            <Button
-              size="sm"
-              colorScheme="teal"
-              {...rest}
-              onClick={() => trigger()}
-            >
-              New Section
-            </Button>
-          )}
-        />
       </Stack>
 
       <Stack spacing={4}>

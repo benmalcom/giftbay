@@ -34,11 +34,12 @@ export const createResume = async (payload: Record<string, unknown>) => {
   );
 };
 
-export const getResumeById = async (resumeId: string) => {
+export const getResumeById = async (resumeId: string, signal: AbortSignal) => {
   return await createRequest(
     composeRequestConfig({
       url: `/resumes/${resumeId}`,
       method: 'get',
+      signal,
     })
   );
 };

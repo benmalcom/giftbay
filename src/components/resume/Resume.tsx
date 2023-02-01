@@ -12,38 +12,24 @@ import {
   Portal,
   Popover,
 } from '@chakra-ui/react';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
+import { ResumeContextType } from 'components/contexts';
 import { EditableLabel } from 'components/form';
 import { ModalManager as CandidateInformationModalManager } from 'components/resume/CandidateInformationModal';
 import ContactsAndLinks from 'components/resume/ContactsAndLinks';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
-import {
-  Candidate,
-  ModalTriggerFunctionProps,
-  ResumeType,
-  SectionType,
-} from 'types/resume';
+import { ModalTriggerFunctionProps } from 'types/resume';
 import Section from './Section';
 
-type ResumeProps = {
-  resume: ResumeType;
-  setCandidate(candidate: Partial<Candidate>): void;
-  updateSection(section: SectionType): void;
-  removeSection(id: string): void;
-};
-export const Resume: React.FC<ResumeProps> = ({
-  resume,
-  removeSection,
-  updateSection,
-  setCandidate,
-}) => {
+export const Resume: React.FC<
+  Pick<
+    ResumeContextType,
+    'resume' | 'removeSection' | 'updateSection' | 'setCandidate'
+  >
+> = ({ resume, removeSection, updateSection, setCandidate }) => {
   const isGeneratePDF = useIsPDFGeneratePage();
   const initRef = useRef();
-
-  useEffect(() => {
-    if (!resume) return;
-  }, [resume]);
 
   const hasName = !!resume!.candidate?.name;
   const hasHeadline = !!resume!.candidate?.headline;

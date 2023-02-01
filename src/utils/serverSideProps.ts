@@ -10,7 +10,7 @@ export function withAuthServerSideProps(
 ) {
   return async (context: GetServerSidePropsContext) => {
     const session = await getSession(context);
-    const { resolvedUrl, res } = context;
+    const { resolvedUrl } = context;
     const url = new URL(resolvedUrl, process.env.NEXT_PUBLIC_APP_BASE_URL);
 
     const isPDFRequest =
@@ -18,7 +18,6 @@ export function withAuthServerSideProps(
       url.searchParams.has('generatePDF');
 
     if (isPDFRequest) {
-      res.setHeader('Cache-Control', 'no-store');
       return { props: {} };
     }
 

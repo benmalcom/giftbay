@@ -1,25 +1,41 @@
 import { Flex } from '@chakra-ui/react';
+import { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import { ResumeContextProvider } from 'components/contexts/ResumeContext';
+import React, { useCallback, useEffect, useState } from 'react';
+import { PageSpinner } from 'components/index';
 import { Resume, Controls } from 'components/resume';
-import resumeSample from 'data/resume.json';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
 import useResumeContext from 'hooks/useResumeContext';
-import { generatePDF, updateResume } from 'services/resume';
-import { ResumeType } from 'types/resume';
-import { arrayBufferToBase64, objectToBase64 } from 'utils/functions';
+import useResumeDownload from 'hooks/useResumeDownload';
+import { generatePDF, getResumeById, updateResume } from 'services/resume';
+import { ResumeData } from 'types/resume';
+import { objectToBase64, objFromBase64 } from 'utils/functions';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
 
 export const Builder = () => {
-  const { resume, updateSection, setCandidate, removeSection } =
-    useResumeContext();
+  const {
+    resume,
+    updateSection,
+    setCandidate,
+    removeSection,
+    setResume,
+    addSection,
+    updateResumeSettings,
+  } = useResumeContext();
   const isGeneratePDFPage = useIsPDFGeneratePage();
+  const [inGetFlight, setInGetFlight] = useState(true);
   const router = useRouter();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [isSavingResume, setIsSavingResume] = useState(false);
+  const { downloadResume } = useResumeDownload();
+  const { resumeId } = router.query;
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    fetchResume(signal);
     return () => {
+      controller.abort();
       const { resumeId } = router.query;
       updateResume(resumeId as string, {
         contents: objectToBase64(resume),
@@ -31,30 +47,62 @@ export const Builder = () => {
     if (!router.isReady) return;
   }, [router.isReady]);
 
+  const fetchResume = useCallback(
+    (abortSignal: AbortSignal) => {
+      setInGetFlight(true);
+      const { resumeId } = router.query;
+      getResumeById(resumeId as string, abortSignal)
+        .then(({ data }: AxiosResponse<ResumeData>) => {
+          if (data.contents) {
+            const resume = objFromBase64(data.contents);
+            setResume(resume);
+          }
+        })
+        .catch(err => {
+          console.log('err ', err);
+        })
+        .finally(() => setInGetFlight(false));
+    },
+    [router.query, setResume]
+  );
+
   const onGenerate = () => {
     setIsGeneratingPDF(true);
-    const { resumeId } = router.query;
-    generatePDF(resumeId as string)
+    console.log('resume before update ', resume);
+    updateResume(resumeId as string, {
+      contents: objectToBase64(resume),
+    })
       .then(({ data }) => {
-        console.log('data ', data);
-        const blob = new Blob([data as unknown as BlobPart], {
-          type: 'application/pdf',
-        });
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = `file-${+new Date()}.pdf`;
-        link.click();
-        window.URL.revokeObjectURL(data as unknown as string);
-        link.remove();
-        return updateResume(resumeId as string, {
-          contents: objectToBase64(resume),
-          fileContents: arrayBufferToBase64(data),
-        });
+        if (data.contents) {
+          const resume = objFromBase64(data.contents);
+          console.log('resume before after ', resume);
+          setResume(resume);
+        }
+        return generatePDF(data.id);
       })
-      .then(() => console.log('Success'))
+      .then(({ data }) => {
+        downloadResume(data, 'resume');
+      })
       .catch(err => console.log('Error ', err))
       .finally(() => setIsGeneratingPDF(false));
   };
+
+  const onSaveResume = () => {
+    setIsSavingResume(true);
+    updateResume(resumeId as string, {
+      contents: objectToBase64(resume),
+    })
+      .then(({ data }) => {
+        if (data.contents) {
+          const resume = objFromBase64(data.contents);
+          setResume(resume);
+        }
+      })
+      .catch(err => console.log('Error ', err))
+      .finally(() => setIsSavingResume(false));
+  };
+
+  if (inGetFlight) return <PageSpinner />;
 
   return (
     <Flex gap={isGeneratePDFPage ? undefined : 3} justify="center">
@@ -69,6 +117,10 @@ export const Builder = () => {
           isGeneratingPDF={isGeneratingPDF}
           setCandidate={setCandidate}
           resume={resume}
+          addSection={addSection}
+          updateResumeSettings={updateResumeSettings}
+          onSaveResume={onSaveResume}
+          isSavingResume={isSavingResume}
         />
         <Resume
           resume={resume}
@@ -81,19 +133,6 @@ export const Builder = () => {
   );
 };
 
-type LayoutProps = {
-  children: React.ReactNode;
-};
-
-const EnhancedBuilderLayout: React.FC<LayoutProps> = ({ children }) => {
-  return (
-    <ResumeContextProvider initialResume={resumeSample as ResumeType}>
-      {children}
-    </ResumeContextProvider>
-  );
-};
-
-Builder.Layout = EnhancedBuilderLayout;
 export default Builder;
 
 export const getServerSideProps = withAuthServerSideProps(() => {

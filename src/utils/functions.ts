@@ -26,3 +26,12 @@ export function arrayBufferToBase64(buf: Uint8Array) {
 export function base64ToArrayBuffer(str: string) {
   return new Uint8Array(Buffer.from(str, 'base64'));
 }
+
+export function downloadResume(fileUrl: string, fileName?: string) {
+  if (!fileUrl) return;
+  const link = document.createElement('a');
+  link.href = fileUrl;
+  link.download = fileName ? `${fileName}.pdf` : `file-${+new Date()}.pdf`;
+  link.click();
+  link.remove();
+}

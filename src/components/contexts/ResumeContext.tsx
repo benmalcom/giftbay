@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { v4 as uuidV4 } from 'uuid';
 import {
   ResumeType,
@@ -18,6 +18,7 @@ export type ResumeContextType = {
   updateSection(section: SectionType): void;
   removeSection(id: string): void;
   updateResumeSettings(values: Partial<ResumeSettingsType>): void;
+  setResume(values: Partial<ResumeType>): void;
 };
 
 export const ResumeContext = React.createContext<ResumeContextType | undefined>(
@@ -56,6 +57,9 @@ export const ResumeContextProvider: React.FC<ResumeContextProviderType> = ({
   const updateResumeSettings = (values: Partial<ResumeSettingsType>) =>
     dispatch({ type: ActionTypes.UpdateSettings, payload: values });
 
+  const setResume = (values: Partial<ResumeType>) =>
+    dispatch({ type: ActionTypes.SetResume, payload: values });
+
   return (
     <ResumeContext.Provider
       value={{
@@ -65,6 +69,7 @@ export const ResumeContextProvider: React.FC<ResumeContextProviderType> = ({
         updateSection,
         removeSection,
         updateResumeSettings,
+        setResume,
       }}
     >
       {children}

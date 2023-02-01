@@ -25,7 +25,7 @@ const links = [
 const NavBar = () => {
   const boxShadow = useColorModeValue('sm', 'sm-dark');
   const isGeneratePDF = useIsPDFGeneratePage();
-  const { status: sessionStatus } = useSession();
+  const session = useSession();
 
   const handleLogOut = async () => {
     signOut({ callbackUrl: APP_BASE_URL });
@@ -34,7 +34,7 @@ const NavBar = () => {
 
   if (isGeneratePDF) return null;
 
-  const isAuthenticated = sessionStatus === 'authenticated';
+  const isAuthenticated = Boolean(session?.data?.user);
 
   return (
     <Box as="section" w="full">

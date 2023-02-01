@@ -16,6 +16,7 @@ import { omit } from 'lodash';
 import React, { useRef } from 'react';
 import { AiFillDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import { v4 as uuid } from 'uuid';
+import { ResumeContextType } from 'components/contexts';
 import { EditableLabel } from 'components/form';
 import JobRole from 'components/resume/JobRole';
 import loremIpsum from 'data/loremIpsum.json';
@@ -34,11 +35,12 @@ import InlineList from './InlineList';
 import { ModalManager as InlineListModalModalManager } from './InlineListModal';
 import { ModalManager as JobRoleModalModalManager } from './JobRoleModal';
 
-type SectionProps = {
+type SectionProps = Pick<
+  ResumeContextType,
+  'removeSection' | 'updateSection'
+> & {
   section: SectionType;
   settings: ResumeSettingsType;
-  updateSection(section: SectionType): void;
-  removeSection(id: string): void;
 };
 
 export const Section: React.FC<SectionProps> = ({

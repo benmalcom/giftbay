@@ -12,6 +12,7 @@ export enum ActionTypes {
   UpdateSection = 'UPDATE_SECTION',
   DeleteSection = 'DELETE_SECTION',
   UpdateSettings = 'UPDATE_SETTINGS',
+  SetResume = 'SET_RESUME',
 }
 
 export type ResumeReducerAction = {
@@ -19,6 +20,7 @@ export type ResumeReducerAction = {
   payload:
     | Partial<Candidate>
     | Partial<SectionType>
+    | Partial<ResumeType>
     | Partial<ResumeSettingsType>;
 };
 
@@ -65,6 +67,9 @@ const resumeReducer = (
         ...state,
         settings: merge(state.settings, payload),
       };
+    }
+    case ActionTypes.SetResume: {
+      return action.payload as ResumeType;
     }
     default:
       return state;
