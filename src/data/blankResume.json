@@ -1,0 +1,24 @@
+{
+  "candidate": {
+    "name": "",
+    "headline": "",
+    "summary": "",
+    "contactsAndLinks": {
+      "email": "",
+      "linkedIn": ""
+    }
+  },
+  "sections": [],
+  "settings": {
+    "colors": {
+      "accent": "#9c432f",
+      "common": "#58595c",
+      "candidateHeadline": "#58595c",
+      "candidateContactsAndLinks": "#505153",
+      "jobFunctions": "#58595c",
+      "jobRoleName": "#606165",
+      "jobRoleDuration": "#342f31",
+      "jobRoleCompanyLocation": "#606165"
+    }
+  }
+}

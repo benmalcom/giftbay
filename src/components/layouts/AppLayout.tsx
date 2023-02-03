@@ -6,7 +6,7 @@ import NavBar from './NavBar';
 type LayoutProps = {
   children: React.ReactNode;
 };
-export const BuilderLayout: React.FC<LayoutProps> = ({ children }) => {
+export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
   const generatePDF = useIsPDFGeneratePage();
   return (
     <Stack w="full" align="center">
@@ -16,4 +16,4 @@ export const BuilderLayout: React.FC<LayoutProps> = ({ children }) => {
   );
 };
 
-export default BuilderLayout;
+export default AppLayout;

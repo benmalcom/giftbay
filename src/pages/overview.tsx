@@ -29,6 +29,9 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
   const [inGetFlight, setInGetFlight] = useState(false);
   const [resumeData, setResumeData] = useState<ResumeData[]>([]);
 
+  // @ts-ignore: user is already available here
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
   const onCreateResume = (payload?: Record<string, unknown>) => {
     setInCreateFlight(true);
     createResume({ user: user.id, ...payload })

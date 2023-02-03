@@ -26,7 +26,6 @@ import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
 import { PasswordInput } from 'components/form';
-import { Logo } from 'components/index';
 
 const schema = yup
   .object({
@@ -87,7 +86,6 @@ export const Login = () => {
     >
       <Stack spacing="8">
         <Stack spacing="6">
-          <Logo />
           <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
             <Heading
               size={useBreakpointValue({ base: 'xs', md: 'sm', lg: 'lg' })}

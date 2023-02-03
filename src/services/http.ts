@@ -1,7 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { isEmpty } from 'lodash';
 import { Session } from 'next-auth';
-import { getSession } from 'next-auth/react';
+import { getSession, signOut } from 'next-auth/react';
+import toast from 'react-hot-toast';
+import { APP_BASE_URL } from 'utils/constants';
 // Default config options
 const defaultOptions: AxiosRequestConfig = {
   baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VERSION}`,
@@ -36,20 +38,27 @@ instance.interceptors.response.use(
     if (error.response) {
       if (error.code === 'ECONNABORTED')
         throw new Error('Network timeout, please try again');
+      else if (error.code === 'ERR_CANCELED') {
+        return;
+      } else if (error.response.status === 401) {
+        signOut({ callbackUrl: `${APP_BASE_URL}/login` });
+        toast.error('Session expired! Please login.');
+        return;
+      } else if (error.response.status === 403) {
+        throw new Error('You are not authorized to perform this operation');
+      }
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       throw error.response.data;
     }
     // Do nothing for canceled requests
-    else if (error.code === 'ERR_CANCELED') {
-      return;
-    } else if (error.request) {
+    else if (error.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
       // http.ClientRequest in node.js
-      error.message =
-        'This request is taking too long, please check your network';
-      throw error;
+      throw new Error(
+        'This request is taking too long, please check your network'
+      );
     } else {
       // Something happened in setting up the request that triggered an Error
       throw error;

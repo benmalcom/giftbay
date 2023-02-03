@@ -32,6 +32,12 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    if (props.text !== value) {
+      setValue(props.text);
+    }
+  }, [props.text, value]);
+
   const onClickReveal = () => {
     onToggle();
   };

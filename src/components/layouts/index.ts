@@ -1,2 +1,2 @@
-export { default as BuilderLayout } from './BuilderLayout';
+export { default as AppLayout } from './AppLayout';
 export { default as NavBar } from './NavBar';

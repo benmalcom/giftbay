@@ -14,7 +14,6 @@ import {
   FormLabel,
   Input,
   FormErrorMessage,
-  Textarea,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';

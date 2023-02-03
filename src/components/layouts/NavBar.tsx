@@ -10,11 +10,12 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
-import { useSession } from 'next-auth/react';
+import React from 'react';
 import { AiOutlinePoweroff } from 'react-icons/ai';
 import Logo from 'components/Logo';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
 import { logOutUser } from 'services/auth';
+import { User } from 'types/user';
 import { APP_BASE_URL } from 'utils/constants';
 
 const links = [
@@ -22,10 +23,13 @@ const links = [
   { name: 'Settings', path: '/settings', visible: true },
 ];
 
-const NavBar = () => {
+type NavBarProps = {
+  user?: User;
+};
+
+const NavBar: React.FC<NavBarProps> = ({ user }) => {
   const boxShadow = useColorModeValue('sm', 'sm-dark');
   const isGeneratePDF = useIsPDFGeneratePage();
-  const session = useSession();
 
   const handleLogOut = async () => {
     signOut({ callbackUrl: APP_BASE_URL });
@@ -34,7 +38,7 @@ const NavBar = () => {
 
   if (isGeneratePDF) return null;
 
-  const isAuthenticated = Boolean(session?.data?.user);
+  const isAuthenticated = Boolean(user);
 
   return (
     <Box as="section" w="full">

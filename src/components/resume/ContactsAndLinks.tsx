@@ -37,32 +37,34 @@ export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
           {...rest}
         >
           <UnorderedList mx={0}>
-            {Object.values(contactsAndLinks).map(item => (
-              <ListItem
-                key={item}
-                fontSize="11pt"
-                sx={{
-                  '@media screen, print': {
-                    fontWeight: 400,
-                    color,
-                    float: 'left',
-                    marginLeft: 5,
-                    listStyleType: 'disc',
-                    fontFamily: 'Roboto, Ariel',
-                    ':first-of-type': {
-                      marginLeft: 0,
-                      listStyleType: 'none',
+            {Object.values(contactsAndLinks)
+              .filter(item => Boolean(item))
+              .map(item => (
+                <ListItem
+                  key={item}
+                  fontSize="11pt"
+                  sx={{
+                    '@media screen, print': {
+                      fontWeight: 400,
+                      color,
+                      float: 'left',
+                      marginLeft: 5,
+                      listStyleType: 'disc',
+                      fontFamily: 'Roboto, Ariel',
+                      ':first-of-type': {
+                        marginLeft: 0,
+                        listStyleType: 'none',
+                      },
                     },
-                  },
-                  '@media print': {
-                    marginRight: '5pt',
-                    fontSize: '10.5pt',
-                  },
-                }}
-              >
-                {item}
-              </ListItem>
-            ))}
+                    '@media print': {
+                      marginRight: '5pt',
+                      fontSize: '10.5pt',
+                    },
+                  }}
+                >
+                  {item}
+                </ListItem>
+              ))}
           </UnorderedList>
           {showRemoveButton && (
             <CloseButton

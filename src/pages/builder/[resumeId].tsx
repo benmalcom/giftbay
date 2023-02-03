@@ -36,10 +36,6 @@ export const Builder = () => {
     fetchResume(signal);
     return () => {
       controller.abort();
-      const { resumeId } = router.query;
-      updateResume(resumeId as string, {
-        contents: objectToBase64(resume),
-      });
     };
   }, []);
 
@@ -66,16 +62,16 @@ export const Builder = () => {
     [router.query, setResume]
   );
 
+  console.log('resume ', resume);
+
   const onGenerate = () => {
     setIsGeneratingPDF(true);
-    console.log('resume before update ', resume);
     updateResume(resumeId as string, {
       contents: objectToBase64(resume),
     })
       .then(({ data }) => {
         if (data.contents) {
           const resume = objFromBase64(data.contents);
-          console.log('resume before after ', resume);
           setResume(resume);
         }
         return generatePDF(data.id);

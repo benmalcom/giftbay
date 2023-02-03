@@ -3,7 +3,13 @@ import { mode } from '@chakra-ui/theme-tools';
 
 const styles = {
   global: (props: Record<string, unknown>) => ({
+    'html, body': {
+      height: '100%',
+      width: '100%',
+    },
     body: {
+      margin: 0,
+      padding: 0,
       fontFamily: `'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
       color: mode('gray.800', 'whiteAlpha.900')(props),
       bg: mode('#F7FAFC', 'gray.800')(props),
@@ -12,6 +18,9 @@ const styles = {
         overflow: 'hidden',
         marginBottom: '-1px',
       },
+    },
+    '#__next': {
+      height: '100%',
     },
     '*::placeholder': {
       color: mode('gray.400', 'whiteAlpha.400')(props),

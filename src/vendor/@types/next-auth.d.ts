@@ -1,8 +1,8 @@
-import { BasicUser } from 'types/user';
+import { User } from 'types/user';
 
 type Token = {
   accessToken: string;
-  user: BasicUser;
+  user: User;
 };
 
 declare module 'next-auth' {
@@ -13,16 +13,7 @@ declare module 'next-auth' {
     accessToken: string;
     refreshToken: string;
     accessTokenExpiry: number;
-    user: BasicUser;
-  }
-
-  /**
-   * The shape of the user object returned in the OAuth providers' `profile` callback,
-   * or the second parameter of the `session` callback, when using a database.
-   */
-  interface User {
-    token: string;
-    data: BasicUser;
+    user: User;
   }
 }
 
@@ -30,7 +21,7 @@ declare module 'next-auth/jwt' {
   /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
   interface JWT {
     /** OpenID ID Token */
-    user: BasicUser;
+    user: User;
     token: Token;
     accessToken: string;
   }

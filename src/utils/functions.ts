@@ -35,3 +35,14 @@ export function downloadResume(fileUrl: string, fileName?: string) {
   link.click();
   link.remove();
 }
+
+export function isBlankResume(resume: ResumeType) {
+  return (
+    !resume?.candidate?.name &&
+    !resume?.candidate?.headline &&
+    !resume?.candidate?.summary &&
+    !resume?.candidate?.contactsAndLinks?.linkedIn &&
+    !resume?.candidate?.contactsAndLinks?.email &&
+    !resume?.sections.length
+  );
+}

@@ -84,7 +84,6 @@ const Settings = () => {
   );
 };
 export default Settings;
-
 export const getServerSideProps = withAuthServerSideProps(() => {
   return {
     props: {

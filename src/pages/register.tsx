@@ -25,7 +25,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
-import { Logo } from 'components';
 import { PasswordInput } from 'components/form';
 
 const schema = yup
@@ -102,8 +101,6 @@ export const Register = () => {
           </Alert>
         )}
         <Stack spacing="6">
-          <Logo />
-
           <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
             <Heading
               size={useBreakpointValue({ base: 'xs', md: 'sm', lg: 'lg' })}
@@ -202,5 +199,4 @@ export const Register = () => {
     </Container>
   );
 };
-
 export default Register;
