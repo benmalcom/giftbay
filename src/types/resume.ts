@@ -86,8 +86,9 @@ export type InlineListType = {
 };
 
 export type ResumeData = {
-  id?: string;
+  id: string;
   user: string;
-  contents?: string;
+  contents: string;
   fileContents?: string;
+  updatedAt?: string;
 };

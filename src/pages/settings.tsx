@@ -6,7 +6,6 @@ import {
   TabPanels,
   Tab,
   Alert,
-  AlertIcon,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -52,14 +51,13 @@ const Settings = () => {
     <>
       <Flex w="full" justify="center" mt="50px">
         <Flex width="600px" flexDir="column">
-          <Alert status="info" variant="subtle">
-            <AlertIcon />
+          <Alert status="warning" variant="subtle">
             Update your bio details and change your password here.
           </Alert>
           <Tabs mt="50px">
             <TabList>
-              <Tab>User/Resume Profile</Tab>
-              <Tab>Change Password</Tab>
+              <Tab>User Profile</Tab>
+              <Tab isDisabled>Change Password</Tab>
             </TabList>
 
             <TabPanels>

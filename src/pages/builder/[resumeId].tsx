@@ -2,6 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { PageSpinner } from 'components/index';
 import { Resume, Controls } from 'components/resume';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
@@ -62,8 +63,6 @@ export const Builder = () => {
     [router.query, setResume]
   );
 
-  console.log('resume ', resume);
-
   const onGenerate = () => {
     setIsGeneratingPDF(true);
     updateResume(resumeId as string, {
@@ -79,7 +78,7 @@ export const Builder = () => {
       .then(({ data }) => {
         downloadResume(data, 'resume');
       })
-      .catch(err => console.log('Error ', err))
+      .catch(err => toast.error(err.message))
       .finally(() => setIsGeneratingPDF(false));
   };
 

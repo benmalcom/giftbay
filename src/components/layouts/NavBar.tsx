@@ -28,7 +28,7 @@ type NavBarProps = {
 };
 
 const NavBar: React.FC<NavBarProps> = ({ user }) => {
-  const boxShadow = useColorModeValue('sm', 'sm-dark');
+  const boxShadow = useColorModeValue('xs', 'xs-dark');
   const isGeneratePDF = useIsPDFGeneratePage();
 
   const handleLogOut = async () => {
@@ -42,8 +42,14 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
 
   return (
     <Box as="section" w="full">
-      <Box as="nav" bg="white" w="full" boxShadow={boxShadow}>
-        <Container py={{ base: '4', lg: '5' }} maxW="7xl">
+      <Box
+        as="nav"
+        bg="#eee"
+        w="full"
+        boxShadow={boxShadow}
+        borderBottom="1px solid #ddd"
+      >
+        <Container py={{ base: '2', lg: '3' }} maxW="7xl">
           <HStack spacing="10" justify="space-between">
             <Link href={isAuthenticated ? '/overview' : '/'} passHref>
               <a>
@@ -54,7 +60,13 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
               <Flex justify="space-between" flex="1">
                 <ButtonGroup variant="link" spacing="8" mr={5}>
                   <Link href="/overview" passHref key="/overview">
-                    <Button as="a" textDecoration="none">
+                    <Button
+                      as="a"
+                      textDecoration="none"
+                      fontSize="15px"
+                      fontWeight={400}
+                      color="#666"
+                    >
                       Home
                     </Button>
                   </Link>
@@ -62,7 +74,13 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
                     .filter(item => item.visible)
                     .map(item => (
                       <Link href={item.path} passHref key={item.path}>
-                        <Button as="a" textDecoration="none">
+                        <Button
+                          as="a"
+                          textDecoration="none"
+                          fontSize="15px"
+                          fontWeight={400}
+                          color="#666"
+                        >
                           {item.name}
                         </Button>
                       </Link>

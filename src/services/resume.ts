@@ -24,6 +24,15 @@ export const updateResume = async (
   );
 };
 
+export const deleteResume = async (resumeId: string) => {
+  return await createRequest(
+    composeRequestConfig({
+      url: `/resumes/${resumeId}`,
+      method: 'delete',
+    })
+  );
+};
+
 export const createResume = async (payload: Record<string, unknown>) => {
   return await createRequest(
     composeRequestConfig({

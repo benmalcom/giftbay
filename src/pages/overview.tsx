@@ -1,5 +1,4 @@
 import {
-  Box,
   Container,
   Flex,
   VStack,
@@ -14,9 +13,10 @@ import {
 import { AxiosResponse } from 'axios';
 import Router from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
 import ResumePDF from 'components/resume/ResumePDF';
-import { createResume, getUserResumes } from 'services/resume';
+import { createResume, getUserResumes, deleteResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
 import { User } from 'types/user';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
@@ -27,10 +27,8 @@ type OverviewProps = {
 const Overview: React.FC<OverviewProps> = ({ user }) => {
   const [inCreateFlight, setInCreateFlight] = useState(false);
   const [inGetFlight, setInGetFlight] = useState(false);
-  const [resumeData, setResumeData] = useState<ResumeData[]>([]);
-
-  // @ts-ignore: user is already available here
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const [inDeleteFlight, setInDeleteFlight] = useState(false);
+  const [resumeDataList, setResumeDataList] = useState<ResumeData[]>([]);
 
   const onCreateResume = (payload?: Record<string, unknown>) => {
     setInCreateFlight(true);
@@ -48,7 +46,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
     (abortSignal: AbortSignal) => {
       setInGetFlight(true);
       getUserResumes(user.id, abortSignal)
-        .then(response => setResumeData(response?.data.results))
+        .then(response => setResumeDataList(response?.data.results))
         .catch(err => {
           console.log('err ', err);
         })
@@ -66,8 +64,24 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
     };
   }, [fetchResumes]);
 
+  const onDeleteResume = (resumeId: string) => {
+    setInDeleteFlight(true);
+    deleteResume(resumeId)
+      .then(() => {
+        setResumeDataList(currentList =>
+          currentList.filter(item => item.id !== resumeId)
+        );
+        toast.success('Success!');
+      })
+      .catch(err => {
+        toast.error('Delete error!');
+        console.log('err ', err);
+      })
+      .finally(() => setInDeleteFlight(false));
+  };
+
   return (
-    <Box as="section" bg="#F7FAFC">
+    <Flex bg="#F7FAFC" flex={1}>
       <Container
         py={{ base: '8', md: '12' }}
         mt={{ base: '8', md: '12' }}
@@ -81,7 +95,6 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
         </Flex>
 
         <Alert status="warning" variant="left-accent">
-          <AlertIcon />
           Create new Resumes. Re-use old ones.
         </Alert>
         <Flex mt={10} gridGap={10}>
@@ -111,7 +124,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
               </>
             )}
           </VStack>
-          {resumeData
+          {resumeDataList
             ?.filter(item => item.fileContents)
             .map(data => {
               return (
@@ -120,13 +133,15 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
                     resumeData={data}
                     onCreateResume={onCreateResume}
                     inCreateFlight={inCreateFlight}
+                    onDeleteResume={onDeleteResume}
+                    inDeleteFlight={inDeleteFlight}
                   />
                 </Skeleton>
               );
             })}
         </Flex>
       </Container>
-    </Box>
+    </Flex>
   );
 };
 

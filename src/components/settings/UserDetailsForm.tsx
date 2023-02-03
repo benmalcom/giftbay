@@ -34,7 +34,6 @@ const schema = yup
       .string()
       .required('This i required')
       .required('Your email is required'),
-    summary: yup.string().typeError('Input format is invalid'),
     linkedIn: yup
       .string()
       .typeError('Input format is invalid')
@@ -61,7 +60,7 @@ const UserDetailsForm: React.FC<FormProps> = ({
     defaultValues: initialValues,
   });
 
-  const onSubmit = (values: Record<string, unknown>) => {
+  const onSubmit = (values: Record<string, string>) => {
     onSave(values as UserDetailsFormData);
   };
 

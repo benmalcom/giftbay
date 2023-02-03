@@ -1,7 +1,9 @@
 import {
+  Alert,
   Box,
   Button,
   Container,
+  Flex,
   Heading,
   Stack,
   Text,
@@ -11,8 +13,16 @@ import Link from 'next/link';
 
 const Home = () => {
   return (
-    <Box as="section" bg="#F7FAFC">
-      <Container py={{ base: '16', md: '24' }} mt={{ base: '16', md: '24' }}>
+    <Flex
+      bg="#efefef"
+      /*      backgroundRepeat="no-repeat"
+      backgroundPosition="center"
+      backgroundSize="cover"
+      backgroundImage={`url(/images/unsplash6.jpg)`}*/
+      height="100%"
+      alignItems="center"
+    >
+      <Container alignItems="center">
         <Stack spacing={{ base: '8', md: '10' }}>
           <Stack align="center" maxW="2xl">
             <Heading
@@ -25,19 +35,20 @@ const Home = () => {
             >
               {process.env.NEXT_PUBLIC_APP_NAME}
             </Heading>
-            <Text
+            <Alert
+              status="success"
               textAlign="center"
               mb="2px"
-              fontWeight={500}
               fontSize={{
                 md: 'lg',
                 lg: 'lg',
                 xl: 'xl',
               }}
+              fontStyle="italic"
             >
-              Build, edit and generate your resume in PDF format.
-            </Text>
-            <Text color="muted" maxW="2xl" textAlign="center" fontSize="md">
+              Build, edit or generate your resume in PDF format.
+            </Alert>
+            <Text maxW="2xl" textAlign="center" fontSize="md">
               Lorem Ipsum has been the industry's standard dummy text ever since
               the 1500s, when an unknown printer took a galley of type and
               scrambled it to make a type specimen book.
@@ -62,7 +73,7 @@ const Home = () => {
           </Stack>
         </Stack>
       </Container>
-    </Box>
+    </Flex>
   );
 };
 

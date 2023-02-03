@@ -1,7 +1,7 @@
-import { Box, Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { AiFillFilePdf, AiOutlineEdit } from 'react-icons/ai';
+import { AiFillFilePdf, AiOutlineEdit, AiFillDelete } from 'react-icons/ai';
 import { Document, Page, pdfjs } from 'react-pdf';
 import usePDFObjectUrl from 'hooks/usePDFObjectUrl';
 import { ResumeData } from 'types/resume';
@@ -10,12 +10,16 @@ type ResumePDFProps = {
   resumeData: ResumeData;
   onCreateResume(payload: Record<string, unknown>): void;
   inCreateFlight?: boolean;
+  onDeleteResume(resumeId: string): void;
+  inDeleteFlight?: boolean;
 };
 
 const ResumePDF: React.FC<ResumePDFProps> = ({
   resumeData,
   inCreateFlight,
   onCreateResume,
+  onDeleteResume,
+  inDeleteFlight,
 }) => {
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   const [, setNumPages] = useState(null);
@@ -54,31 +58,40 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
         _groupHover={{ display: 'block' }}
       />
       <Flex
-        position="absolute"
         display="none"
-        transform="translate(-50%, -50%)"
-        left="50%"
-        top="50%"
-        zIndex={3}
         _groupHover={{ display: 'flex' }}
-        justify="center"
+        w="100%"
+        h="100%"
+        flexDir="column"
       >
-        <Button
-          size="sm"
-          m={1}
-          onClick={onDuplicate}
-          isLoading={inCreateFlight}
+        <Flex
+          position="absolute"
+          transform="translate(-50%, -50%)"
+          left="50%"
+          top="50%"
+          zIndex={3}
+          gap={2}
         >
-          <AiFillFilePdf color="red" style={{ marginRight: '2px' }} />
-          Duplicate
-        </Button>
-
-        <Link href={`/builder/${resumeData.id}`}>
-          <Button as="a" size="sm" m={1} colorScheme="orange">
-            <AiOutlineEdit style={{ marginRight: '2px' }} />
-            Edit
+          <Button size="sm" onClick={onDuplicate} isLoading={inCreateFlight}>
+            <AiFillFilePdf color="red" style={{ marginRight: '2px' }} />
+            Duplicate
           </Button>
-        </Link>
+
+          <Link href={`/builder/${resumeData.id}`}>
+            <Button as="a" size="sm" colorScheme="orange">
+              <AiOutlineEdit />
+            </Button>
+          </Link>
+          <Button
+            as="a"
+            size="sm"
+            colorScheme="red"
+            isLoading={inDeleteFlight}
+            onClick={() => onDeleteResume(resumeData.id)}
+          >
+            <AiFillDelete color="white" />
+          </Button>
+        </Flex>
       </Flex>
       <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>
         <Page
