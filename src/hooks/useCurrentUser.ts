@@ -11,10 +11,10 @@ const useCurrentUser = () => {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (status === 'unauthenticated') return;
+    if (status === 'unauthenticated' || !session?.user) return;
     const controller = new AbortController();
     const signal = controller.signal;
-    getUser(session?.user.id, signal)
+    getUser(session.user.id, signal)
       .then((response: AxiosResponse<User>) => setUser(response.data))
       .catch(error => setError(error.message))
       .finally(() => setLoading(false));
@@ -22,7 +22,7 @@ const useCurrentUser = () => {
     return () => {
       controller.abort();
     };
-  }, [session?.user.id, status]);
+  }, [session?.user, status]);
 
   return { user, loading, error };
 };
