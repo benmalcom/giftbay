@@ -31,19 +31,6 @@ export const Builder = () => {
   const { downloadResume } = useResumeDownload();
   const { resumeId } = router.query;
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    fetchResume(signal);
-    return () => {
-      controller.abort();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!router.isReady) return;
-  }, [router.isReady]);
-
   const fetchResume = useCallback(
     (abortSignal: AbortSignal) => {
       setInGetFlight(true);
@@ -64,8 +51,22 @@ export const Builder = () => {
         })
         .finally(() => setInGetFlight(false));
     },
-    [router.query, setResume]
+    [isGeneratePDFPage, router.query, setResume]
   );
+
+  useEffect(() => {
+    if (!router.isReady) return;
+  }, [router.isReady]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    fetchResume(signal);
+    return () => {
+      controller.abort();
+    };
+    // eslint-disable-next-line
+  }, []);
 
   const onGenerate = () => {
     setIsGeneratingPDF(true);

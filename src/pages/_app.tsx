@@ -8,13 +8,13 @@ import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { ResumeContextProvider } from 'components/contexts/ResumeContext';
 import { NavBar } from 'components/layouts';
+import RefreshTokenHandler from 'components/RefreshTokenHandler';
 import blankResume from 'data/blankResume.json';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
 import 'styles/override.scss';
 import { ResumeType } from 'types/resume';
 import { User } from 'types/user';
-import RefreshTokenHandler from 'components/RefreshTokenHandler';
 
 type NextPageWithLayout = NextPage & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,7 +50,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     };
   }, []);
 
-  if (!clientLoaded) return null;
+  if (!clientLoaded || isGsspLoading) return <Flex>Loading...</Flex>;
 
   return (
     <ChakraProvider theme={theme}>

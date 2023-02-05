@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   Flex,
   Tabs,
@@ -45,7 +46,7 @@ const Settings = () => {
     console.log('values ', values);
   };
 
-  if (inGetUserFlight) return <PageSpinner />;
+  if (inGetUserFlight || error) return <PageSpinner />;
 
   return (
     <>

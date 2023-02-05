@@ -7,13 +7,13 @@ import {
   Alert,
   Heading,
   Spinner,
-  Skeleton,
 } from '@chakra-ui/react';
 import { AxiosResponse } from 'axios';
 import Router from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { PageSpinner } from 'components';
 import ResumePDF from 'components/resume/ResumePDF';
 import { createResume, getUserResumes, deleteResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
@@ -123,20 +123,22 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
               </>
             )}
           </VStack>
-          {resumeDataList
-            ?.filter(item => item.fileContents)
-            .map(data => {
-              return (
-                <ResumePDF
-                  key={data.id}
-                  resumeData={data}
-                  onCreateResume={onCreateResume}
-                  inCreateFlight={inCreateFlight}
-                  onDeleteResume={onDeleteResume}
-                  inDeleteFlight={inDeleteFlight}
-                />
-              );
-            })}
+          {inGetFlight && <PageSpinner />}
+          {!inGetFlight &&
+            resumeDataList
+              ?.filter(item => item.fileContents)
+              .map(data => {
+                return (
+                  <ResumePDF
+                    key={data.id}
+                    resumeData={data}
+                    onCreateResume={onCreateResume}
+                    inCreateFlight={inCreateFlight}
+                    onDeleteResume={onDeleteResume}
+                    inDeleteFlight={inDeleteFlight}
+                  />
+                );
+              })}
         </Flex>
       </Container>
     </Flex>

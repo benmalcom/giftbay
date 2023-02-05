@@ -1,4 +1,4 @@
-import { ResumeData, ResumeType } from 'types/resume';
+import { ResumeData } from 'types/resume';
 import { composeRequestConfig, createRequest } from './http';
 
 export const generatePDF = async (resumeId: string) => {

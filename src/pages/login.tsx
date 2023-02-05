@@ -14,16 +14,12 @@ import {
   useColorModeValue,
   Link as ChakraLink,
   FormErrorMessage,
-  AlertDescription,
-  AlertTitle,
-  Alert,
-  AlertIcon,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { signIn, SignInOptions, useSession } from 'next-auth/react';
+import { signIn, SignInOptions } from 'next-auth/react';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';

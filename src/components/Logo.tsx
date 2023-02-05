@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Box, Heading } from '@chakra-ui/react';
 
 export const Logo = () => {

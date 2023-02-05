@@ -20,7 +20,6 @@ import { ModalManager as CandidateInformationModalManager } from 'components/res
 import ContactsAndLinks from 'components/resume/ContactsAndLinks';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
 import { ModalTriggerFunctionProps } from 'types/resume';
-import { isBlankResume } from 'utils/functions';
 import Section from './Section';
 
 export const Resume: React.FC<
