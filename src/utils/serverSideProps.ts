@@ -21,13 +21,17 @@ export function withAuthServerSideProps(
       return { props: {} };
     }
 
+    const redirect = {
+      permanent: false,
+      destination: `/login?dest=${resolvedUrl}`,
+    };
+
     if (!session?.user) {
       return {
-        redirect: {
-          permanent: false,
-          destination: `/login?dest=${resolvedUrl}`,
+        redirect,
+        props: {
+          authMessage: 'You need to be logged in to access this page.',
         },
-        props: {},
       };
     }
 

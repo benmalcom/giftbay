@@ -48,30 +48,28 @@ const callbacks = {
     This is a good place to persist additional data like an access_token in the JWT.
     Subsequent invocations will only contain the token parameter. */
     if (user) {
-      token.accessToken = user.accessToken;
-      token.refreshToken = user.refreshToken;
-      token.accessTokenExpiry = user.accessTokenExpiry;
-      token.user = user.data;
+      return {
+        accessToken: user.accessToken,
+        refreshToken: user.refreshToken,
+        accessTokenExpiry: new Date(user.accessTokenExpiry).getTime(),
+        user: user.data,
+      };
     }
-    // If accessTokenExpiry is 24 hours, we have to refresh token before 24 hours pass.
-    const shouldRefreshTime = Math.round(
-      token.accessTokenExpiry - 60 * 60 * 1000 - Date.now()
-    );
 
-    // If the token is still valid, just return it.
-    if (shouldRefreshTime > 0) {
+    // Return previous token if the access token has not expired yet
+    if (Date.now() < token.accessTokenExpiry) {
       return Promise.resolve(token);
     }
 
-    // If the call arrives after 23 hours have passed, we allow to refresh the token.
-    token = refreshAccessToken(token);
-    return Promise.resolve(token);
+    // Access token has expired, try to update it
+    return await refreshAccessToken(token);
   },
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   async session({ session, token }) {
     // Here we pass accessToken to the client to be used in authentication with your API
     session.accessToken = token.accessToken;
+    session.refreshToken = token.refreshToken;
     session.user = token.user;
     session.accessTokenExpiry = token.accessTokenExpiry;
     session.error = token.error;

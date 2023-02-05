@@ -14,12 +14,16 @@ import {
   useColorModeValue,
   Link as ChakraLink,
   FormErrorMessage,
+  AlertDescription,
+  AlertTitle,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { signIn, SignInOptions } from 'next-auth/react';
+import { signIn, SignInOptions, useSession } from 'next-auth/react';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -68,7 +72,6 @@ export const Login = () => {
       })
       .finally(() => setInFlight(false));
   };
-
   const {
     register,
     handleSubmit,
@@ -86,6 +89,12 @@ export const Login = () => {
     >
       <Stack spacing="8">
         <Stack spacing="6">
+          {/*{authMessage && (
+            <Alert status="error">
+              <AlertIcon />
+              <AlertDescription>{authMessage}</AlertDescription>
+            </Alert>
+          )}*/}
           <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
             <Heading
               size={useBreakpointValue({ base: 'xs', md: 'sm', lg: 'lg' })}

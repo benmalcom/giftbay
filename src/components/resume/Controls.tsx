@@ -113,7 +113,7 @@ export const Controls: React.FC<ControlsProps> = ({
 
         <Stack direction="row">
           {resume.sections.map(section => (
-            <Badge key={section.id} textTransform="capitalize">
+            <Badge key={section.id} textTransform="capitalize" py={0.5}>
               {section.name}
             </Badge>
           ))}

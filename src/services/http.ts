@@ -13,7 +13,7 @@ const defaultOptions: AxiosRequestConfig = {
     Pragma: 'no-cache',
     Expires: '0',
   },
-  timeout: 10000,
+  // timeout: 10000,
 };
 
 // Create instance
@@ -22,7 +22,8 @@ const instance = axios.create(defaultOptions);
 instance.interceptors.request.use(
   async (config: AxiosRequestConfig) => {
     const session = (await getSession()) as Session;
-    if (session?.accessToken) {
+    if (session?.accessToken && !config.url?.startsWith('/auth')) {
+      //Don't send token for refresh tokens route
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       config.headers.Authorization = `Bearer ${session?.accessToken}`;
@@ -41,8 +42,8 @@ instance.interceptors.response.use(
       else if (error.code === 'ERR_CANCELED') {
         return;
       } else if (error.response.status === 401) {
-        signOut({ callbackUrl: `${APP_BASE_URL}/login` });
         toast.error('Session expired! Please login.');
+        signOut({ callbackUrl: `${APP_BASE_URL}/login` });
         return;
       } else if (error.response.status === 403) {
         throw new Error('You are not authorized to perform this operation');

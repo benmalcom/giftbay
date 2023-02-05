@@ -5,7 +5,6 @@ import {
   Text,
   useColorModeValue,
   Alert,
-  AlertIcon,
   Heading,
   Spinner,
   Skeleton,
@@ -48,7 +47,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
       getUserResumes(user.id, abortSignal)
         .then(response => setResumeDataList(response?.data.results))
         .catch(err => {
-          console.log('err ', err);
+          err?.code !== 'ERR_CANCELED' && console.log('err ', err);
         })
         .finally(() => setInGetFlight(false));
     },
@@ -128,15 +127,14 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
             ?.filter(item => item.fileContents)
             .map(data => {
               return (
-                <Skeleton isLoaded={!inGetFlight} key={data.id}>
-                  <ResumePDF
-                    resumeData={data}
-                    onCreateResume={onCreateResume}
-                    inCreateFlight={inCreateFlight}
-                    onDeleteResume={onDeleteResume}
-                    inDeleteFlight={inDeleteFlight}
-                  />
-                </Skeleton>
+                <ResumePDF
+                  key={data.id}
+                  resumeData={data}
+                  onCreateResume={onCreateResume}
+                  inCreateFlight={inCreateFlight}
+                  onDeleteResume={onDeleteResume}
+                  inDeleteFlight={inDeleteFlight}
+                />
               );
             })}
         </Flex>

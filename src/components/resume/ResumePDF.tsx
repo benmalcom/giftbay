@@ -1,10 +1,13 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { AiFillFilePdf, AiOutlineEdit, AiFillDelete } from 'react-icons/ai';
 import { Document, Page, pdfjs } from 'react-pdf';
 import usePDFObjectUrl from 'hooks/usePDFObjectUrl';
 import { ResumeData } from 'types/resume';
+dayjs.extend(relativeTime);
 
 type ResumePDFProps = {
   resumeData: ResumeData;
@@ -38,22 +41,13 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
   };
 
   return (
-    <Flex
-      role="group"
-      boxShadow="md"
-      w="fit-content"
-      position="relative"
-      zIndex={1}
-      _hover={{
-        cursor: 'pointer',
-      }}
-    >
+    <Flex role="group" boxShadow="md" position="relative" zIndex={1}>
       <Box
         w="100%"
         h="100%"
         position="absolute"
         zIndex={2}
-        bg="rgba(0, 0, 0, 0.4)"
+        bg="rgba(0, 0, 0, 0.5)"
         display="none"
         _groupHover={{ display: 'block' }}
       />
@@ -63,22 +57,26 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
         w="100%"
         h="100%"
         flexDir="column"
+        position="absolute"
+        align="center"
+        justify="center"
+        zIndex={3}
+        py={5}
+        rowGap={4}
       >
-        <Flex
-          position="absolute"
-          transform="translate(-50%, -50%)"
-          left="50%"
-          top="50%"
-          zIndex={3}
-          gap={2}
-        >
-          <Button size="sm" onClick={onDuplicate} isLoading={inCreateFlight}>
+        <Flex gap={2}>
+          <Button
+            size="sm"
+            onClick={onDuplicate}
+            isLoading={inCreateFlight}
+            cursor="pointer"
+          >
             <AiFillFilePdf color="red" style={{ marginRight: '2px' }} />
             Duplicate
           </Button>
 
           <Link href={`/builder/${resumeData.id}`}>
-            <Button as="a" size="sm" colorScheme="orange">
+            <Button as="a" size="sm" colorScheme="orange" cursor="pointer">
               <AiOutlineEdit />
             </Button>
           </Link>
@@ -88,9 +86,18 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
             colorScheme="red"
             isLoading={inDeleteFlight}
             onClick={() => onDeleteResume(resumeData.id)}
+            cursor="pointer"
           >
             <AiFillDelete color="white" />
           </Button>
+        </Flex>
+        <Flex>
+          <Text color="white" fontSize="13px" fontWeight={600} mr={1}>
+            Last edited:
+          </Text>{' '}
+          <Text color="white" fontSize="13px" fontWeight={500}>
+            {dayjs(resumeData.updatedAt).fromNow()}
+          </Text>
         </Flex>
       </Flex>
       <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>

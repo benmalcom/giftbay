@@ -48,7 +48,11 @@ export const Builder = () => {
     (abortSignal: AbortSignal) => {
       setInGetFlight(true);
       const { resumeId } = router.query;
-      getResumeById(resumeId as string, abortSignal)
+      getResumeById(
+        resumeId as string,
+        isGeneratePDFPage ? { forPDFGen: true } : null,
+        abortSignal
+      )
         .then(({ data }: AxiosResponse<ResumeData>) => {
           if (data.contents) {
             const resume = objFromBase64(data.contents);

@@ -11,7 +11,6 @@ import {
   PopoverBody,
   Portal,
   Popover,
-  Skeleton,
 } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
@@ -39,160 +38,158 @@ export const Resume: React.FC<
   const hasContactsAndLinks = !!resume!.candidate?.contactsAndLinks;
 
   return (
-    <Skeleton height="fit-content" isLoaded={!isBlankResume(resume)}>
-      <Flex
-        width={isGeneratePDF ? 'full' : '950px'}
-        id="resume"
-        sx={{
-          '@media screen, print': {
-            height: 'fit-content',
-            flexDir: 'column',
-            boxSizing: 'border-box',
-            backgroundColor: '#FFFFFF',
-            position: 'relative',
-            fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
-          },
-          '@media screen': {
-            boxShadow:
-              '0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-          },
-        }}
-        p="40px 48px"
+    <Flex
+      width={isGeneratePDF ? 'full' : '950px'}
+      id="resume"
+      sx={{
+        '@media screen, print': {
+          height: 'fit-content',
+          flexDir: 'column',
+          boxSizing: 'border-box',
+          backgroundColor: '#FFFFFF',
+          position: 'relative',
+          fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
+        },
+        '@media screen': {
+          boxShadow:
+            '0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        },
+      }}
+      p="40px 48px"
+    >
+      <Popover
+        closeOnBlur={false}
+        placement="left"
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        initialFocusRef={initRef}
       >
-        <Popover
-          closeOnBlur={false}
-          placement="left"
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          initialFocusRef={initRef}
-        >
-          {({ onClose }) => (
-            <>
-              <PopoverTrigger>
-                <Button
-                  size="xs"
-                  mr="10px"
-                  top="0"
-                  right="-10px"
-                  position="absolute"
-                  borderRadius={0}
-                  display="none"
-                >
-                  <AiOutlineMenu />
-                </Button>
-              </PopoverTrigger>
-              <Portal>
-                <PopoverContent>
-                  <PopoverHeader>Candidate Information</PopoverHeader>
-                  <PopoverCloseButton />
-                  <PopoverBody py="10px">
-                    <CandidateInformationModalManager
-                      triggerFunc={({
-                        trigger,
-                        ...rest
-                      }: ModalTriggerFunctionProps) => (
-                        <Button
-                          className="candidate-ctas"
-                          size="xs"
-                          {...rest}
-                          onClick={() => {
-                            trigger();
-                            onClose();
-                          }}
-                          mr="10px"
-                        >
-                          Job Role
-                        </Button>
-                      )}
-                      onSave={() => console.log('')}
-                    />
-                  </PopoverBody>
-                </PopoverContent>
-              </Portal>
-            </>
-          )}
-        </Popover>
+        {({ onClose }) => (
+          <>
+            <PopoverTrigger>
+              <Button
+                size="xs"
+                mr="10px"
+                top="0"
+                right="-10px"
+                position="absolute"
+                borderRadius={0}
+                display="none"
+              >
+                <AiOutlineMenu />
+              </Button>
+            </PopoverTrigger>
+            <Portal>
+              <PopoverContent>
+                <PopoverHeader>Candidate Information</PopoverHeader>
+                <PopoverCloseButton />
+                <PopoverBody py="10px">
+                  <CandidateInformationModalManager
+                    triggerFunc={({
+                      trigger,
+                      ...rest
+                    }: ModalTriggerFunctionProps) => (
+                      <Button
+                        className="candidate-ctas"
+                        size="xs"
+                        {...rest}
+                        onClick={() => {
+                          trigger();
+                          onClose();
+                        }}
+                        mr="10px"
+                      >
+                        Job Role
+                      </Button>
+                    )}
+                    onSave={() => console.log('')}
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </Portal>
+          </>
+        )}
+      </Popover>
 
-        {hasName && (
-          <EditableLabel
-            displayNode={Heading}
-            text={resume!.candidate?.name}
-            onChange={value => setCandidate({ name: value })}
-            showRemoveButton
-            onRemove={() => setCandidate({ name: '' })}
-            displayNodeProps={{
-              sx: {
-                fontSize: '24pt',
-                color: resume.settings.colors.accent,
-                marginBottom: '6px',
-                fontWeight: 400,
-                fontFamily: 'Verdana, Ariel',
-                '@media print': {
-                  fontSize: '21pt',
-                },
+      {hasName && (
+        <EditableLabel
+          displayNode={Heading}
+          text={resume!.candidate?.name}
+          onChange={value => setCandidate({ name: value })}
+          showRemoveButton
+          onRemove={() => setCandidate({ name: '' })}
+          displayNodeProps={{
+            sx: {
+              fontSize: '24pt',
+              color: resume.settings.colors.accent,
+              marginBottom: '6px',
+              fontWeight: 400,
+              fontFamily: 'Verdana, Ariel',
+              '@media print': {
+                fontSize: '21pt',
               },
-            }}
-          />
-        )}
-        {hasHeadline && (
-          <EditableLabel
-            displayNode={Text}
-            text={resume!.candidate?.headline}
-            onChange={value => setCandidate({ headline: value })}
-            showRemoveButton
-            onRemove={() => setCandidate({ headline: '' })}
-            displayNodeProps={{
-              sx: {
-                fontSize: '13pt',
-                fontWeight: 400,
-                color: resume.settings.colors.candidateHeadline,
-                '@media print': {
-                  fontSize: '12pt',
-                },
+            },
+          }}
+        />
+      )}
+      {hasHeadline && (
+        <EditableLabel
+          displayNode={Text}
+          text={resume!.candidate?.headline}
+          onChange={value => setCandidate({ headline: value })}
+          showRemoveButton
+          onRemove={() => setCandidate({ headline: '' })}
+          displayNodeProps={{
+            sx: {
+              fontSize: '13pt',
+              fontWeight: 400,
+              color: resume.settings.colors.candidateHeadline,
+              '@media print': {
+                fontSize: '12pt',
               },
-            }}
-          />
-        )}
-        {hasContactsAndLinks && (
-          <ContactsAndLinks
-            onSave={values => setCandidate({ contactsAndLinks: values })}
-            contactsAndLinks={resume!.candidate?.contactsAndLinks}
-            showRemoveButton
-            onRemove={() => setCandidate({ contactsAndLinks: undefined })}
-            color={resume.settings.colors.candidateContactsAndLinks}
-          />
-        )}
-        {hasSummary && (
-          <EditableLabel
-            displayNode={Text}
-            text={resume!.candidate?.summary}
-            onChange={value => setCandidate({ summary: value })}
-            showRemoveButton
-            onRemove={() => setCandidate({ summary: '' })}
-            displayNodeProps={{
-              sx: {
-                margin: '10pt 0',
-                fontWeight: 400,
-                fontSize: '11.5pt',
-                color: resume.settings.colors.common,
-                '@media print': {
-                  fontSize: '11pt',
-                },
+            },
+          }}
+        />
+      )}
+      {hasContactsAndLinks && (
+        <ContactsAndLinks
+          onSave={values => setCandidate({ contactsAndLinks: values })}
+          contactsAndLinks={resume!.candidate?.contactsAndLinks}
+          showRemoveButton
+          onRemove={() => setCandidate({ contactsAndLinks: undefined })}
+          color={resume.settings.colors.candidateContactsAndLinks}
+        />
+      )}
+      {hasSummary && (
+        <EditableLabel
+          displayNode={Text}
+          text={resume!.candidate?.summary}
+          onChange={value => setCandidate({ summary: value })}
+          showRemoveButton
+          onRemove={() => setCandidate({ summary: '' })}
+          displayNodeProps={{
+            sx: {
+              margin: '10pt 0',
+              fontWeight: 400,
+              fontSize: '11.5pt',
+              color: resume.settings.colors.common,
+              '@media print': {
+                fontSize: '11pt',
               },
-            }}
-          />
-        )}
-        {resume.sections.map(section => (
-          <Section
-            settings={resume.settings}
-            key={section.id}
-            section={section}
-            removeSection={removeSection}
-            updateSection={updateSection}
-          />
-        ))}
-      </Flex>
-    </Skeleton>
+            },
+          }}
+        />
+      )}
+      {resume.sections.map(section => (
+        <Section
+          settings={resume.settings}
+          key={section.id}
+          section={section}
+          removeSection={removeSection}
+          updateSection={updateSection}
+        />
+      ))}
+    </Flex>
   );
 };
 

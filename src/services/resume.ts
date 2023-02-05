@@ -43,11 +43,16 @@ export const createResume = async (payload: Record<string, unknown>) => {
   );
 };
 
-export const getResumeById = async (resumeId: string, signal: AbortSignal) => {
+export const getResumeById = async (
+  resumeId: string,
+  params: Record<string, string | boolean> | null,
+  signal: AbortSignal
+) => {
   return await createRequest(
     composeRequestConfig({
       url: `/resumes/${resumeId}`,
       method: 'get',
+      params,
       signal,
     })
   );

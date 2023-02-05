@@ -32,9 +32,9 @@ export const refreshAccessToken = async (tokenObject: {
 
     return {
       ...tokenObject,
-      accessToken: data.access.accessToken,
-      accessTokenExpiry: data.access.accessTokenExpiry,
-      refreshToken: data.refresh.accessToken,
+      accessToken: data.access.token,
+      accessTokenExpiry: new Date(data.access.expires).getTime(),
+      refreshToken: data.refresh.token ?? tokenObject.refreshToken,
     };
   } catch (error) {
     return {
@@ -57,7 +57,7 @@ export const logOutUser = async () => {
 
   return await createRequest({
     url: '/auth/logout',
-    payload: { refreshToken: session.refreshToken },
+    payload: { refreshToken: session?.refreshToken },
     method: 'post',
   });
 };
