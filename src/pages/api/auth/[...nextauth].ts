@@ -22,17 +22,16 @@ const providers = [
             refresh: { token: refreshToken },
           }, // eslint-disable-next-line
         } = data as Record<string, any>;
-
-        return Object.assign(
-          {},
-          {
-            data: { email, id, isEmailVerified, name },
-            accessToken,
-            refreshToken,
-            accessTokenExpiry,
-          }
-        );
+        const user = {
+          data: { email, id, isEmailVerified, name },
+          accessToken,
+          refreshToken,
+          accessTokenExpiry,
+        };
+        if (user) return user;
+        return null;
       } catch (e) {
+        console.log(' e ', e);
         throw new Error((e as ApiResponseError)?.message || 'Operation failed');
       }
     },

@@ -36,20 +36,13 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => response,
   error => {
+    console.log('error from http ', error.response.data);
     if (error.response) {
       if (error.code === 'ECONNABORTED')
         throw new Error('Network timeout, please try again');
       else if (error.code === 'ERR_CANCELED') {
         return;
-      } else if (error.response.status === 401) {
-        toast.error('Session expired! Please login.');
-        signOut({ callbackUrl: `${APP_BASE_URL}/login` });
-        return;
-      } else if (error.response.status === 403) {
-        throw new Error('You are not authorized to perform this operation');
       }
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
       throw error.response.data;
     }
     // Do nothing for canceled requests
