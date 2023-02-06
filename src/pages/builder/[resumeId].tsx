@@ -64,8 +64,6 @@ export const Builder = () => {
     [isGeneratePDFPage, router.query, setResume]
   );
 
-  console.log('resume ', resume);
-
   useEffect(() => {
     if (!router.isReady) return;
   }, [router.isReady]);

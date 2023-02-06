@@ -118,7 +118,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
               <>
                 <AiOutlinePlus size={50} fontWeight={400} color="gray" />
                 <Text fontSize="lg" fontWeight={500} color="blackAlpha.700">
-                  Blank Resume
+                  New Resume
                 </Text>
               </>
             )}
