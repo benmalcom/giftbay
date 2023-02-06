@@ -5,12 +5,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { PageSpinner } from 'components/index';
 import { Resume, Controls } from 'components/resume';
+import blankResume from 'data/blankResume.json';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
 import useResumeContext from 'hooks/useResumeContext';
 import useResumeDownload from 'hooks/useResumeDownload';
 import { generatePDF, getResumeById, updateResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
-import { objectToBase64, objFromBase64 } from 'utils/functions';
+import {
+  arrayBufferToBase64,
+  objectToBase64,
+  objFromBase64,
+} from 'utils/functions';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
 
 export const Builder = () => {
@@ -28,12 +33,15 @@ export const Builder = () => {
   const router = useRouter();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [isSavingResume, setIsSavingResume] = useState(false);
+  const [fileName, setFileName] = useState('');
   const { downloadResume } = useResumeDownload();
   const { resumeId } = router.query;
 
   const fetchResume = useCallback(
     (abortSignal: AbortSignal) => {
       setInGetFlight(true);
+      // @ts-ignore: Make it undefined for loading purpose
+      setResume(undefined);
       const { resumeId } = router.query;
       getResumeById(
         resumeId as string,
@@ -44,15 +52,19 @@ export const Builder = () => {
           if (data.contents) {
             const resume = objFromBase64(data.contents);
             setResume(resume);
+          } else {
+            setResume(blankResume);
           }
         })
         .catch(err => {
-          console.log('err ', err);
+          err?.code !== 'ERR_CANCELED' && console.log('err ', err);
         })
         .finally(() => setInGetFlight(false));
     },
     [isGeneratePDFPage, router.query, setResume]
   );
+
+  console.log('resume ', resume);
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -70,21 +82,22 @@ export const Builder = () => {
 
   const onGenerate = () => {
     setIsGeneratingPDF(true);
-    updateResume(resumeId as string, {
-      contents: objectToBase64(resume),
-    })
+    generatePDF(resumeId as string)
       .then(({ data }) => {
-        if (data.contents) {
-          const resume = objFromBase64(data.contents);
-          setResume(resume);
-        }
-        return generatePDF(data.id);
+        downloadResume(data, fileName ?? 'resume');
+        setIsGeneratingPDF(false);
+        setIsSavingResume(true);
+        return updateResume(resumeId as string, {
+          contents: objectToBase64(resume),
+          fileContents: arrayBufferToBase64(data),
+        });
       })
-      .then(({ data }) => {
-        downloadResume(data, 'resume');
-      })
-      .catch(err => toast.error(err.message))
-      .finally(() => setIsGeneratingPDF(false));
+      .then(() => setIsSavingResume(false))
+      .catch(err => {
+        toast.error(err.message);
+        setIsGeneratingPDF(false);
+        setIsSavingResume(false);
+      });
   };
 
   const onSaveResume = () => {
@@ -102,7 +115,10 @@ export const Builder = () => {
       .finally(() => setIsSavingResume(false));
   };
 
-  if (inGetFlight) return <PageSpinner />;
+  const onChangeFileName = (e: React.FormEvent<HTMLInputElement>) =>
+    setFileName(e.currentTarget.value);
+
+  if (inGetFlight || !resume) return <PageSpinner />;
 
   return (
     <Flex gap={isGeneratePDFPage ? undefined : 3} justify="center">
@@ -113,6 +129,8 @@ export const Builder = () => {
         my={isGeneratePDFPage ? undefined : 14}
       >
         <Controls
+          fileName={fileName}
+          onChangeFileName={onChangeFileName}
           onGenerate={onGenerate}
           isGeneratingPDF={isGeneratingPDF}
           setCandidate={setCandidate}

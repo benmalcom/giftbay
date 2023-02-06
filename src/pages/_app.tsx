@@ -6,10 +6,12 @@ import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { PageSpinner } from 'components';
 import { ResumeContextProvider } from 'components/contexts/ResumeContext';
 import { NavBar } from 'components/layouts';
 import RefreshTokenHandler from 'components/RefreshTokenHandler';
 import blankResume from 'data/blankResume.json';
+import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
 import 'styles/override.scss';
@@ -27,6 +29,7 @@ type AppPropsWithLayout = AppProps<Record<string, Session>> & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [clientLoaded, setClientLoaded] = useState(false);
   const [isGsspLoading, setIsGsspLoading] = useState(false);
+  const isGeneratePDFPage = useIsPDFGeneratePage();
 
   const Layout = Component.Layout ?? React.Fragment;
   useEffect(() => {
@@ -50,7 +53,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     };
   }, []);
 
-  if (!clientLoaded || isGsspLoading) return <Flex>Loading...</Flex>;
+  if (!clientLoaded || isGsspLoading) return <PageSpinner />;
 
   return (
     <ChakraProvider theme={theme}>
@@ -64,7 +67,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <ResumeContextProvider initialResume={blankResume as ResumeType}>
           <Flex flexDirection="column" height="100%">
             <NavBar user={pageProps?.user as unknown as User} />
-            <Box flex={1}>
+            <Box flex={1} paddingTop={isGeneratePDFPage ? 0 : '65px'}>
               <Layout>
                 <Component {...pageProps} />
                 <RefreshTokenHandler />

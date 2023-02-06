@@ -5,6 +5,7 @@ function usePDFObjectUrl(fileContents: string) {
   const [fileUrl, setFileUrl] = useState<string | undefined>();
 
   useEffect(() => {
+    if (!fileContents) return;
     if (fileUrl) return;
     const arrayBuffer = base64ToArrayBuffer(fileContents).buffer;
     const blob = new Blob([arrayBuffer as unknown as BlobPart], {

@@ -41,7 +41,7 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
   const isAuthenticated = Boolean(user);
 
   return (
-    <Box as="section" w="full">
+    <Box as="section" w="full" position="fixed" zIndex={10}>
       <Box
         as="nav"
         bg="#eee"

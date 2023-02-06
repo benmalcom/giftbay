@@ -96,7 +96,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
         <Alert status="warning" variant="left-accent">
           Create new Resumes. Re-use old ones.
         </Alert>
-        <Flex mt={10} gridGap={10}>
+        <Flex mt={10} gridGap={8}>
           <VStack
             onClick={() => onCreateResume()}
             boxShadow={useColorModeValue('sm', 'sm-dark')}
@@ -125,20 +125,18 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
           </VStack>
           {inGetFlight && <PageSpinner />}
           {!inGetFlight &&
-            resumeDataList
-              ?.filter(item => item.fileContents)
-              .map(data => {
-                return (
-                  <ResumePDF
-                    key={data.id}
-                    resumeData={data}
-                    onCreateResume={onCreateResume}
-                    inCreateFlight={inCreateFlight}
-                    onDeleteResume={onDeleteResume}
-                    inDeleteFlight={inDeleteFlight}
-                  />
-                );
-              })}
+            resumeDataList.map(data => {
+              return (
+                <ResumePDF
+                  key={data.id}
+                  resumeData={data}
+                  onCreateResume={onCreateResume}
+                  inCreateFlight={inCreateFlight}
+                  onDeleteResume={onDeleteResume}
+                  inDeleteFlight={inDeleteFlight}
+                />
+              );
+            })}
         </Flex>
       </Container>
     </Flex>

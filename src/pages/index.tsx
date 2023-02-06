@@ -19,9 +19,8 @@ const Home = () => {
       backgroundSize="cover"
       backgroundImage={`url(/images/unsplash6.jpg)`}*/
       height="100%"
-      alignItems="center"
     >
-      <Container alignItems="center">
+      <Container alignItems="center" mt={36}>
         <Stack spacing={{ base: '8', md: '10' }}>
           <Stack align="center" maxW="2xl">
             <Heading

@@ -43,6 +43,16 @@ export function isBlankResume(resume: ResumeType) {
     !resume?.candidate?.summary &&
     !resume?.candidate?.contactsAndLinks?.linkedIn &&
     !resume?.candidate?.contactsAndLinks?.email &&
-    !resume?.sections.length
+    !resume?.sections?.length
+  );
+}
+
+export function isResumePDFReady(resume: ResumeType) {
+  return (
+    !!resume?.candidate.name &&
+    !!resume?.candidate?.headline &&
+    !!resume?.candidate?.contactsAndLinks?.linkedIn &&
+    !!resume?.candidate?.contactsAndLinks?.email &&
+    resume?.sections?.length > 1
   );
 }

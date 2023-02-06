@@ -50,6 +50,7 @@ const AddSectionModal: React.FC<FormProps> = ({
     register,
     handleSubmit,
     formState: { errors = {} },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: initialValues,
@@ -57,11 +58,15 @@ const AddSectionModal: React.FC<FormProps> = ({
 
   const onSubmit = (values: FormValuesType) => {
     onSave(values);
+    handleClose();
+  };
+  const handleClose = () => {
+    reset();
     onClose();
   };
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Section</ModalHeader>

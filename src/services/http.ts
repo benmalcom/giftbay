@@ -36,7 +36,6 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => response,
   error => {
-    console.log('error from http ', error.response.data);
     if (error.response) {
       if (error.code === 'ECONNABORTED')
         throw new Error('Network timeout, please try again');

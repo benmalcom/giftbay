@@ -90,5 +90,5 @@ export type ResumeData = {
   user: string;
   contents: string;
   fileContents?: string;
-  updatedAt?: string;
+  updatedAt: string;
 };

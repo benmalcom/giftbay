@@ -62,6 +62,7 @@ const JobRoleModal: React.FC<FormProps> = ({
     handleSubmit,
     formState: { errors = {} },
     control,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: { isInline: false, ...(initialValues || {}) },
@@ -69,11 +70,16 @@ const JobRoleModal: React.FC<FormProps> = ({
 
   const onSubmit = (values: Record<string, unknown>) => {
     onSave(values as JobRoleType);
+    handleClose();
+  };
+
+  const handleClose = () => {
+    reset();
     onClose();
   };
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Job Role</ModalHeader>

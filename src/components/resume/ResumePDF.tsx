@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { AspectRatio, Box, Button, Flex, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { AiFillFilePdf, AiOutlineEdit, AiFillDelete } from 'react-icons/ai';
+import {
+  AiFillFilePdf,
+  AiOutlineEdit,
+  AiFillDelete,
+  AiOutlineFilePdf,
+} from 'react-icons/ai';
 import { Document, Page, pdfjs } from 'react-pdf';
 import usePDFObjectUrl from 'hooks/usePDFObjectUrl';
 import { ResumeData } from 'types/resume';
@@ -92,24 +97,41 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
             <AiFillDelete color="white" />
           </Button>
         </Flex>
-        <Flex>
-          <Text color="white" fontSize="13px" fontWeight={600} mr={1}>
-            Last edited:
-          </Text>{' '}
-          <Text color="white" fontSize="13px" fontWeight={500}>
-            {dayjs(resumeData.updatedAt).fromNow()}
-          </Text>
-        </Flex>
+        {resumeData.updatedAt && (
+          <Flex>
+            <Text color="white" fontSize="13px" fontWeight={600} mr={1}>
+              Last edited:
+            </Text>{' '}
+            <Text color="white" fontSize="13px" fontWeight={500}>
+              {dayjs(resumeData.updatedAt).format('DD-MM-YYYY')}
+            </Text>
+          </Flex>
+        )}
       </Flex>
-      <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page
-          pageNumber={1}
-          height={300}
-          scale={1}
-          renderTextLayer={false}
-          renderAnnotationLayer={false}
-        />
-      </Document>
+      {resumeData.fileContents ? (
+        <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>
+          <Page
+            pageNumber={1}
+            height={300}
+            scale={1}
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
+          />
+        </Document>
+      ) : (
+        <AspectRatio w="220px" ratio={4 / 3}>
+          <Flex
+            bg="#ffffff"
+            boxShadow="sm"
+            width="full"
+            height="full"
+            align="center"
+            justify="center"
+          >
+            <AiOutlineFilePdf color="red" size={140} />
+          </Flex>
+        </AspectRatio>
+      )}
     </Flex>
   );
 };

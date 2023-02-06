@@ -27,8 +27,9 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
-      inputRef.current.focus({ preventScroll: true });
-      inputRef.current.setSelectionRange(Infinity, Infinity);
+      const element = inputRef.current;
+      element.focus({ preventScroll: true });
+      element.selectionStart = element.value.length;
     }
   }, [isOpen]);
 
