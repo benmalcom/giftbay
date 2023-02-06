@@ -13,7 +13,7 @@ import Link from 'next/link';
 const Home = () => {
   return (
     <Flex
-      bg="#efefef"
+      bg="#f7f7f7"
       /*      backgroundRepeat="no-repeat"
       backgroundPosition="center"
       backgroundSize="cover"
