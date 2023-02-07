@@ -176,7 +176,7 @@ export const Resume: React.FC<
               contactsAndLinks={resume!.candidate?.contactsAndLinks}
               showRemoveButton
               onRemove={() => setCandidate({ contactsAndLinks: undefined })}
-              color={resume.settings.colors.candidateContactsAndLinks}
+              color={resume.settings.colors.candidateHeadline}
             />
           )}
           {hasSummary && (

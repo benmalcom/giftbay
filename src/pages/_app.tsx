@@ -72,7 +72,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         gutter={8}
         toastOptions={toastOptions}
       />
-      {!isLargerThan767 ? (
+      {!isLargerThan767 && !isGeneratePDFPage ? (
         <Alert status="error" flexDirection="column" w="96%" m="30px auto">
           <Flex>
             <AlertIcon />
