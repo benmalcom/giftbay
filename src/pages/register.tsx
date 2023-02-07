@@ -97,7 +97,7 @@ export const Register = () => {
           <Alert status="success">
             <AlertIcon />
             Success! A verification email has been sent to{' '}
-            {getValues()?.email || 'you'}.
+            {getValues()?.email || 'you'}. Please check your inbox.
           </Alert>
         )}
         <Stack spacing="6">
