@@ -3,17 +3,17 @@ import {
   Flex,
   VStack,
   Text,
-  useColorModeValue,
   Alert,
   Heading,
   Spinner,
+  AspectRatio,
+  Skeleton,
 } from '@chakra-ui/react';
 import { AxiosResponse } from 'axios';
 import Router from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
-import { PageSpinner } from 'components';
 import ResumePDF from 'components/resume/ResumePDF';
 import { createResume, getUserResumes, deleteResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
@@ -79,6 +79,19 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
       .finally(() => setInDeleteFlight(false));
   };
 
+  if (inGetFlight)
+    return (
+      <Flex gridGap={8}>
+        {Array.from(new Array(4).keys()).map(item => (
+          <Skeleton key={item}>
+            <AspectRatio w="220px" ratio={4 / 3}>
+              <Flex />
+            </AspectRatio>
+          </Skeleton>
+        ))}
+      </Flex>
+    );
+
   return (
     <Flex bg="#F7FAFC" flex={1}>
       <Container
@@ -97,46 +110,45 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
           Create new Resumes. Re-use old ones.
         </Alert>
         <Flex mt={10} gridGap={8}>
-          <VStack
-            onClick={() => onCreateResume()}
-            boxShadow={useColorModeValue('sm', 'sm-dark')}
-            as="a"
-            border="1px dashed teal"
-            borderRadius={3}
-            h="300px"
-            w="250px"
-            justify="center"
-            cursor={inCreateFlight ? 'default' : 'pointer'}
-            _hover={{
-              boxShadow:
-                '0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-            }}
-          >
-            {inCreateFlight ? (
-              <Spinner size="xl" />
-            ) : (
-              <>
-                <AiOutlinePlus size={50} fontWeight={400} color="gray" />
-                <Text fontSize="lg" fontWeight={500} color="blackAlpha.700">
-                  New Resume
-                </Text>
-              </>
-            )}
-          </VStack>
-          {inGetFlight && <PageSpinner />}
-          {!inGetFlight &&
-            resumeDataList.map(data => {
-              return (
-                <ResumePDF
-                  key={data.id}
-                  resumeData={data}
-                  onCreateResume={onCreateResume}
-                  inCreateFlight={inCreateFlight}
-                  onDeleteResume={onDeleteResume}
-                  inDeleteFlight={inDeleteFlight}
-                />
-              );
-            })}
+          {resumeDataList.length < 4 && (
+            <VStack
+              onClick={() => onCreateResume()}
+              boxShadow="sm"
+              as="a"
+              border="1px dashed teal"
+              borderRadius={3}
+              h="300px"
+              w="250px"
+              justify="center"
+              cursor={inCreateFlight ? 'default' : 'pointer'}
+              _hover={{
+                boxShadow:
+                  '0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+              }}
+            >
+              {inCreateFlight ? (
+                <Spinner size="xl" />
+              ) : (
+                <>
+                  <AiOutlinePlus size={50} fontWeight={400} color="gray" />
+                  <Text fontSize="lg" fontWeight={500} color="blackAlpha.700">
+                    New Resume
+                  </Text>
+                </>
+              )}
+            </VStack>
+          )}
+
+          {resumeDataList.map(data => (
+            <ResumePDF
+              key={data.id}
+              resumeData={data}
+              onCreateResume={onCreateResume}
+              inCreateFlight={inCreateFlight}
+              onDeleteResume={onDeleteResume}
+              inDeleteFlight={inDeleteFlight}
+            />
+          ))}
         </Flex>
       </Container>
     </Flex>

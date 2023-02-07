@@ -13,6 +13,7 @@ import {
   Popover,
   Alert,
   AlertIcon,
+  AlertTitle,
 } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
@@ -65,8 +66,11 @@ export const Resume: React.FC<
       p={isResumeBlank ? '10px' : '40px 48px'}
     >
       {isResumeBlank ? (
-        <Alert status="warning">
-          <AlertIcon />
+        <Alert status="warning" flexDir="column" py={5}>
+          <Flex>
+            <AlertIcon />
+            <AlertTitle fontSize="lg">Resume is empty!</AlertTitle>
+          </Flex>
           Start building up your resume. Use the controls section on the left to
           flesh up your resume.
         </Alert>
