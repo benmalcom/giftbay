@@ -1,4 +1,13 @@
-import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Box,
+  ChakraProvider,
+  Flex,
+  useMediaQuery,
+  AlertIcon,
+} from '@chakra-ui/react';
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { Router } from 'next/router';
@@ -29,6 +38,7 @@ type AppPropsWithLayout = AppProps<Record<string, Session>> & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [clientLoaded, setClientLoaded] = useState(false);
   const [isGsspLoading, setIsGsspLoading] = useState(false);
+  const [isLargerThan767] = useMediaQuery('(min-width: 767px)');
   const isGeneratePDFPage = useIsPDFGeneratePage();
 
   const Layout = Component.Layout ?? React.Fragment;
@@ -36,7 +46,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     setClientLoaded(true);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const start = () => {
       setIsGsspLoading(true);
     };
@@ -54,7 +64,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   }, []);
 
   if (!clientLoaded || isGsspLoading) return <PageSpinner />;
-
   return (
     <ChakraProvider theme={theme}>
       <Toaster
@@ -63,19 +72,32 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         gutter={8}
         toastOptions={toastOptions}
       />
-      <SessionProvider session={pageProps.session}>
-        <ResumeContextProvider initialResume={blankResume as ResumeType}>
-          <Flex flexDirection="column" height="100%">
-            <NavBar user={pageProps?.user as unknown as User} />
-            <Box flex={1} paddingTop={isGeneratePDFPage ? 0 : '65px'}>
-              <Layout>
-                <Component {...pageProps} />
-                <RefreshTokenHandler />
-              </Layout>
-            </Box>
+      {!isLargerThan767 ? (
+        <Alert status="error" flexDirection="column" w="96%" m="30px auto">
+          <Flex>
+            <AlertIcon />
+            <AlertTitle>Mobile device not supported!</AlertTitle>
           </Flex>
-        </ResumeContextProvider>
-      </SessionProvider>
+          <AlertDescription>
+            For a rich experience, you will only be able to access this
+            application on a tablet, laptop or desktop.
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <SessionProvider session={pageProps.session}>
+          <ResumeContextProvider initialResume={blankResume as ResumeType}>
+            <Flex flexDirection="column" height="100%">
+              <NavBar user={pageProps?.user as unknown as User} />
+              <Box flex={1} paddingTop={isGeneratePDFPage ? 0 : '65px'}>
+                <Layout>
+                  <Component {...pageProps} />
+                  <RefreshTokenHandler />
+                </Layout>
+              </Box>
+            </Flex>
+          </ResumeContextProvider>
+        </SessionProvider>
+      )}
     </ChakraProvider>
   );
 }
