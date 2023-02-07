@@ -64,6 +64,7 @@ export const Login = () => {
         if (url) await router.push(url);
       })
       .catch(error => {
+        console.log('Error before toast ', error);
         toast.error(error);
       })
       .finally(() => setInFlight(false));
