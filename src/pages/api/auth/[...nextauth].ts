@@ -6,10 +6,6 @@ import { ApiResponseError } from 'types/api';
 
 const providers = [
   CredentialsProvider({
-    options: undefined,
-    name: 'Credentials',
-    id: 'credentials',
-    credentials: {},
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     async authorize(credentials) {
