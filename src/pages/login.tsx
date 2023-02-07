@@ -55,11 +55,7 @@ export const Login = () => {
     signIn('credentials', {
       ...values,
       callbackUrl:
-        (dest as string) ||
-        `${
-          process.env.NEXT_PUBLIC_VERCEL_URL ||
-          process.env.NEXT_PUBLIC_APP_BASE_URL
-        }/overview`,
+        (dest as string) || `${process.env.NEXT_PUBLIC_APP_BASE_URL}/overview`,
       redirect: false,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     }) // @ts-ignore
