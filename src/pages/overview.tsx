@@ -8,6 +8,7 @@ import {
   Spinner,
   AspectRatio,
   Skeleton,
+  AlertTitle,
 } from '@chakra-ui/react';
 import { AxiosResponse } from 'axios';
 import Router from 'next/router';
@@ -106,8 +107,12 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
           </Heading>
         </Flex>
 
-        <Alert status="warning" variant="left-accent">
-          Create new Resumes. Re-use old ones.
+        <Alert status="warning" flexDir="column" alignItems="flex-start">
+          <AlertTitle fontSize="md">
+            Create new Resumes. Re-use old ones.
+          </AlertTitle>{' '}
+          Maximum number of resumes is 4. You can delete old ones to free up
+          space.
         </Alert>
         <Flex mt={10} gridGap={8}>
           {resumeDataList.length < 4 && (
