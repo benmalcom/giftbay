@@ -13,6 +13,7 @@ import { AiFillFilePdf } from 'react-icons/ai';
 import InputColor from 'react-input-color';
 import { ResumeContextType } from 'components/contexts';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
+import theme from 'styles/theme';
 import { ModalTriggerFunctionProps } from 'types/resume';
 import { isBlankResume, isResumePDFReady } from 'utils/functions';
 import { ModalManager as AddSectionModalManager } from './AddSectionModal';
@@ -26,6 +27,8 @@ type ControlsProps = Pick<
   onSaveResume(): void;
   isGeneratingPDF?: boolean;
   isSavingResume?: boolean;
+  isActiveControls?: boolean;
+  toggleControls(): void;
   onChangeFileName(e: React.FormEvent<HTMLInputElement>): void;
   fileName: string;
 };
@@ -40,6 +43,8 @@ export const Controls: React.FC<ControlsProps> = ({
   isSavingResume,
   onChangeFileName,
   fileName,
+  isActiveControls,
+  toggleControls,
 }) => {
   const generatePDF = useIsPDFGeneratePage();
   const isReadyForPDF = isResumePDFReady(resume);
@@ -59,6 +64,20 @@ export const Controls: React.FC<ControlsProps> = ({
       top="80px"
       spacing={7}
       zIndex={5}
+      display="block"
+      sx={{
+        '@media (min-width: 1025px) and (max-width: 1280px) and (min-width: 1281px)':
+          {
+            display: 'block',
+          },
+        '@media (min-width: 768px) and (max-width: 1024px)': {
+          display: isActiveControls ? 'block' : 'none',
+          left: 1,
+          top: 0,
+          position: 'absolute',
+          boxShadow: 'var(--chakra-shadows-lg)',
+        },
+      }}
     >
       <Stack spacing={3}>
         <Heading as="h5" size="sm" color="muted">

@@ -1,4 +1,5 @@
-import { Flex } from '@chakra-ui/react';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { Flex, IconProps, useDisclosure } from '@chakra-ui/react';
 import { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -35,6 +36,8 @@ export const Builder = () => {
   const [isSavingResume, setIsSavingResume] = useState(false);
   const [fileName, setFileName] = useState('');
   const { downloadResume } = useResumeDownload();
+  const { isOpen: isActiveControls, onToggle: toggleControls } =
+    useDisclosure();
   const { resumeId } = router.query;
 
   const fetchResume = useCallback(
@@ -118,15 +121,45 @@ export const Builder = () => {
 
   if (inGetFlight || !resume) return <PageSpinner />;
 
+  const mobileControlsIconStyles = {
+    position: 'absolute',
+    left: 4,
+    top: 4,
+    cursor: 'pointer',
+    display: 'none',
+    onClick: toggleControls,
+    sx: {
+      '@media (min-width: 768px) and (max-width: 1024px)': {
+        display: 'block',
+      },
+    },
+  } as IconProps;
+
   return (
-    <Flex gap={isGeneratePDFPage ? undefined : 3} justify="center">
+    <Flex
+      gap={isGeneratePDFPage ? undefined : 3}
+      justify="center"
+      position="relative"
+    >
+      {isActiveControls ? (
+        <CloseIcon
+          {...mobileControlsIconStyles}
+          fontSize="20px"
+          color="red.800"
+        />
+      ) : (
+        <HamburgerIcon {...mobileControlsIconStyles} fontSize="30px" />
+      )}
       <Flex
+        position="relative"
         gap={4}
         height="max-content"
         boxSizing="border-box"
         my={isGeneratePDFPage ? undefined : 14}
       >
         <Controls
+          isActiveControls={isActiveControls}
+          toggleControls={toggleControls}
           fileName={fileName}
           onChangeFileName={onChangeFileName}
           onGenerate={onGenerate}
