@@ -7,9 +7,6 @@ import {
   useBreakpointValue,
   Spinner,
   Stack,
-  Alert,
-  AlertTitle,
-  AlertDescription,
 } from '@chakra-ui/react';
 
 import Link from 'next/link';
@@ -17,7 +14,6 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Logo } from 'components/index';
 import { verifyEmail } from '../services/auth';
 
 export const VerifyEmail = () => {
@@ -65,56 +61,38 @@ export const VerifyEmail = () => {
 
     if (error) {
       return (
-        <Alert
-          status="error"
-          variant="subtle"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          textAlign="center"
-          height="fit-content"
-          py={5}
-        >
-          <AlertTitle mb={1} fontSize="lg">
-            Verification error!
-          </AlertTitle>
-          <AlertDescription maxWidth="sm">
-            There was an error with the verification process.
-          </AlertDescription>
+        <VStack spacing={6}>
+          <VStack>
+            <Text fontSize="lg" fontWeight={500}>
+              Verification error!
+            </Text>
+            <Text mt={0}>
+              There was an error with the verification process.
+            </Text>
+          </VStack>
           <Button
             isLoading={inFlight}
             w="80%"
-            as="a"
             colorScheme="red"
             size="md"
             textDecoration="none"
             cursor="pointer"
-            mt={5}
             onClick={handleEmailVerification}
           >
             Try again
           </Button>
-        </Alert>
+        </VStack>
       );
     }
 
     return (
-      <Alert
-        status="success"
-        variant="subtle"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        textAlign="center"
-        height="fit-content"
-        py={5}
-      >
-        <AlertTitle mb={1} fontSize="lg">
-          Verification successful!
-        </AlertTitle>
-        <AlertDescription maxWidth="sm">
-          You can now sign in with your account.
-        </AlertDescription>
+      <VStack spacing={6}>
+        <VStack>
+          <Text fontSize="lg" fontWeight={500}>
+            Verification successful!
+          </Text>
+          <Text mt={0}>You can now sign in with your account.</Text>
+        </VStack>
         <Link href="/login" passHref>
           <Button
             w="80%"
@@ -128,7 +106,7 @@ export const VerifyEmail = () => {
             Sign in
           </Button>
         </Link>
-      </Alert>
+      </VStack>
     );
   };
 
@@ -139,10 +117,7 @@ export const VerifyEmail = () => {
       px={{ base: '0', sm: '8' }}
     >
       <Stack spacing="8">
-        <Stack spacing="6">
-          <Logo />
-          {getUIState()}
-        </Stack>
+        <Stack spacing="6">{getUIState()}</Stack>
       </Stack>
     </Container>
   );

@@ -66,6 +66,7 @@ export const Register = () => {
 
   const onSubmit = (values: SignInOptions | undefined) => {
     setInFlight(true);
+    setShowVerifyMessage(false);
     signIn('credentials', {
       ...values,
       redirect: false,
