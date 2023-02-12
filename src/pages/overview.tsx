@@ -81,19 +81,6 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
       .finally(() => setInDeleteFlight(false));
   };
 
-  if (inGetFlight)
-    return (
-      <Flex gridGap={8}>
-        {Array.from(new Array(4).keys()).map(item => (
-          <Skeleton key={item}>
-            <AspectRatio w="220px" ratio={4 / 3}>
-              <Flex />
-            </AspectRatio>
-          </Skeleton>
-        ))}
-      </Flex>
-    );
-
   return (
     <>
       <HeaderTags title={`${process.env.NEXT_PUBLIC_APP_NAME} - Overview`} />
@@ -149,16 +136,28 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
               </VStack>
             )}
 
-            {resumeDataList.map(data => (
-              <ResumePDF
-                key={data.id}
-                resumeData={data}
-                onCreateResume={onCreateResume}
-                inCreateFlight={inCreateFlight}
-                onDeleteResume={onDeleteResume}
-                inDeleteFlight={inDeleteFlight}
-              />
-            ))}
+            {inGetFlight ? (
+              <Flex gridGap={8}>
+                {Array.from(new Array(4).keys()).map(item => (
+                  <Skeleton key={item}>
+                    <AspectRatio w="220px" ratio={4 / 3}>
+                      <Flex />
+                    </AspectRatio>
+                  </Skeleton>
+                ))}
+              </Flex>
+            ) : (
+              resumeDataList.map(data => (
+                <ResumePDF
+                  key={data.id}
+                  resumeData={data}
+                  onCreateResume={onCreateResume}
+                  inCreateFlight={inCreateFlight}
+                  onDeleteResume={onDeleteResume}
+                  inDeleteFlight={inDeleteFlight}
+                />
+              ))
+            )}
           </Flex>
         </Container>
       </Flex>
