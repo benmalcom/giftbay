@@ -138,7 +138,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
 
             {inGetFlight ? (
               <Flex gridGap={8}>
-                {Array.from(new Array(4).keys()).map(item => (
+                {Array.from(new Array(3).keys()).map(item => (
                   <Skeleton key={item}>
                     <AspectRatio w="220px" ratio={4 / 3}>
                       <Flex />
