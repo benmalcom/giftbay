@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { verifyEmail } from '../services/auth';
+import { verifyEmail } from 'services/auth';
 
 export const VerifyEmail = () => {
   const [inFlight, setInFlight] = useState(true);

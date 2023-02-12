@@ -15,7 +15,7 @@ import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { PageSpinner } from 'components';
+import { PageSpinner } from 'components/common';
 import { ResumeContextProvider } from 'components/contexts/ResumeContext';
 import { NavBar } from 'components/layouts';
 import RefreshTokenHandler from 'components/RefreshTokenHandler';

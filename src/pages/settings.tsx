@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { PageSpinner } from 'components';
+import { PageSpinner } from 'components/common';
 import ChangePasswordForm, {
   ChangePasswordFormData,
 } from 'components/settings/ChangePasswordForm';

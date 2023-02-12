@@ -15,6 +15,7 @@ import Router from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { HeaderTags } from 'components/common';
 import ResumePDF from 'components/resume/ResumePDF';
 import { createResume, getUserResumes, deleteResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
@@ -94,69 +95,74 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
     );
 
   return (
-    <Flex bg="#F7FAFC" flex={1}>
-      <Container
-        py={{ base: '8', md: '12' }}
-        mt={{ base: '8', md: '12' }}
-        maxW="5xl"
-      >
-        <Flex mb={7} align="center">
-          <Text mr={1}>Welcome,</Text>
-          <Heading as="h5" size="sm" fontWeight={500}>
-            {user.name}.
-          </Heading>
-        </Flex>
+    <>
+      <HeaderTags title={`${process.env.NEXT_PUBLIC_APP_NAME} - Overview`} />
 
-        <Alert status="warning" flexDir="column" alignItems="flex-start">
-          <AlertTitle fontSize="md">
-            Create new Resumes. Re-use old ones.
-          </AlertTitle>{' '}
-          Maximum number of resumes is 4. You can delete old ones to free up
-          space.
-        </Alert>
-        <Flex mt={10} gridGap={8}>
-          {resumeDataList.length < 4 && (
-            <VStack
-              onClick={() => onCreateResume()}
-              boxShadow="sm"
-              as="a"
-              border="1px dashed teal"
-              borderRadius={3}
-              h="300px"
-              w="250px"
-              justify="center"
-              cursor={inCreateFlight ? 'default' : 'pointer'}
-              _hover={{
-                boxShadow:
-                  '0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-              }}
-            >
-              {inCreateFlight ? (
-                <Spinner size="xl" />
-              ) : (
-                <>
-                  <AiOutlinePlus size={50} fontWeight={400} color="gray" />
-                  <Text fontSize="lg" fontWeight={500} color="blackAlpha.700">
-                    New Resume
-                  </Text>
-                </>
-              )}
-            </VStack>
-          )}
+      <Flex bg="#F7FAFC" flex={1}>
+        <Container
+          py={{ base: '8', md: '12' }}
+          mt={{ base: '8', md: '12' }}
+          maxW="5xl"
+        >
+          <Flex mb={7} align="center">
+            <Text mr={1}>Welcome,</Text>
+            <Heading as="h5" size="sm" fontWeight={500}>
+              {user.name}.
+            </Heading>
+          </Flex>
 
-          {resumeDataList.map(data => (
-            <ResumePDF
-              key={data.id}
-              resumeData={data}
-              onCreateResume={onCreateResume}
-              inCreateFlight={inCreateFlight}
-              onDeleteResume={onDeleteResume}
-              inDeleteFlight={inDeleteFlight}
-            />
-          ))}
-        </Flex>
-      </Container>
-    </Flex>
+          <Alert status="warning" flexDir="column" alignItems="flex-start">
+            <AlertTitle fontSize="md">
+              Create new Resumes. Re-use old ones.
+            </AlertTitle>{' '}
+            Maximum number of resumes is 4. You can delete old ones to free up
+            space.
+          </Alert>
+          <Flex mt={10} gridGap={8}>
+            {resumeDataList.length < 4 && (
+              <VStack
+                onClick={() => onCreateResume()}
+                boxShadow="sm"
+                bg="white"
+                as="a"
+                border="1px dashed teal"
+                borderRadius={3}
+                h="300px"
+                w="250px"
+                justify="center"
+                cursor={inCreateFlight ? 'default' : 'pointer'}
+                _hover={{
+                  boxShadow:
+                    '0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                }}
+              >
+                {inCreateFlight ? (
+                  <Spinner size="xl" />
+                ) : (
+                  <>
+                    <AiOutlinePlus size={50} fontWeight={400} color="teal" />
+                    <Text fontSize="lg" fontWeight={500} color="blackAlpha.700">
+                      New Resume
+                    </Text>
+                  </>
+                )}
+              </VStack>
+            )}
+
+            {resumeDataList.map(data => (
+              <ResumePDF
+                key={data.id}
+                resumeData={data}
+                onCreateResume={onCreateResume}
+                inCreateFlight={inCreateFlight}
+                onDeleteResume={onDeleteResume}
+                inDeleteFlight={inDeleteFlight}
+              />
+            ))}
+          </Flex>
+        </Container>
+      </Flex>
+    </>
   );
 };
 

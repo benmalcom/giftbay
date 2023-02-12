@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import React from 'react';
 import { AiOutlinePoweroff } from 'react-icons/ai';
-import Logo from 'components/Logo';
+import { Logo } from 'components/common';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
 import { logOutUser } from 'services/auth';
 import { User } from 'types/user';
@@ -49,7 +49,7 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
         boxShadow={boxShadow}
         borderBottom="1px solid #ddd"
       >
-        <Container py={{ base: '2', lg: '3' }} maxW="7xl">
+        <Container py={1.5} maxW="7xl">
           <HStack spacing="10" justify="space-between">
             <Link href={isAuthenticated ? '/overview' : '/'} passHref>
               <a>

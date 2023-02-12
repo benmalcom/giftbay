@@ -25,6 +25,7 @@ import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
+import { HeaderTags } from 'components/common';
 import { PasswordInput } from 'components/form';
 
 const schema = yup
@@ -80,90 +81,30 @@ export const Login = () => {
   });
 
   return (
-    <Container
-      maxW="lg"
-      py={{ base: '12', md: '24' }}
-      px={{ base: '0', sm: '8' }}
-    >
-      <Stack spacing="8">
-        <Stack spacing="6">
-          {/*{authMessage && (
+    <>
+      <HeaderTags title={`${process.env.NEXT_PUBLIC_APP_NAME} - Login`} />
+
+      <Container
+        maxW="lg"
+        py={{ base: '12', md: '24' }}
+        px={{ base: '0', sm: '8' }}
+      >
+        <Stack spacing="8">
+          <Stack spacing="6">
+            {/*{authMessage && (
             <Alert status="error">
               <AlertIcon />
               <AlertDescription>{authMessage}</AlertDescription>
             </Alert>
           )}*/}
-          <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-            <Heading
-              size={useBreakpointValue({ base: 'xs', md: 'sm', lg: 'lg' })}
-            >
-              Log in to your account
-            </Heading>
-            <HStack spacing="1" justify="center">
-              <Text color="muted">Don't have an account?</Text>
-              <Link href="/register" passHref>
-                <ChakraLink
-                  color="teal"
-                  size="lg"
-                  textDecoration="none"
-                  cursor="pointer"
-                >
-                  Register
-                </ChakraLink>
-              </Link>
-            </HStack>
-          </Stack>
-        </Stack>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Box
-            py={{ base: '0', sm: '8' }}
-            px={{ base: '4', sm: '10' }}
-            bg={useBreakpointValue({ base: 'transparent', sm: 'bg-surface' })}
-            boxShadow={{ base: 'none', sm: useColorModeValue('md', 'md-dark') }}
-            borderRadius={{ base: 'none', sm: 'xl' }}
-          >
-            <Stack spacing="6">
-              <Stack spacing="5">
-                <FormControl isInvalid={Boolean(errors.email)}>
-                  <FormLabel htmlFor="email">Email</FormLabel>
-                  <Input
-                    id="email"
-                    type="email"
-                    {...register('email')}
-                    placeholder="Email address"
-                    errorBorderColor="red.300"
-                  />
-                  <FormErrorMessage>
-                    {errors?.email?.message && errors.email.message.toString()}
-                  </FormErrorMessage>
-                </FormControl>
-                <FormControl isInvalid={Boolean(errors.password)}>
-                  <FormLabel htmlFor="password">Password</FormLabel>
-                  <PasswordInput
-                    errorBorderColor="red.300"
-                    {...register('password')}
-                    placeholder="Password"
-                  />
-                  <FormErrorMessage>
-                    {errors?.password?.message &&
-                      errors.password.message.toString()}
-                  </FormErrorMessage>
-                </FormControl>
-              </Stack>
-              <HStack justify="space-between">
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <Checkbox
-                      onChange={e => onChange(e)}
-                      checked={!!value}
-                      onBlur={() => onBlur()}
-                    >
-                      Remember me
-                    </Checkbox>
-                  )}
-                  name="remember_me"
-                />
+            <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
+              <Heading
+                size={useBreakpointValue({ base: 'xs', md: 'sm', lg: 'lg' })}
+              >
+                Log in to your account
+              </Heading>
+              <HStack spacing="1" justify="center">
+                <Text color="muted">Don't have an account?</Text>
                 <Link href="/register" passHref>
                   <ChakraLink
                     color="teal"
@@ -171,20 +112,88 @@ export const Login = () => {
                     textDecoration="none"
                     cursor="pointer"
                   >
-                    Forgot password?
+                    Register
                   </ChakraLink>
                 </Link>
               </HStack>
-              <Stack spacing="6">
-                <Button type="submit" colorScheme="teal" isLoading={inFlight}>
-                  Sign in
-                </Button>
-              </Stack>
             </Stack>
-          </Box>
-        </form>
-      </Stack>
-    </Container>
+          </Stack>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Box
+              py={{ base: '0', sm: '8' }}
+              px={{ base: '4', sm: '10' }}
+              bg={useBreakpointValue({ base: 'transparent', sm: 'bg-surface' })}
+              boxShadow={{
+                base: 'none',
+                sm: useColorModeValue('md', 'md-dark'),
+              }}
+              borderRadius={{ base: 'none', sm: 'xl' }}
+            >
+              <Stack spacing="6">
+                <Stack spacing="5">
+                  <FormControl isInvalid={Boolean(errors.email)}>
+                    <FormLabel htmlFor="email">Email</FormLabel>
+                    <Input
+                      id="email"
+                      type="email"
+                      {...register('email')}
+                      placeholder="Email address"
+                      errorBorderColor="red.300"
+                    />
+                    <FormErrorMessage>
+                      {errors?.email?.message &&
+                        errors.email.message.toString()}
+                    </FormErrorMessage>
+                  </FormControl>
+                  <FormControl isInvalid={Boolean(errors.password)}>
+                    <FormLabel htmlFor="password">Password</FormLabel>
+                    <PasswordInput
+                      errorBorderColor="red.300"
+                      {...register('password')}
+                      placeholder="Password"
+                    />
+                    <FormErrorMessage>
+                      {errors?.password?.message &&
+                        errors.password.message.toString()}
+                    </FormErrorMessage>
+                  </FormControl>
+                </Stack>
+                <HStack justify="space-between">
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <Checkbox
+                        onChange={e => onChange(e)}
+                        checked={!!value}
+                        onBlur={() => onBlur()}
+                      >
+                        Remember me
+                      </Checkbox>
+                    )}
+                    name="remember_me"
+                  />
+                  <Link href="/register" passHref>
+                    <ChakraLink
+                      color="teal"
+                      size="lg"
+                      textDecoration="none"
+                      cursor="pointer"
+                    >
+                      Forgot password?
+                    </ChakraLink>
+                  </Link>
+                </HStack>
+                <Stack spacing="6">
+                  <Button type="submit" colorScheme="teal" isLoading={inFlight}>
+                    Sign in
+                  </Button>
+                </Stack>
+              </Stack>
+            </Box>
+          </form>
+        </Stack>
+      </Container>
+    </>
   );
 };
 

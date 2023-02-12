@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { PageSpinner } from 'components/index';
+import { HeaderTags, PageSpinner } from 'components/common';
 import { Resume, Controls } from 'components/resume';
 import blankResume from 'data/blankResume.json';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
@@ -136,49 +136,55 @@ export const Builder = () => {
   } as IconProps;
 
   return (
-    <Flex
-      gap={isGeneratePDFPage ? undefined : 3}
-      justify="center"
-      position="relative"
-    >
-      {isActiveControls ? (
-        <CloseIcon
-          {...mobileControlsIconStyles}
-          fontSize="20px"
-          color="red.800"
-        />
-      ) : (
-        <HamburgerIcon {...mobileControlsIconStyles} fontSize="30px" />
-      )}
+    <>
+      <HeaderTags
+        title={`${process.env.NEXT_PUBLIC_APP_NAME} - ${resume.candidate?.name} Resume builder`.trim()}
+      />
+
       <Flex
+        gap={isGeneratePDFPage ? undefined : 3}
+        justify="center"
         position="relative"
-        gap={4}
-        height="max-content"
-        boxSizing="border-box"
-        my={isGeneratePDFPage ? undefined : 14}
       >
-        <Controls
-          isActiveControls={isActiveControls}
-          toggleControls={toggleControls}
-          fileName={fileName}
-          onChangeFileName={onChangeFileName}
-          onGenerate={onGenerate}
-          isGeneratingPDF={isGeneratingPDF}
-          setCandidate={setCandidate}
-          resume={resume}
-          addSection={addSection}
-          updateResumeSettings={updateResumeSettings}
-          onSaveResume={onSaveResume}
-          isSavingResume={isSavingResume}
-        />
-        <Resume
-          resume={resume}
-          updateSection={updateSection}
-          setCandidate={setCandidate}
-          removeSection={removeSection}
-        />
+        {isActiveControls ? (
+          <CloseIcon
+            {...mobileControlsIconStyles}
+            fontSize="20px"
+            color="red.800"
+          />
+        ) : (
+          <HamburgerIcon {...mobileControlsIconStyles} fontSize="30px" />
+        )}
+        <Flex
+          position="relative"
+          gap={4}
+          height="max-content"
+          boxSizing="border-box"
+          my={isGeneratePDFPage ? undefined : 14}
+        >
+          <Controls
+            isActiveControls={isActiveControls}
+            toggleControls={toggleControls}
+            fileName={fileName}
+            onChangeFileName={onChangeFileName}
+            onGenerate={onGenerate}
+            isGeneratingPDF={isGeneratingPDF}
+            setCandidate={setCandidate}
+            resume={resume}
+            addSection={addSection}
+            updateResumeSettings={updateResumeSettings}
+            onSaveResume={onSaveResume}
+            isSavingResume={isSavingResume}
+          />
+          <Resume
+            resume={resume}
+            updateSection={updateSection}
+            setCandidate={setCandidate}
+            removeSection={removeSection}
+          />
+        </Flex>
       </Flex>
-    </Flex>
+    </>
   );
 };
 

@@ -58,9 +58,9 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
       fontSize="16px"
       {...props.inputProps}
       onChange={handleChange}
-      boxShadow="sm"
+      boxShadow="md"
       value={value}
-      _focus={{ boxShadow: 'none' }}
+      _focus={{ outline: 'none', boxShadow: 'md' }}
     />
   ) : (
     <Box
