@@ -9,11 +9,10 @@ import {
   Input,
 } from '@chakra-ui/react';
 import React from 'react';
-import { AiFillFilePdf } from 'react-icons/ai';
+import { AiFillFilePdf, AiOutlineUser } from 'react-icons/ai';
 import InputColor from 'react-input-color';
 import { ResumeContextType } from 'components/contexts';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
-import theme from 'styles/theme';
 import { ModalTriggerFunctionProps } from 'types/resume';
 import { isBlankResume, isResumePDFReady } from 'utils/functions';
 import { ModalManager as AddSectionModalManager } from './AddSectionModal';
@@ -107,7 +106,7 @@ export const Controls: React.FC<ControlsProps> = ({
           Candidate
         </Heading>
         <Divider />
-        <Flex w="full" justify="space-around">
+        <Flex w="full" columnGap={3}>
           <CandidateInformationModalManager
             onSave={values => setCandidate(values)}
             initialValues={resume.candidate}
@@ -117,43 +116,42 @@ export const Controls: React.FC<ControlsProps> = ({
                 colorScheme="gray"
                 {...rest}
                 onClick={() => trigger()}
+                leftIcon={<AiOutlineUser />}
               >
-                Candidate Bio
-              </Button>
-            )}
-          />
-          <AddSectionModalManager
-            onSave={values => addSection(values.name)}
-            initialValues={undefined}
-            triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
-              <Button
-                size="sm"
-                colorScheme="orange"
-                {...rest}
-                onClick={() => trigger()}
-              >
-                New Section
+                Update Bio
               </Button>
             )}
           />
         </Flex>
       </Stack>
-      {resume.sections.length > 0 && (
-        <Stack spacing={4}>
-          <Heading as="h5" size="sm">
-            Sections
-          </Heading>
-          <Divider />
+      <Stack spacing={4}>
+        <Heading as="h5" size="sm">
+          Sections
+        </Heading>
+        <Divider />
 
-          <Stack direction="row">
-            {resume.sections.map(section => (
-              <Badge key={section.id} textTransform="capitalize" py={0.5}>
-                {section.name}
-              </Badge>
-            ))}
-          </Stack>
-        </Stack>
-      )}
+        <Flex gap={3} flexWrap="wrap">
+          {resume.sections.map(section => (
+            <Badge key={section.id} textTransform="capitalize" py={0.5}>
+              {section.name}
+            </Badge>
+          ))}
+        </Flex>
+        <AddSectionModalManager
+          onSave={values => addSection(values.name)}
+          initialValues={undefined}
+          triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
+            <Button
+              size="sm"
+              colorScheme="orange"
+              {...rest}
+              onClick={() => trigger()}
+            >
+              New Section
+            </Button>
+          )}
+        />
+      </Stack>
 
       <Stack spacing={4}>
         <Heading as="h5" size="sm">

@@ -1,6 +1,8 @@
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { Flex, IconProps, useDisclosure } from '@chakra-ui/react';
+import { savePDF } from '@progress/kendo-react-pdf';
 import { AxiosResponse } from 'axios';
+import { jsPDF } from 'jspdf';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -12,6 +14,7 @@ import useResumeContext from 'hooks/useResumeContext';
 import useResumeDownload from 'hooks/useResumeDownload';
 import { generatePDF, getResumeById, updateResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
+
 import {
   arrayBufferToBase64,
   objectToBase64,
@@ -118,6 +121,17 @@ export const Builder = () => {
 
   const onChangeFileName = (e: React.FormEvent<HTMLInputElement>) =>
     setFileName(e.currentTarget.value);
+
+  const onGenerate2 = () => {
+    const htmlElement = document.querySelector('#resume');
+    if (htmlElement)
+      savePDF(htmlElement as HTMLElement, {
+        paperSize: 'auto',
+        fileName: 'form.pdf',
+        scale: 0.6,
+        margin: 0,
+      });
+  };
 
   if (inGetFlight || !resume) return <PageSpinner />;
 

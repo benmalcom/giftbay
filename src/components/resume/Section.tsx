@@ -21,7 +21,7 @@ import { EditableLabel } from 'components/form';
 import JobRole from 'components/resume/JobRole';
 import loremIpsum from 'data/loremIpsum.json';
 import {
-  InlineListType,
+  ItemListType,
   JobFunctionType,
   JobRoleType,
   ModalTriggerFunctionProps,
@@ -31,8 +31,8 @@ import {
   SectionType,
 } from 'types/resume';
 import { ModalManager as AddSectionModalManager } from './AddSectionModal';
-import InlineList from './InlineList';
-import { ModalManager as InlineListModalModalManager } from './InlineListModal';
+import ItemList from './ItemList';
+import { ModalManager as InlineListModalModalManager } from './ItemListModal';
 import { ModalManager as JobRoleModalModalManager } from './JobRoleModal';
 
 type SectionProps = Pick<
@@ -145,13 +145,13 @@ export const Section: React.FC<SectionProps> = ({
     updateSection(sectionPayload);
   };
 
-  const onSaveInlineList = (values: InlineListType) => {
+  const onSaveInlineList = (values: ItemListType) => {
     const sectionPayload = structuredClone(section);
     if (values.id) {
       const index = sectionPayload.items.findIndex(
         item =>
           item.type === SectionItemType.InlineList &&
-          (item.content as InlineListType).id === values.id
+          (item.content as ItemListType).id === values.id
       );
       if (index === -1) throw new Error('Inline list not found');
       const inlineList = sectionPayload.items[index].content;
@@ -353,14 +353,14 @@ export const Section: React.FC<SectionProps> = ({
         }
         if (sectionItem.type === SectionItemType.InlineList) {
           return (
-            <InlineList
+            <ItemList
               settings={settings}
-              key={(sectionItem.content as InlineListType).id}
+              key={(sectionItem.content as ItemListType).id}
               onSave={onSaveInlineList}
               onRemoveInlineList={inlineListId =>
                 onRemoveSectionItem(inlineListId, SectionItemType.InlineList)
               }
-              inlineList={sectionItem.content as InlineListType}
+              inlineList={sectionItem.content as ItemListType}
             />
           );
         }

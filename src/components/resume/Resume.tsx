@@ -191,9 +191,11 @@ export const Resume: React.FC<
                   margin: '10pt 0',
                   fontWeight: 400,
                   fontSize: '11.5pt',
+                  lineHeight: '160%',
                   color: resume.settings.colors.common,
                   '@media print': {
                     fontSize: '11pt',
+                    lineHeight: '180%',
                   },
                 },
               }}

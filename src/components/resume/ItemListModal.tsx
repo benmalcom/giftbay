@@ -20,11 +20,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { InlineListType } from 'types/resume';
+import { ItemListType } from 'types/resume';
 
 type FormProps = {
-  onSave(values: InlineListType): void;
-  initialValues?: Partial<InlineListType>;
+  onSave(values: ItemListType): void;
+  initialValues?: Partial<ItemListType>;
   isOpen: boolean;
   onClose(): void;
 };
@@ -42,7 +42,7 @@ const schema = yup
   })
   .required();
 
-const InlineListModal: React.FC<FormProps> = ({
+const ItemListModal: React.FC<FormProps> = ({
   initialValues,
   onSave,
   isOpen,
@@ -51,6 +51,7 @@ const InlineListModal: React.FC<FormProps> = ({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors = {} },
   } = useForm({
     resolver: yupResolver(schema),
@@ -58,12 +59,17 @@ const InlineListModal: React.FC<FormProps> = ({
   });
 
   const onSubmit = (values: Record<string, unknown>) => {
-    onSave(values as InlineListType);
+    onSave(values as ItemListType);
+    handleClose();
+  };
+  const handleClose = () => {
+    reset();
     onClose();
   };
+
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Inline List</ModalHeader>
@@ -112,7 +118,7 @@ const InlineListModal: React.FC<FormProps> = ({
                     </FormControl>
                   </Stack>
                   <Stack spacing="1" direction="row" justifyContent="end">
-                    <Button colorScheme="gray" mr={3} onClick={onClose}>
+                    <Button colorScheme="gray" mr={3} onClick={handleClose}>
                       Close
                     </Button>
                     <Button type="submit" colorScheme="teal">
@@ -130,8 +136,8 @@ const InlineListModal: React.FC<FormProps> = ({
 };
 
 type ModalManagerProps = {
-  onSave(values: InlineListType): void;
-  initialValues?: Partial<InlineListType>;
+  onSave(values: ItemListType): void;
+  initialValues?: Partial<ItemListType>;
   triggerFunc({ trigger }: { trigger(): void }): React.ReactNode;
 };
 
@@ -143,7 +149,7 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
   const { isOpen, onToggle } = useDisclosure();
   return (
     <>
-      <InlineListModal
+      <ItemListModal
         isOpen={isOpen}
         onClose={onToggle}
         onSave={onSave}

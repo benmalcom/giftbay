@@ -1,24 +1,26 @@
-import { Box, Text, Stack, Flex, CloseButton } from '@chakra-ui/react';
+import { Box, Text, CloseButton, HStack, Stack } from '@chakra-ui/react';
 import React from 'react';
 import {
-  InlineListType,
+  ItemListType,
   ModalTriggerFunctionProps,
   ResumeSettingsType,
 } from 'types/resume';
-import { ModalManager as InlineListModalManager } from './InlineListModal';
+import { ModalManager as InlineListModalManager } from './ItemListModal';
 
 type InlineListProps = {
-  onSave(values: InlineListType): void;
+  onSave(values: ItemListType): void;
   onRemoveInlineList(inlineListId: string): void;
-  inlineList: InlineListType;
+  inlineList: ItemListType;
   settings: ResumeSettingsType;
+  isLine?: boolean;
 };
 
-export const InlineList: React.FC<InlineListProps> = ({
+export const ItemList: React.FC<InlineListProps> = ({
   onSave,
   inlineList,
   onRemoveInlineList,
   settings,
+  isLine,
 }) => {
   return (
     <InlineListModalManager
@@ -42,31 +44,38 @@ export const InlineList: React.FC<InlineListProps> = ({
           }}
           onDoubleClick={() => props.trigger()}
         >
-          <Stack>
-            <Flex>
+          {/* eslint-disable-next-line react/jsx-no-undef */}
+          <Stack direction={isLine ? 'row' : 'column'}>
+            {isLine ? (
               <Text
                 sx={{
                   '@media screen, print': {
                     color: settings.colors.common,
-                    fontWeight: 600,
                     fontSize: '11pt',
                   },
                 }}
               >
-                {inlineList.name}:
-              </Text>
-              <Text
-                sx={{
-                  '@media screen, print': {
-                    marginLeft: 1,
-                    color: settings.colors.common,
-                    fontSize: '10.5pt',
-                  },
-                }}
-              >
+                <Text as="span" fontWeight={600}>
+                  {inlineList.name}:{' '}
+                </Text>
                 {inlineList.content}
               </Text>
-            </Flex>
+            ) : (
+              <>
+                <Text
+                  fontWeight={600}
+                  sx={{
+                    '@media screen, print': {
+                      color: settings.colors.common,
+                      fontSize: '11pt',
+                    },
+                  }}
+                >
+                  {inlineList.name}:
+                </Text>
+                <Text> {inlineList.content}</Text>
+              </>
+            )}
           </Stack>
           <CloseButton
             size="sm"
@@ -84,6 +93,6 @@ export const InlineList: React.FC<InlineListProps> = ({
   );
 };
 
-InlineList.displayName = 'InlineList';
+ItemList.displayName = 'ItemList';
 
-export default InlineList;
+export default ItemList;

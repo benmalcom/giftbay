@@ -60,7 +60,7 @@ export type SectionType = {
   name?: string;
   items: Array<
     SectionItem & {
-      content: JobRoleType | InlineListType | SectionParagraphType;
+      content: JobRoleType | ItemListType | SectionParagraphType;
     }
   >;
 };
@@ -78,7 +78,7 @@ export type ResumeSettingsType = {
   };
 };
 
-export type InlineListType = {
+export type ItemListType = {
   id: string;
   name: string;
   content: string;
