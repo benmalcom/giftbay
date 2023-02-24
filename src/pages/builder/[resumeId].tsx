@@ -18,6 +18,7 @@ import { User } from 'types/user';
 import { pdfPageSizes } from 'utils/constants';
 import {
   arrayBufferToBase64,
+  formatResumeFilename,
   objectToBase64,
   objFromBase64,
 } from 'utils/functions';
@@ -196,7 +197,7 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
             paperSize={pdfPageSizes.US}
             scale={0.645}
             avoidLinks
-            fileName="form.pdf"
+            fileName={formatResumeFilename(resume)}
             ref={pdfExportComponent}
             author={user.name}
             creator={process.env.NEXT_PUBLIC_APP_NAME}

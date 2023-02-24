@@ -56,3 +56,9 @@ export function isResumePDFReady(resume: ResumeType) {
     resume?.sections?.length > 1
   );
 }
+
+export function formatResumeFilename(resume: ResumeType) {
+  const ownerName = resume.candidate.name.replaceAll(' ', '_');
+  const suffix = resume.candidate.headline.match(/\b(\w)/g)?.join('');
+  return `${ownerName}_Resume_${suffix}`;
+}
