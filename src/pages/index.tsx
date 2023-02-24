@@ -26,20 +26,14 @@ const Home = () => {
         <Container alignItems="flex-start" mt={36}>
           <Stack spacing={{ base: '8', md: '10' }}>
             <Stack align="center" maxW="2xl">
-              <Heading
-                size={useBreakpointValue({
-                  md: 'md',
-                  lg: 'lg',
-                  xl: 'xl',
-                  '2xl': '2xl',
-                })}
-              >
+              <Heading as="h3" size="lg">
                 {process.env.NEXT_PUBLIC_APP_NAME}
               </Heading>
               <Alert
                 status="success"
                 textAlign="center"
                 mb="2px"
+                py={1}
                 fontSize={{
                   md: 'lg',
                   lg: 'lg',

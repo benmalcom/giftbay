@@ -17,11 +17,11 @@ export const JobFunctions: React.FC<JobFunctionsProps> = ({
   settings,
 }) => {
   return (
-    <UnorderedList ml={10}>
+    <UnorderedList ml={7} className="kendo-ui-list">
       {jobFunctions.map(item => (
         <ListItem
           key={item.id}
-          fontSize="11.5pt"
+          fontSize="11pt"
           sx={{
             '@media screen, print': {
               color: settings.colors.common,
@@ -33,6 +33,9 @@ export const JobFunctions: React.FC<JobFunctionsProps> = ({
             },
             '@media print': {
               fontSize: '10.5pt',
+            },
+            '::before': {
+              backgroundColor: settings.colors.accent,
             },
           }}
           role="group"

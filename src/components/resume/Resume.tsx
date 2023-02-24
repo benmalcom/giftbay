@@ -37,7 +37,6 @@ export const Resume: React.FC<
 
   const hasName = !!resume!.candidate?.name;
   const hasHeadline = !!resume!.candidate?.headline;
-  const hasSummary = !!resume!.candidate?.summary;
   const hasContactsAndLinks = !!resume!.candidate?.contactsAndLinks;
   const isResumeBlank = isBlankResume(resume);
 
@@ -53,7 +52,7 @@ export const Resume: React.FC<
           boxSizing: 'border-box',
           backgroundColor: '#FFFFFF',
           position: 'relative',
-          fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
+          fontFamily: 'Arial, Helvetica, sans-serif',
         },
         '@media screen': {
           boxShadow:
@@ -160,11 +159,11 @@ export const Resume: React.FC<
               onRemove={() => setCandidate({ headline: '' })}
               displayNodeProps={{
                 sx: {
-                  fontSize: '13pt',
+                  fontSize: '14pt',
                   fontWeight: 400,
                   color: resume.settings.colors.candidateHeadline,
                   '@media print': {
-                    fontSize: '12pt',
+                    fontSize: '13pt',
                   },
                 },
               }}
@@ -177,28 +176,6 @@ export const Resume: React.FC<
               showRemoveButton
               onRemove={() => setCandidate({ contactsAndLinks: undefined })}
               color={resume.settings.colors.candidateHeadline}
-            />
-          )}
-          {hasSummary && (
-            <EditableLabel
-              displayNode={Text}
-              text={resume!.candidate?.summary}
-              onChange={value => setCandidate({ summary: value })}
-              showRemoveButton
-              onRemove={() => setCandidate({ summary: '' })}
-              displayNodeProps={{
-                sx: {
-                  margin: '10pt 0',
-                  fontWeight: 400,
-                  fontSize: '11.5pt',
-                  lineHeight: '160%',
-                  color: resume.settings.colors.common,
-                  '@media print': {
-                    fontSize: '11pt',
-                    lineHeight: '180%',
-                  },
-                },
-              }}
             />
           )}
           {resume.sections.map(section => (

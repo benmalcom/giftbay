@@ -1,8 +1,7 @@
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { Flex, IconProps, useDisclosure } from '@chakra-ui/react';
-import { savePDF } from '@progress/kendo-react-pdf';
+import { PDFExport } from '@progress/kendo-react-pdf';
 import { AxiosResponse } from 'axios';
-import { jsPDF } from 'jspdf';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -15,6 +14,7 @@ import useResumeDownload from 'hooks/useResumeDownload';
 import { generatePDF, getResumeById, updateResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
 
+import { User } from 'types/user';
 import {
   arrayBufferToBase64,
   objectToBase64,
@@ -22,7 +22,10 @@ import {
 } from 'utils/functions';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
 
-export const Builder = () => {
+type BuilderProps = {
+  user: User;
+};
+export const Builder: React.FC<BuilderProps> = ({ user }) => {
   const {
     resume,
     updateSection,
@@ -41,6 +44,8 @@ export const Builder = () => {
   const { downloadResume } = useResumeDownload();
   const { isOpen: isActiveControls, onToggle: toggleControls } =
     useDisclosure();
+  const pdfExportComponent = React.useRef<PDFExport>(null);
+
   const { resumeId } = router.query;
 
   const fetchResume = useCallback(
@@ -104,6 +109,12 @@ export const Builder = () => {
       });
   };
 
+  const onGenerateViaClient = () => {
+    if (pdfExportComponent.current) {
+      pdfExportComponent.current.save();
+    }
+  };
+
   const onSaveResume = () => {
     setIsSavingResume(true);
     updateResume(resumeId as string, {
@@ -121,17 +132,6 @@ export const Builder = () => {
 
   const onChangeFileName = (e: React.FormEvent<HTMLInputElement>) =>
     setFileName(e.currentTarget.value);
-
-  const onGenerate2 = () => {
-    const htmlElement = document.querySelector('#resume');
-    if (htmlElement)
-      savePDF(htmlElement as HTMLElement, {
-        paperSize: 'auto',
-        fileName: 'form.pdf',
-        scale: 0.6,
-        margin: 0,
-      });
-  };
 
   if (inGetFlight || !resume) return <PageSpinner />;
 
@@ -181,7 +181,7 @@ export const Builder = () => {
             toggleControls={toggleControls}
             fileName={fileName}
             onChangeFileName={onChangeFileName}
-            onGenerate={onGenerate}
+            onGenerate={onGenerateViaClient}
             isGeneratingPDF={isGeneratingPDF}
             setCandidate={setCandidate}
             resume={resume}
@@ -190,12 +190,23 @@ export const Builder = () => {
             onSaveResume={onSaveResume}
             isSavingResume={isSavingResume}
           />
-          <Resume
-            resume={resume}
-            updateSection={updateSection}
-            setCandidate={setCandidate}
-            removeSection={removeSection}
-          />
+          <PDFExport
+            paperSize={['8.5in', '11in']}
+            scale={0.645}
+            avoidLinks
+            fileName="form.pdf"
+            ref={pdfExportComponent}
+            author={user.name}
+            creator={process.env.NEXT_PUBLIC_APP_NAME}
+            title={`${resume.candidate.name} - Resume`}
+          >
+            <Resume
+              resume={resume}
+              updateSection={updateSection}
+              setCandidate={setCandidate}
+              removeSection={removeSection}
+            />
+          </PDFExport>
         </Flex>
       </Flex>
     </>

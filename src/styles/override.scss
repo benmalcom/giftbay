@@ -26,3 +26,59 @@
 .react-pdf__Page__textContent span {
   direction: rtl;
 }
+
+ul {
+  &.kendo-ui-list {
+    list-style-type: none;
+    li {
+      display: flex;
+      &::before {
+        content: '';
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        margin: 10px 15px 0 0;
+      }
+    }
+    &.inline {
+      display: flex;
+      align-items: center;
+      li {
+        align-items: center;
+        &::before {
+          display: none;
+        }
+        &::after {
+          content: '';
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          margin: 0 10px;
+          background-color: #606165;
+        }
+        &:last-of-type {
+          &::after {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.k-pdf-export {
+  .kendo-ui-list {
+    li {
+      &::before {
+        margin: 12px 8px 0 0;
+      }
+    }
+    &.inline {
+      li {
+        &::after {
+          margin-top: 6px;
+        }
+      }
+    }
+  }
+}

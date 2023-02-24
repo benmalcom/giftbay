@@ -92,6 +92,9 @@ const InLineJobTitle: React.FC<JobTitleProps> = ({ jobRole, settings }) => (
         alignItems: 'center',
         marginBottom: '10px',
       },
+      '@media print': {
+        fontSize: '10.5pt',
+      },
     }}
   >
     <Flex>

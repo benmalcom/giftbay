@@ -17,9 +17,9 @@ function useResumeDownload() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = fileConfig.fileName
-      ? `${fileConfig.fileName}.pdf`
-      : `file-${+new Date()}.pdf`;
+    link.download = `resume-chef/${
+      fileConfig.fileName
+    }-${new Date().getTime()}.pdf`;
     link.click();
     link.remove();
     return () => {
@@ -33,7 +33,7 @@ function useResumeDownload() {
    * @param {string} fileName - Proposed name of the pdf file
    * @return {void}
    * */
-  const downloadResume = (fileContents: ArrayBuffer, fileName?: string) => {
+  const downloadResume = (fileContents: ArrayBuffer, fileName: string) => {
     setFileConfig({
       fileContents,
       fileName,

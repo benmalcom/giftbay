@@ -1,4 +1,11 @@
-import { Box, Text, CloseButton, HStack, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  CloseButton,
+  HStack,
+  Stack,
+  Heading,
+} from '@chakra-ui/react';
 import React from 'react';
 import {
   ItemListType,
@@ -44,9 +51,8 @@ export const ItemList: React.FC<InlineListProps> = ({
           }}
           onDoubleClick={() => props.trigger()}
         >
-          {/* eslint-disable-next-line react/jsx-no-undef */}
-          <Stack direction={isLine ? 'row' : 'column'}>
-            {isLine ? (
+          {isLine ? (
+            <Stack direction={isLine ? 'row' : 'column'}>
               <Text
                 sx={{
                   '@media screen, print': {
@@ -55,28 +61,28 @@ export const ItemList: React.FC<InlineListProps> = ({
                   },
                 }}
               >
-                <Text as="span" fontWeight={600}>
-                  {inlineList.name}:{' '}
-                </Text>
-                {inlineList.content}
+                <b> {`${inlineList.name}:`} </b> {inlineList.content}
               </Text>
-            ) : (
-              <>
-                <Text
-                  fontWeight={600}
-                  sx={{
-                    '@media screen, print': {
-                      color: settings.colors.common,
-                      fontSize: '11pt',
-                    },
-                  }}
-                >
-                  {inlineList.name}:
-                </Text>
-                <Text> {inlineList.content}</Text>
-              </>
-            )}
-          </Stack>
+            </Stack>
+          ) : (
+            <Stack
+              spacing={0}
+              direction="column"
+              sx={{
+                '@media screen, print': {
+                  color: settings.colors.common,
+                  fontSize: '11pt',
+                },
+              }}
+            >
+              <Heading
+                as="h6"
+                size="xs"
+                mb={1}
+              >{`${inlineList.name}:`}</Heading>
+              <Text as="span"> {inlineList.content}</Text>
+            </Stack>
+          )}
           <CloseButton
             size="sm"
             color="red"

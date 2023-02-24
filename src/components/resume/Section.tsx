@@ -1,6 +1,6 @@
 import {
+  Box,
   Button,
-  Divider,
   Flex,
   Popover,
   PopoverBody,
@@ -220,7 +220,7 @@ export const Section: React.FC<SectionProps> = ({
   return (
     <Stack
       sx={{
-        '@media screen, print': { marginTop: '15px', gap: 3, width: '100%' },
+        '@media screen, print': { marginTop: '15px', gap: 2, width: '100%' },
       }}
     >
       <Flex mb={0} mt={0} role="group">
@@ -327,9 +327,10 @@ export const Section: React.FC<SectionProps> = ({
           </Button>
         </Flex>
       </Flex>
-      <Divider
-        orientation="horizontal"
-        colorScheme="blackAlpha"
+      <Box
+        h="1.2px"
+        w="full"
+        bg="blackAlpha.200"
         sx={{
           marginTop: '0 !important',
         }}
@@ -378,6 +379,7 @@ export const Section: React.FC<SectionProps> = ({
                   color: settings.colors.common,
                   position: 'relative',
                   fontSize: '11pt',
+                  lineHeight: '160%',
                   '@media print': {
                     fontSize: '10.5pt',
                   },
