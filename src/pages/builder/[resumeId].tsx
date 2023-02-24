@@ -15,6 +15,7 @@ import { generatePDF, getResumeById, updateResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
 
 import { User } from 'types/user';
+import { pdfPageSizes } from 'utils/constants';
 import {
   arrayBufferToBase64,
   objectToBase64,
@@ -191,7 +192,8 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
             isSavingResume={isSavingResume}
           />
           <PDFExport
-            paperSize={['8.5in', '11in']}
+            // @ts-ignore: Typescript misbehaviour
+            paperSize={pdfPageSizes.US}
             scale={0.645}
             avoidLinks
             fileName="form.pdf"
