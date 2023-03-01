@@ -7,10 +7,12 @@ import {
   ModalCloseButton,
   useDisclosure,
   Flex,
+  Button,
 } from '@chakra-ui/react';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import { useSession } from 'next-auth/react';
 import React from 'react';
+import { AiOutlineDownload } from 'react-icons/ai';
 import { withDownloadCta } from 'components/resume/ResumeDownloadable';
 import { ResumeType } from 'types/resume';
 import { User } from 'types/user';
@@ -37,11 +39,24 @@ const ResumePreviewModal: React.FC<ModalProps> = ({
   };
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} size="5xl">
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        size="5xl"
+        scrollBehavior="inside"
+      >
         <ModalOverlay />
         <ModalContent>
+          <ModalHeader>
+            <Button
+              onClick={onGenerate}
+              leftIcon={<AiOutlineDownload color="teal" />}
+            >
+              Download
+            </Button>
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody as={Flex} justifyContent="center" pt={16} pb={5}>
+          <ModalBody as={Flex} justifyContent="center" pt={5} pb={5}>
             <ResumeDownloadable
               ref={pdfExportComponent}
               user={user}
