@@ -31,7 +31,6 @@ import Section from './Section';
 
 type ResumeProps = {
   isEditable?: boolean;
-  isMini?: boolean;
   resume: ResumeType;
   setCandidate?(candidate: Partial<Candidate>): void;
   updateSection?(section: SectionType): void;

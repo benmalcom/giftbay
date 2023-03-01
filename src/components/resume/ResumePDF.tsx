@@ -8,9 +8,9 @@ import {
   AiFillFilePdf,
   AiOutlineEdit,
   AiFillDelete,
-  AiOutlineFilePdf,
   AiOutlineEye,
 } from 'react-icons/ai';
+import { VscFilePdf } from 'react-icons/vsc';
 import { ResumeData } from 'types/resume';
 import { objFromBase64 } from 'utils/functions';
 import { ModalManager as ResumePreviewModalManager } from './ResumePreviewModal';
@@ -137,7 +137,7 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
           align="center"
           justify="center"
         >
-          <AiOutlineFilePdf color="red" size={140} />
+          <VscFilePdf style={{ color: 'red' }} size={140} />
         </Flex>
       </AspectRatio>
     </Flex>
