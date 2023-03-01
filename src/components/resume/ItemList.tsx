@@ -1,11 +1,4 @@
-import {
-  Box,
-  Text,
-  CloseButton,
-  HStack,
-  Stack,
-  Heading,
-} from '@chakra-ui/react';
+import { Box, Text, CloseButton, Stack, Heading } from '@chakra-ui/react';
 import React from 'react';
 import {
   ItemListType,
@@ -20,6 +13,7 @@ type InlineListProps = {
   inlineList: ItemListType;
   settings: ResumeSettingsType;
   isLine?: boolean;
+  isEditable?: boolean;
 };
 
 export const ItemList: React.FC<InlineListProps> = ({
@@ -28,6 +22,7 @@ export const ItemList: React.FC<InlineListProps> = ({
   onRemoveInlineList,
   settings,
   isLine,
+  isEditable,
 }) => {
   return (
     <InlineListModalManager
@@ -45,11 +40,11 @@ export const ItemList: React.FC<InlineListProps> = ({
             },
           }}
           _hover={{
-            border: '1px dashed gray',
-            cursor: 'pointer',
+            border: isEditable ? '1px dashed gray' : undefined,
+            cursor: isEditable ? 'pointer' : undefined,
             borderRadius: '2px',
           }}
-          onDoubleClick={() => props.trigger()}
+          onDoubleClick={isEditable ? () => props.trigger() : undefined}
         >
           {isLine ? (
             <Stack direction={isLine ? 'row' : 'column'}>
@@ -83,16 +78,18 @@ export const ItemList: React.FC<InlineListProps> = ({
               <Text as="span"> {inlineList.content}</Text>
             </Stack>
           )}
-          <CloseButton
-            size="sm"
-            color="red"
-            position="absolute"
-            top="-10px"
-            right="-20px"
-            display="none"
-            _groupHover={{ display: 'inline-block' }}
-            onClick={() => onRemoveInlineList(inlineList.id)}
-          />
+          {isEditable && (
+            <CloseButton
+              size="sm"
+              color="red"
+              position="absolute"
+              top="-10px"
+              right="-20px"
+              display="none"
+              _groupHover={{ display: 'inline-block' }}
+              onClick={() => onRemoveInlineList(inlineList.id)}
+            />
+          )}
         </Box>
       )}
     />

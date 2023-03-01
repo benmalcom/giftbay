@@ -40,7 +40,6 @@ export function isBlankResume(resume: ResumeType) {
   return (
     !resume?.candidate?.name &&
     !resume?.candidate?.headline &&
-    !resume?.candidate?.summary &&
     !resume?.candidate?.contactsAndLinks?.linkedIn &&
     !resume?.candidate?.contactsAndLinks?.email &&
     !resume?.sections?.length
@@ -62,3 +61,26 @@ export function formatResumeFilename(resume: ResumeType) {
   const suffix = resume.candidate.headline.match(/\b(\w)/g)?.join('');
   return `${ownerName}_Resume_${suffix}`;
 }
+
+// Generate from server, should be used inside component
+/*
+const onGenerate = () => {
+  setIsGeneratingPDF(true);
+  generatePDF(resumeId as string)
+    .then(({ data }) => {
+      downloadResume(data, fileName ?? 'resume');
+      setIsGeneratingPDF(false);
+      setIsSavingResume(true);
+      return updateResume(resumeId as string, {
+        contents: objectToBase64(resume),
+        fileContents: arrayBufferToBase64(data),
+      });
+    })
+    .then(() => setIsSavingResume(false))
+    .catch(err => {
+      toast.error(err.message);
+      setIsGeneratingPDF(false);
+      setIsSavingResume(false);
+    });
+};
+*/

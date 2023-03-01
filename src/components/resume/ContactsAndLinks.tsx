@@ -7,6 +7,7 @@ type ContactInformationProps = {
   onSave(values: ContactsAndLinksType): void;
   contactsAndLinks: ContactsAndLinksType;
   showRemoveButton?: boolean;
+  isEditable?: boolean;
   onRemove?(): void;
   color: string;
 };
@@ -17,6 +18,7 @@ export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
   showRemoveButton,
   onRemove,
   color,
+  isEditable,
 }) => {
   return (
     <ContactsAndLinksModalManager
@@ -26,11 +28,11 @@ export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
         <Box
           role="group"
           position="relative"
-          onDoubleClick={() => trigger()}
+          onDoubleClick={isEditable ? () => trigger() : undefined}
           w="full"
           _hover={{
-            border: '1px dashed gray',
-            cursor: 'pointer',
+            border: isEditable ? '1px dashed gray' : undefined,
+            cursor: isEditable ? 'pointer' : undefined,
             borderRadius: '2px',
             padding: 0,
           }}
@@ -57,7 +59,7 @@ export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
                 </ListItem>
               ))}
           </UnorderedList>
-          {showRemoveButton && (
+          {showRemoveButton && isEditable && (
             <CloseButton
               size="sm"
               color="red"

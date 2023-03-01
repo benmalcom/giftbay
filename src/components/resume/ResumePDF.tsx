@@ -3,16 +3,17 @@ import { AspectRatio, Box, Button, Flex, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   AiFillFilePdf,
   AiOutlineEdit,
   AiFillDelete,
   AiOutlineFilePdf,
+  AiOutlineEye,
 } from 'react-icons/ai';
-import { Document, Page, pdfjs } from 'react-pdf';
-import usePDFObjectUrl from 'hooks/usePDFObjectUrl';
 import { ResumeData } from 'types/resume';
+import { objFromBase64 } from 'utils/functions';
+import { ModalManager as ResumePreviewModalManager } from './ResumePreviewModal';
 dayjs.extend(relativeTime);
 
 type ResumePDFProps = {
@@ -30,15 +31,6 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
   onDeleteResume,
   inDeleteFlight,
 }) => {
-  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-  const [, setNumPages] = useState(null);
-
-  // @ts-ignore: Ignore Type
-  const onDocumentLoadSuccess = ({ numPages }) => {
-    setNumPages(numPages);
-  };
-  const fileUrl = usePDFObjectUrl(resumeData.fileContents!);
-
   const onDuplicate = () => {
     onCreateResume({
       contents: resumeData.contents,
@@ -70,29 +62,56 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
         py={5}
         rowGap={4}
       >
-        <Flex gap={2}>
+        <Flex gap={1}>
           <Button
-            size="sm"
+            size="xs"
             onClick={onDuplicate}
             isLoading={inCreateFlight}
             cursor="pointer"
+            title="Duplicate resume"
           >
             <AiFillFilePdf color="red" style={{ marginRight: '2px' }} />
             Duplicate
           </Button>
+          {resumeData.contents ? (
+            <ResumePreviewModalManager
+              resume={objFromBase64(resumeData.contents)}
+              triggerFunc={({ trigger, ...rest }) => (
+                <Button
+                  as="a"
+                  size="xs"
+                  colorScheme="twitter"
+                  isLoading={inDeleteFlight}
+                  onClick={() => trigger()}
+                  cursor="pointer"
+                  title="View resume"
+                  {...rest}
+                >
+                  <AiOutlineEye color="white" /> View
+                </Button>
+              )}
+            />
+          ) : null}
 
           <Link href={`/builder/${resumeData.id}`}>
-            <Button as="a" size="sm" colorScheme="orange" cursor="pointer">
+            <Button
+              as="a"
+              size="xs"
+              colorScheme="orange"
+              cursor="pointer"
+              title="Edit resume"
+            >
               <AiOutlineEdit />
             </Button>
           </Link>
           <Button
             as="a"
-            size="sm"
+            size="xs"
             colorScheme="red"
             isLoading={inDeleteFlight}
             onClick={() => onDeleteResume(resumeData.id)}
             cursor="pointer"
+            title="Delete resume"
           >
             <AiFillDelete color="white" />
           </Button>
@@ -108,30 +127,19 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
           </Flex>
         )}
       </Flex>
-      {resumeData.fileContents ? (
-        <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>
-          <Page
-            pageNumber={1}
-            height={300}
-            scale={1}
-            renderTextLayer={false}
-            renderAnnotationLayer={false}
-          />
-        </Document>
-      ) : (
-        <AspectRatio w="220px" ratio={4 / 3}>
-          <Flex
-            bg="#ffffff"
-            boxShadow="sm"
-            width="full"
-            height="full"
-            align="center"
-            justify="center"
-          >
-            <AiOutlineFilePdf color="red" size={140} />
-          </Flex>
-        </AspectRatio>
-      )}
+
+      <AspectRatio w="220px" ratio={4 / 3}>
+        <Flex
+          bg="#ffffff"
+          boxShadow="sm"
+          width="full"
+          height="full"
+          align="center"
+          justify="center"
+        >
+          <AiOutlineFilePdf color="red" size={140} />
+        </Flex>
+      </AspectRatio>
     </Flex>
   );
 };

@@ -17,22 +17,33 @@ import {
 } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
-import { ResumeContextType } from 'components/contexts';
 import { EditableLabel } from 'components/form';
 import { ModalManager as CandidateInformationModalManager } from 'components/resume/CandidateInformationModal';
 import ContactsAndLinks from 'components/resume/ContactsAndLinks';
-import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
-import { ModalTriggerFunctionProps } from 'types/resume';
+import {
+  Candidate,
+  ModalTriggerFunctionProps,
+  ResumeType,
+  SectionType,
+} from 'types/resume';
 import { isBlankResume } from 'utils/functions';
 import Section from './Section';
 
-export const Resume: React.FC<
-  Pick<
-    ResumeContextType,
-    'resume' | 'removeSection' | 'updateSection' | 'setCandidate'
-  >
-> = ({ resume, removeSection, updateSection, setCandidate }) => {
-  const isGeneratePDF = useIsPDFGeneratePage();
+type ResumeProps = {
+  isEditable?: boolean;
+  isMini?: boolean;
+  resume: ResumeType;
+  setCandidate?(candidate: Partial<Candidate>): void;
+  updateSection?(section: SectionType): void;
+  removeSection?(id: string): void;
+};
+export const Resume: React.FC<ResumeProps> = ({
+  resume,
+  removeSection,
+  updateSection,
+  setCandidate,
+  isEditable = false,
+}) => {
   const initRef = useRef();
 
   const hasName = !!resume!.candidate?.name;
@@ -42,7 +53,7 @@ export const Resume: React.FC<
 
   return (
     <Flex
-      width={isGeneratePDF ? 'full' : '950px'}
+      width="950px"
       id="resume"
       zIndex={4}
       sx={{
@@ -62,7 +73,7 @@ export const Resume: React.FC<
           width: '100%',
         },
       }}
-      p={isResumeBlank ? '10px' : '40px 48px'}
+      p={isResumeBlank ? '10px' : '40px 60px'}
     >
       {isResumeBlank ? (
         <Alert status="warning" flexDir="column" py={5}>
@@ -131,11 +142,12 @@ export const Resume: React.FC<
 
           {hasName && (
             <EditableLabel
+              isEditable={isEditable}
               displayNode={Heading}
               text={resume!.candidate?.name}
-              onChange={value => setCandidate({ name: value })}
+              onChange={value => setCandidate?.({ name: value })}
               showRemoveButton
-              onRemove={() => setCandidate({ name: '' })}
+              onRemove={() => setCandidate?.({ name: '' })}
               displayNodeProps={{
                 sx: {
                   fontSize: '24pt',
@@ -152,11 +164,12 @@ export const Resume: React.FC<
           )}
           {hasHeadline && (
             <EditableLabel
+              isEditable={isEditable}
               displayNode={Text}
               text={resume!.candidate?.headline}
-              onChange={value => setCandidate({ headline: value })}
+              onChange={value => setCandidate?.({ headline: value })}
               showRemoveButton
-              onRemove={() => setCandidate({ headline: '' })}
+              onRemove={() => setCandidate?.({ headline: '' })}
               displayNodeProps={{
                 sx: {
                   fontSize: '14pt',
@@ -171,15 +184,17 @@ export const Resume: React.FC<
           )}
           {hasContactsAndLinks && (
             <ContactsAndLinks
-              onSave={values => setCandidate({ contactsAndLinks: values })}
+              isEditable={isEditable}
+              onSave={values => setCandidate?.({ contactsAndLinks: values })}
               contactsAndLinks={resume!.candidate?.contactsAndLinks}
               showRemoveButton
-              onRemove={() => setCandidate({ contactsAndLinks: undefined })}
+              onRemove={() => setCandidate?.({ contactsAndLinks: undefined })}
               color={resume.settings.colors.candidateHeadline}
             />
           )}
           {resume.sections.map(section => (
             <Section
+              isEditable={isEditable}
               settings={resume.settings}
               key={section.id}
               section={section}

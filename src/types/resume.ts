@@ -51,7 +51,6 @@ export type ResumeType = {
 export type Candidate = {
   name: string;
   headline: string;
-  summary: string;
   contactsAndLinks: ContactsAndLinksType;
 };
 

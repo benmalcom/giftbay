@@ -35,12 +35,12 @@ import ItemList from './ItemList';
 import { ModalManager as InlineListModalModalManager } from './ItemListModal';
 import { ModalManager as JobRoleModalModalManager } from './JobRoleModal';
 
-type SectionProps = Pick<
-  ResumeContextType,
-  'removeSection' | 'updateSection'
-> & {
+type SectionProps = {
   section: SectionType;
   settings: ResumeSettingsType;
+  isEditable?: boolean;
+  updateSection?(section: SectionType): void;
+  removeSection?(id: string): void;
 };
 
 export const Section: React.FC<SectionProps> = ({
@@ -48,6 +48,7 @@ export const Section: React.FC<SectionProps> = ({
   updateSection,
   removeSection,
   settings,
+  isEditable,
 }) => {
   const initRef = useRef();
   const onSaveJobRole = (values: JobRoleType) => {
@@ -79,7 +80,7 @@ export const Section: React.FC<SectionProps> = ({
 
       sectionPayload.items.push(jobRole);
     }
-    updateSection(sectionPayload);
+    updateSection?.(sectionPayload);
   };
 
   const onAddJobFunctions = (
@@ -101,7 +102,7 @@ export const Section: React.FC<SectionProps> = ({
     const jobRole = sectionPayload.items[jobRoleIndex].content as JobRoleType;
     jobRole.jobFunctions.push(...jobFunctions);
     sectionPayload.items[jobRoleIndex].content = jobRole;
-    updateSection(sectionPayload);
+    updateSection?.(sectionPayload);
   };
 
   const onSaveJobFunction = (values: JobFunctionType) => {
@@ -122,11 +123,11 @@ export const Section: React.FC<SectionProps> = ({
     jobFunctions[jobFunctionIndex] = Object.assign({}, jobFunction, values);
     jobRole.jobFunctions = jobFunctions;
     sectionPayload.items[jobRoleIndex].content = jobRole;
-    updateSection(sectionPayload);
+    updateSection?.(sectionPayload);
   };
 
   const onSaveSectionName = (values: Partial<SectionType>) => {
-    updateSection({ ...section, ...values });
+    updateSection?.({ ...section, ...values });
   };
 
   const onRemoveJobFunction = (jobFunctionId: string, jobRoleId: string) => {
@@ -142,7 +143,7 @@ export const Section: React.FC<SectionProps> = ({
       item => item.id !== jobFunctionId
     );
     sectionPayload.items[jobRoleIndex].content = jobRole;
-    updateSection(sectionPayload);
+    updateSection?.(sectionPayload);
   };
 
   const onSaveInlineList = (values: ItemListType) => {
@@ -173,7 +174,7 @@ export const Section: React.FC<SectionProps> = ({
 
       sectionPayload.items.push(inlineList);
     }
-    updateSection(sectionPayload);
+    updateSection?.(sectionPayload);
   };
 
   const onRemoveSectionItem = (itemId: string, sectionItemType: string) => {
@@ -184,7 +185,7 @@ export const Section: React.FC<SectionProps> = ({
     if (sectionItemIndex === -1)
       throw new Error(`Cannot find ${sectionItemType.toString()}`);
     sectionPayload.items.splice(sectionItemIndex, 1);
-    updateSection(sectionPayload);
+    updateSection?.(sectionPayload);
   };
 
   const onAddParagraph = () => {
@@ -200,7 +201,7 @@ export const Section: React.FC<SectionProps> = ({
     };
 
     sectionPayload.items.push(paragraph);
-    updateSection(sectionPayload);
+    updateSection?.(sectionPayload);
   };
   const onChangeParagraph = (paragraphId: string, text: string) => {
     const sectionPayload = structuredClone(section);
@@ -214,13 +215,13 @@ export const Section: React.FC<SectionProps> = ({
       .content as SectionParagraphType;
     paragraph.text = text;
     sectionPayload.items[index].content = paragraph;
-    updateSection(sectionPayload);
+    updateSection?.(sectionPayload);
   };
 
   return (
     <Stack
       sx={{
-        '@media screen, print': { marginTop: '15px', gap: 2, width: '100%' },
+        '@media screen, print': { marginTop: '20px', gap: 2, width: '100%' },
       }}
     >
       <Flex mb={0} mt={0} role="group">
@@ -242,7 +243,7 @@ export const Section: React.FC<SectionProps> = ({
               display: 'none',
             },
           }}
-          _groupHover={{ display: 'inline-block' }}
+          _groupHover={{ display: isEditable ? 'inline-block' : undefined }}
         >
           <Popover
             closeOnBlur={false}
@@ -322,7 +323,7 @@ export const Section: React.FC<SectionProps> = ({
               </Button>
             )}
           />
-          <Button size="xs" onClick={() => removeSection(section.id)}>
+          <Button size="xs" onClick={() => removeSection?.(section.id)}>
             <AiFillDelete color="red" />
           </Button>
         </Flex>
@@ -339,6 +340,7 @@ export const Section: React.FC<SectionProps> = ({
         if (sectionItem.type === SectionItemType.JobRole) {
           return (
             <JobRole
+              isEditable={isEditable}
               settings={settings}
               key={(sectionItem.content as JobRoleType).id}
               onSave={onSaveJobRole}
@@ -355,6 +357,7 @@ export const Section: React.FC<SectionProps> = ({
         if (sectionItem.type === SectionItemType.InlineList) {
           return (
             <ItemList
+              isEditable={isEditable}
               settings={settings}
               key={(sectionItem.content as ItemListType).id}
               onSave={onSaveInlineList}
@@ -370,6 +373,7 @@ export const Section: React.FC<SectionProps> = ({
           const paragraph = sectionItem.content as SectionParagraphType;
           return (
             <EditableLabel
+              isEditable={isEditable}
               key={paragraph.id}
               text={paragraph.text}
               onChange={text => onChangeParagraph(paragraph.id, text)}

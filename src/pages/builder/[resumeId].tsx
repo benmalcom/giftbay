@@ -4,24 +4,16 @@ import { PDFExport } from '@progress/kendo-react-pdf';
 import { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { HeaderTags, PageSpinner } from 'components/common';
-import { Resume, Controls } from 'components/resume';
+import { Controls, ResumeDownloadable } from 'components/resume';
 import blankResume from 'data/blankResume.json';
 import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
 import useResumeContext from 'hooks/useResumeContext';
-import useResumeDownload from 'hooks/useResumeDownload';
-import { generatePDF, getResumeById, updateResume } from 'services/resume';
+import { getResumeById, updateResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
 
 import { User } from 'types/user';
-import { pdfPageSizes } from 'utils/constants';
-import {
-  arrayBufferToBase64,
-  formatResumeFilename,
-  objectToBase64,
-  objFromBase64,
-} from 'utils/functions';
+import { objectToBase64, objFromBase64 } from 'utils/functions';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
 
 type BuilderProps = {
@@ -30,12 +22,12 @@ type BuilderProps = {
 export const Builder: React.FC<BuilderProps> = ({ user }) => {
   const {
     resume,
-    updateSection,
     setCandidate,
-    removeSection,
     setResume,
     addSection,
     updateResumeSettings,
+    updateSection,
+    removeSection,
   } = useResumeContext();
   const isGeneratePDFPage = useIsPDFGeneratePage();
   const [inGetFlight, setInGetFlight] = useState(true);
@@ -43,7 +35,6 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [isSavingResume, setIsSavingResume] = useState(false);
   const [fileName, setFileName] = useState('');
-  const { downloadResume } = useResumeDownload();
   const { isOpen: isActiveControls, onToggle: toggleControls } =
     useDisclosure();
   const pdfExportComponent = React.useRef<PDFExport>(null);
@@ -77,6 +68,21 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
     [isGeneratePDFPage, router.query, setResume]
   );
 
+  const onSaveResume = () => {
+    setIsSavingResume(true);
+    updateResume(resumeId as string, {
+      contents: objectToBase64(resume),
+    })
+      .then(({ data }) => {
+        if (data.contents) {
+          const resume = objFromBase64(data.contents);
+          setResume(resume);
+        }
+      })
+      .catch(err => console.log('Error ', err))
+      .finally(() => setIsSavingResume(false));
+  };
+
   useEffect(() => {
     if (!router.isReady) return;
   }, [router.isReady]);
@@ -93,43 +99,10 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
 
   const onGenerate = () => {
     setIsGeneratingPDF(true);
-    generatePDF(resumeId as string)
-      .then(({ data }) => {
-        downloadResume(data, fileName ?? 'resume');
-        setIsGeneratingPDF(false);
-        setIsSavingResume(true);
-        return updateResume(resumeId as string, {
-          contents: objectToBase64(resume),
-          fileContents: arrayBufferToBase64(data),
-        });
-      })
-      .then(() => setIsSavingResume(false))
-      .catch(err => {
-        toast.error(err.message);
-        setIsGeneratingPDF(false);
-        setIsSavingResume(false);
-      });
-  };
-
-  const onGenerateViaClient = () => {
     if (pdfExportComponent.current) {
       pdfExportComponent.current.save();
     }
-  };
-
-  const onSaveResume = () => {
-    setIsSavingResume(true);
-    updateResume(resumeId as string, {
-      contents: objectToBase64(resume),
-    })
-      .then(({ data }) => {
-        if (data.contents) {
-          const resume = objFromBase64(data.contents);
-          setResume(resume);
-        }
-      })
-      .catch(err => console.log('Error ', err))
-      .finally(() => setIsSavingResume(false));
+    setIsGeneratingPDF(false);
   };
 
   const onChangeFileName = (e: React.FormEvent<HTMLInputElement>) =>
@@ -157,11 +130,7 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
         title={`${process.env.NEXT_PUBLIC_APP_NAME} - ${resume.candidate?.name} Resume builder`.trim()}
       />
 
-      <Flex
-        gap={isGeneratePDFPage ? undefined : 3}
-        justify="center"
-        position="relative"
-      >
+      <Flex gap={3} justify="center" position="relative">
         {isActiveControls ? (
           <CloseIcon
             {...mobileControlsIconStyles}
@@ -176,14 +145,14 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
           gap={4}
           height="max-content"
           boxSizing="border-box"
-          my={isGeneratePDFPage ? undefined : 14}
+          my={14}
         >
           <Controls
             isActiveControls={isActiveControls}
             toggleControls={toggleControls}
             fileName={fileName}
             onChangeFileName={onChangeFileName}
-            onGenerate={onGenerateViaClient}
+            onGenerate={onGenerate}
             isGeneratingPDF={isGeneratingPDF}
             setCandidate={setCandidate}
             resume={resume}
@@ -192,24 +161,16 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
             onSaveResume={onSaveResume}
             isSavingResume={isSavingResume}
           />
-          <PDFExport
-            // @ts-ignore: Typescript misbehaviour
-            paperSize={pdfPageSizes.US}
-            scale={0.645}
-            avoidLinks
-            fileName={formatResumeFilename(resume)}
+
+          <ResumeDownloadable
             ref={pdfExportComponent}
-            author={user.name}
-            creator={process.env.NEXT_PUBLIC_APP_NAME}
-            title={`${resume.candidate.name} - Resume`}
-          >
-            <Resume
-              resume={resume}
-              updateSection={updateSection}
-              setCandidate={setCandidate}
-              removeSection={removeSection}
-            />
-          </PDFExport>
+            user={user}
+            resume={resume}
+            isEditable
+            removeSection={removeSection}
+            setCandidate={setCandidate}
+            updateSection={updateSection}
+          />
         </Flex>
       </Flex>
     </>

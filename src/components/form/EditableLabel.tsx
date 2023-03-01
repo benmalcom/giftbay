@@ -17,13 +17,23 @@ type EditableInputProps = {
   displayNode?: React.ElementType;
   displayNodeProps?: TextProps | HeadingProps;
   showRemoveButton?: boolean;
+  isEditable?: boolean;
   onRemove?(): void;
 };
-export const EditableLabel: React.FC<EditableInputProps> = props => {
-  const [value, setValue] = useState(props.text);
+export const EditableLabel: React.FC<EditableInputProps> = ({
+  isEditable,
+  displayNodeProps,
+  showRemoveButton,
+  onRemove,
+  inputProps,
+  displayNode,
+  text,
+  onChange,
+}) => {
+  const [value, setValue] = useState(text);
   const { isOpen, onToggle } = useDisclosure();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
-  const DisplayComponent = props.displayNode ?? Text;
+  const DisplayComponent = displayNode ?? Text;
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
@@ -34,18 +44,19 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
   }, [isOpen]);
 
   useEffect(() => {
-    if (props.text !== value) {
-      setValue(props.text);
+    if (text !== value) {
+      setValue(text);
     }
-  }, [props.text, value]);
+  }, [text, value]);
 
   const onClickReveal = () => {
+    console.log('Click reveal');
     onToggle();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
-    props.onChange?.(e.target.value);
+    onChange?.(e.target.value);
   };
 
   return isOpen ? (
@@ -56,7 +67,7 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
       w="full"
       onBlur={onClickReveal}
       fontSize="16px"
-      {...props.inputProps}
+      {...inputProps}
       onChange={handleChange}
       boxShadow="md"
       value={value}
@@ -75,19 +86,19 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
         },
       }}
       _hover={{
-        border: '1px dashed gray',
-        cursor: 'pointer',
+        border: isEditable ? '1px dashed gray' : undefined,
+        cursor: isEditable ? 'pointer' : undefined,
         borderRadius: '2px',
       }}
     >
       <DisplayComponent
         sx={{
-          ...props.displayNodeProps?.sx,
+          ...displayNodeProps?.sx,
         }}
       >
         {value}
       </DisplayComponent>
-      {props.showRemoveButton && (
+      {showRemoveButton && isEditable && (
         <CloseButton
           size="sm"
           color="red"
@@ -96,7 +107,7 @@ export const EditableLabel: React.FC<EditableInputProps> = props => {
           right="-20px"
           display="none"
           _groupHover={{ display: 'inline-block' }}
-          onClick={() => props.onRemove?.()}
+          onClick={() => onRemove?.()}
         />
       )}
     </Box>

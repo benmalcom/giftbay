@@ -13,7 +13,7 @@ import {
   PopoverCloseButton,
   PopoverBody,
 } from '@chakra-ui/react';
-import React, { useRef } from 'react';
+import React, { forwardRef, MutableRefObject, Ref, useRef } from 'react';
 import { AiFillDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import JobFunctions from 'components/resume/JobFunctions';
 import { ModalManager as JobFunctionsModalManager } from 'components/resume/JobFunctionsModal';
@@ -33,6 +33,7 @@ type JobRoleProps = {
   onRemove(jobRoleId: string): void;
   jobRole: JobRoleType;
   settings: ResumeSettingsType;
+  isEditable?: boolean;
 };
 
 export const JobRole: React.FC<JobRoleProps> = ({
@@ -43,6 +44,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
   onRemoveJobFunction,
   onRemove,
   settings,
+  isEditable,
 }) => {
   return (
     <Box
@@ -55,7 +57,14 @@ export const JobRole: React.FC<JobRoleProps> = ({
       }}
     >
       {jobRole.isInline ? (
-        <InLineJobTitle jobRole={jobRole} settings={settings} />
+        <InLineJobTitle
+          jobRole={jobRole}
+          settings={settings}
+          isEditable={isEditable}
+          onSave={onSave}
+          onRemove={onRemove}
+          onAddJobFunctions={onAddJobFunctions}
+        />
       ) : (
         <NonInLineJobTitle
           jobRole={jobRole}
@@ -63,10 +72,12 @@ export const JobRole: React.FC<JobRoleProps> = ({
           onSave={onSave}
           onRemove={onRemove}
           onAddJobFunctions={onAddJobFunctions}
+          isEditable={isEditable}
         />
       )}
 
       <JobFunctions
+        isEditable={isEditable}
         settings={settings}
         onSaveJobFunction={onSaveJobFunction}
         jobFunctions={jobRole.jobFunctions}
@@ -83,54 +94,87 @@ export default JobRole;
 type JobTitleProps = {
   jobRole: JobRoleType;
   settings: ResumeSettingsType;
+  isEditable?: boolean;
 };
 
-const InLineJobTitle: React.FC<JobTitleProps> = ({ jobRole, settings }) => (
-  <Flex
-    sx={{
-      '@media screen, print': {
-        alignItems: 'center',
-        marginBottom: '10px',
-      },
-      '@media print': {
-        fontSize: '10.5pt',
-      },
-    }}
-  >
-    <Flex>
-      <Text
-        sx={{
-          '@media screen, print': {
-            color: settings.colors.jobRoleName,
-            fontWeight: 600,
-          },
-        }}
-      >
-        {jobRole.name},
-      </Text>
-      &nbsp;
-      <Text
-        sx={{
-          '@media screen, print': {
-            color: settings.colors.jobRoleCompanyLocation,
-          },
-        }}
-      >
-        {jobRole.company}, {jobRole.location}
-      </Text>
-    </Flex>
-    <Text
-      color="#342f31"
+const InLineJobTitle: React.FC<
+  JobTitleProps & {
+    onSave(values: JobRoleType): void;
+    onAddJobFunctions(jobRoleId: string, values: Record<string, number>): void;
+    onRemove(jobRoleId: string): void;
+  }
+> = ({
+  jobRole,
+  settings,
+  onAddJobFunctions,
+  onSave,
+  onRemove,
+  isEditable,
+}) => {
+  const initRef = useRef();
+  return (
+    <Flex
+      role="group"
+      _hover={{ cursor: 'pointer' }}
       sx={{
         '@media screen, print': {
-          color: settings.colors.jobRoleDuration,
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        },
+        '@media print': {
+          fontSize: '10.5pt',
         },
       }}
     >
-      {jobRole.duration}
-    </Text>
-  </Flex>
-);
+      <Flex>
+        <Text
+          sx={{
+            '@media screen, print': {
+              color: settings.colors.jobRoleName,
+              fontWeight: 600,
+            },
+          }}
+        >
+          {jobRole.name},
+        </Text>
+        &nbsp;
+        <Text
+          sx={{
+            '@media screen, print': {
+              color: settings.colors.jobRoleCompanyLocation,
+            },
+          }}
+        >
+          {jobRole.company}, {jobRole.location}
+        </Text>
+        {isEditable && (
+          <CtaButtons
+            ref={
+              initRef as unknown as Ref<
+                MutableRefObject<HTMLDivElement | undefined>
+              >
+            }
+            jobRole={jobRole}
+            isEditable={isEditable}
+            onSave={onSave}
+            onRemove={onRemove}
+            onAddJobFunctions={onAddJobFunctions}
+          />
+        )}
+      </Flex>
+      <Text
+        color="#342f31"
+        sx={{
+          '@media screen, print': {
+            color: settings.colors.jobRoleDuration,
+          },
+        }}
+      >
+        {jobRole.duration}
+      </Text>
+    </Flex>
+  );
+};
 
 const NonInLineJobTitle: React.FC<
   JobTitleProps & {
@@ -138,69 +182,15 @@ const NonInLineJobTitle: React.FC<
     onAddJobFunctions(jobRoleId: string, values: Record<string, number>): void;
     onRemove(jobRoleId: string): void;
   }
-> = ({ jobRole, settings, onAddJobFunctions, onSave, onRemove }) => {
+> = ({
+  jobRole,
+  settings,
+  onAddJobFunctions,
+  onSave,
+  onRemove,
+  isEditable,
+}) => {
   const initRef = useRef();
-  const getCtaButtons = () => (
-    <Flex display="none" _groupHover={{ display: 'inline-block' }} ml="15px">
-      <Popover
-        closeOnBlur={false}
-        placement="left"
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        initialFocusRef={initRef}
-      >
-        {({ onClose }) => (
-          <>
-            <PopoverTrigger>
-              <Button size="xs" mr="10px">
-                <AiOutlinePlus />
-              </Button>
-            </PopoverTrigger>
-            <Portal>
-              <PopoverContent>
-                <PopoverHeader>Add contents</PopoverHeader>
-                <PopoverCloseButton />
-                <PopoverBody py="10px">
-                  <JobFunctionsModalManager
-                    triggerFunc={({
-                      trigger,
-                      ...rest
-                    }: ModalTriggerFunctionProps) => (
-                      <Button
-                        size="xs"
-                        {...rest}
-                        onClick={() => {
-                          trigger();
-                          onClose();
-                        }}
-                        mr="10px"
-                      >
-                        Job Responsibilities
-                      </Button>
-                    )}
-                    onSave={values => onAddJobFunctions(jobRole.id, values)}
-                  />
-                </PopoverBody>
-              </PopoverContent>
-            </Portal>
-          </>
-        )}
-      </Popover>
-      <JobRoleModalManager
-        onSave={onSave}
-        initialValues={jobRole}
-        triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
-          <Button size="xs" mr="10px" {...rest} onClick={() => trigger()}>
-            <AiOutlineEdit />
-          </Button>
-        )}
-      />
-      <Button size="xs" onClick={() => onRemove(jobRole.id)}>
-        <AiFillDelete color="red" />
-      </Button>
-    </Flex>
-  );
-
   return (
     <>
       <Stack>
@@ -253,8 +243,94 @@ const NonInLineJobTitle: React.FC<
         >
           {jobRole.name}
         </Heading>
-        {getCtaButtons()}
+        {isEditable && (
+          <CtaButtons
+            ref={
+              initRef as unknown as Ref<
+                MutableRefObject<HTMLDivElement | undefined>
+              >
+            }
+            jobRole={jobRole}
+            isEditable={isEditable}
+            onSave={onSave}
+            onRemove={onRemove}
+            onAddJobFunctions={onAddJobFunctions}
+          />
+        )}
       </Flex>
     </>
   );
 };
+
+const CtaButtons = forwardRef<
+  MutableRefObject<HTMLDivElement | undefined>,
+  Pick<
+    JobRoleProps,
+    'jobRole' | 'isEditable' | 'onSave' | 'onAddJobFunctions' | 'onRemove'
+  >
+>(({ jobRole, onSave, onRemove, isEditable, onAddJobFunctions }, initRef) => (
+  <Flex
+    display="none"
+    _groupHover={{ display: isEditable ? 'inline-block' : undefined }}
+    ml="15px"
+  >
+    <Popover
+      closeOnBlur={false}
+      placement="left"
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      initialFocusRef={initRef}
+    >
+      {({ onClose }) => (
+        <>
+          <PopoverTrigger>
+            <Button size="xs" mr="10px">
+              <AiOutlinePlus />
+            </Button>
+          </PopoverTrigger>
+          <Portal>
+            <PopoverContent>
+              <PopoverHeader>Add contents</PopoverHeader>
+              <PopoverCloseButton />
+              <PopoverBody py="10px">
+                <JobFunctionsModalManager
+                  triggerFunc={({
+                    trigger,
+                    ...rest
+                  }: ModalTriggerFunctionProps) => (
+                    <Button
+                      size="xs"
+                      {...rest}
+                      onClick={() => {
+                        trigger();
+                        onClose();
+                      }}
+                      mr="10px"
+                    >
+                      Job Responsibilities
+                    </Button>
+                  )}
+                  onSave={values => onAddJobFunctions(jobRole.id, values)}
+                />
+              </PopoverBody>
+            </PopoverContent>
+          </Portal>
+        </>
+      )}
+    </Popover>
+    <JobRoleModalManager
+      onSave={onSave}
+      initialValues={jobRole}
+      triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
+        <Button size="xs" mr="10px" {...rest} onClick={() => trigger()}>
+          <AiOutlineEdit />
+        </Button>
+      )}
+    />
+    <Button size="xs" onClick={() => onRemove(jobRole.id)}>
+      <AiFillDelete color="red" />
+    </Button>
+  </Flex>
+));
+
+CtaButtons.displayName = 'CtaButtons';

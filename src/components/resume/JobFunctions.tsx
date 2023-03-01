@@ -8,6 +8,7 @@ type JobFunctionsProps = {
   onRemoveJobFunction(jobFunctionId: string, jobRoleId: string): void;
   jobFunctions: JobFunctionType[];
   settings: ResumeSettingsType;
+  isEditable?: boolean;
 };
 
 export const JobFunctions: React.FC<JobFunctionsProps> = ({
@@ -15,6 +16,7 @@ export const JobFunctions: React.FC<JobFunctionsProps> = ({
   jobFunctions,
   onRemoveJobFunction,
   settings,
+  isEditable,
 }) => {
   return (
     <UnorderedList ml={7} className="kendo-ui-list">
@@ -41,19 +43,22 @@ export const JobFunctions: React.FC<JobFunctionsProps> = ({
           role="group"
         >
           <EditableLabel
+            isEditable={isEditable}
             onChange={(text: string) => onSaveJobFunction({ ...item, text })}
             text={item.text}
           />
-          <CloseButton
-            size="sm"
-            color="red"
-            position="absolute"
-            top="-10px"
-            right="-20px"
-            display="none"
-            _groupHover={{ display: 'inline-block' }}
-            onClick={() => onRemoveJobFunction(item.id, item.jobRoleId)}
-          />
+          {isEditable && (
+            <CloseButton
+              size="sm"
+              color="red"
+              position="absolute"
+              top="-10px"
+              right="-20px"
+              display="none"
+              _groupHover={{ display: 'inline-block' }}
+              onClick={() => onRemoveJobFunction(item.id, item.jobRoleId)}
+            />
+          )}
         </ListItem>
       ))}
     </UnorderedList>
