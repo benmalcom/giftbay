@@ -14,6 +14,7 @@ import {
   PopoverBody,
 } from '@chakra-ui/react';
 import React, { forwardRef, MutableRefObject, Ref, useRef } from 'react';
+import { DropResult } from 'react-beautiful-dnd';
 import { AiFillDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import JobFunctions from 'components/resume/JobFunctions';
 import { ModalManager as JobFunctionsModalManager } from 'components/resume/JobFunctionsModal';
@@ -34,6 +35,7 @@ type JobRoleProps = {
   jobRole: JobRoleType;
   settings: ResumeSettingsType;
   isEditable?: boolean;
+  onJobFunctionDragEnd(dragIndex: number, hoverIndex: number): void;
 };
 
 export const JobRole: React.FC<JobRoleProps> = ({
@@ -45,6 +47,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
   onRemove,
   settings,
   isEditable,
+  onJobFunctionDragEnd,
 }) => {
   return (
     <Box
@@ -82,6 +85,7 @@ export const JobRole: React.FC<JobRoleProps> = ({
         onSaveJobFunction={onSaveJobFunction}
         jobFunctions={jobRole.jobFunctions}
         onRemoveJobFunction={onRemoveJobFunction}
+        onDragEnd={onJobFunctionDragEnd}
       />
     </Box>
   );

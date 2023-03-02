@@ -14,9 +14,9 @@ import {
 } from '@chakra-ui/react';
 import { omit } from 'lodash';
 import React, { useRef } from 'react';
+import { DropResult } from 'react-beautiful-dnd';
 import { AiFillDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import { v4 as uuid } from 'uuid';
-import { ResumeContextType } from 'components/contexts';
 import { EditableLabel } from 'components/form';
 import JobRole from 'components/resume/JobRole';
 import loremIpsum from 'data/loremIpsum.json';
@@ -218,6 +218,27 @@ export const Section: React.FC<SectionProps> = ({
     updateSection?.(sectionPayload);
   };
 
+  const onJobFunctionDrop = (
+    dragIndex: number,
+    hoverIndex: number,
+    jobRoleId: string
+  ) => {
+    const sectionPayload = structuredClone(section);
+    const jobRoleIndex = sectionPayload.items.findIndex(
+      item =>
+        item.type === SectionItemType.JobRole && item.content.id === jobRoleId
+    );
+    if (jobRoleIndex === -1) throw new Error('Cannot find job role');
+    const jobRole = sectionPayload.items[jobRoleIndex].content as JobRoleType;
+    const jobFunctions = [...jobRole.jobFunctions];
+    const tmp = jobFunctions[dragIndex];
+    jobFunctions[dragIndex] = jobFunctions[hoverIndex];
+    jobFunctions[hoverIndex] = tmp;
+    jobRole.jobFunctions = jobFunctions;
+    sectionPayload.items[jobRoleIndex].content = jobRole;
+    updateSection?.(sectionPayload);
+  };
+
   return (
     <Stack
       sx={{
@@ -338,11 +359,12 @@ export const Section: React.FC<SectionProps> = ({
       />
       {section.items.map(sectionItem => {
         if (sectionItem.type === SectionItemType.JobRole) {
+          const jobRole = sectionItem.content as JobRoleType;
           return (
             <JobRole
               isEditable={isEditable}
               settings={settings}
-              key={(sectionItem.content as JobRoleType).id}
+              key={jobRole.id}
               onSave={onSaveJobRole}
               jobRole={sectionItem.content as JobRoleType}
               onSaveJobFunction={onSaveJobFunction}
@@ -350,6 +372,9 @@ export const Section: React.FC<SectionProps> = ({
               onRemoveJobFunction={onRemoveJobFunction}
               onRemove={jobRoleId =>
                 onRemoveSectionItem(jobRoleId, SectionItemType.JobRole)
+              }
+              onJobFunctionDragEnd={(dragIndex: number, hoverIndex: number) =>
+                onJobFunctionDrop(dragIndex, hoverIndex, jobRole.id)
               }
             />
           );

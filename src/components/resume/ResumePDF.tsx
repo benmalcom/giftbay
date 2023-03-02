@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { AspectRatio, Box, Button, Flex, Text } from '@chakra-ui/react';
+import { AspectRatio, Badge, Box, Button, Flex, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Link from 'next/link';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   AiFillFilePdf,
   AiOutlineEdit,
@@ -11,7 +11,7 @@ import {
   AiOutlineEye,
 } from 'react-icons/ai';
 import { VscFilePdf } from 'react-icons/vsc';
-import { ResumeData } from 'types/resume';
+import { ResumeData, ResumeType } from 'types/resume';
 import { objFromBase64 } from 'utils/functions';
 import { ModalManager as ResumePreviewModalManager } from './ResumePreviewModal';
 dayjs.extend(relativeTime);
@@ -38,6 +38,11 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
     });
   };
 
+  const resume = useMemo<ResumeType>(
+    () => objFromBase64(resumeData.contents),
+    [resumeData.contents]
+  );
+
   return (
     <Flex role="group" boxShadow="md" position="relative" zIndex={1}>
       <Box
@@ -62,6 +67,9 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
         py={5}
         rowGap={4}
       >
+        <Badge variant="solid" colorScheme="green" textTransform="capitalize">
+          {resume.candidate.headline}
+        </Badge>
         <Flex gap={1}>
           <Button
             size="xs"
@@ -75,7 +83,7 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
           </Button>
           {resumeData.contents ? (
             <ResumePreviewModalManager
-              resume={objFromBase64(resumeData.contents)}
+              resume={resume}
               triggerFunc={({ trigger, ...rest }) => (
                 <Button
                   as="a"
