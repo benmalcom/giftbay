@@ -16,7 +16,6 @@ function useInitialResume() {
         const result = structuredClone(currentObject);
         result.candidate.name = user.name;
         result.candidate.headline = 'Senior Software Engineer';
-        result.candidate.summary = loremIpsum.text;
         result.candidate.contactsAndLinks.email = user.email;
         result.candidate.contactsAndLinks.linkedIn =
           'https://linkedin.com/in/my-name';

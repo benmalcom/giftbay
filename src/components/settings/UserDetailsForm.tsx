@@ -6,7 +6,6 @@ import {
   FormLabel,
   Input,
   Stack,
-  Textarea,
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,7 +16,6 @@ import * as yup from 'yup';
 
 export type UserDetailsFormData = {
   name: string;
-  summary: string;
   linkedIn: string;
   github?: string;
 };
@@ -65,7 +63,7 @@ const UserDetailsForm: React.FC<FormProps> = ({
   };
 
   useEffect(() => {
-    reset(pick(initialValues, ['name', 'summary', 'linkedIn', 'github']));
+    reset(pick(initialValues, ['name', 'linkedIn', 'github']));
   }, [initialValues, reset]);
 
   return (
@@ -91,19 +89,6 @@ const UserDetailsForm: React.FC<FormProps> = ({
               />
               <FormErrorMessage>
                 {errors?.name?.message && errors.name.message.toString()}
-              </FormErrorMessage>
-            </FormControl>
-
-            <FormControl isInvalid={Boolean(errors.summary)}>
-              <FormLabel htmlFor="name">Profile/Summary</FormLabel>
-              <Textarea
-                {...register('summary')}
-                placeholder="Enter brief summary about you"
-                errorBorderColor="red.300"
-                rows={4}
-              />
-              <FormErrorMessage>
-                {errors?.summary?.message && errors.summary.message.toString()}
               </FormErrorMessage>
             </FormControl>
 
