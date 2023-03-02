@@ -14,7 +14,6 @@ import {
   PopoverBody,
 } from '@chakra-ui/react';
 import React, { forwardRef, MutableRefObject, Ref, useRef } from 'react';
-import { DropResult } from 'react-beautiful-dnd';
 import { AiFillDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import JobFunctions from 'components/resume/JobFunctions';
 import { ModalManager as JobFunctionsModalManager } from 'components/resume/JobFunctionsModal';

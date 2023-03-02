@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react';
 import { omit } from 'lodash';
 import React, { useRef } from 'react';
-import { DropResult } from 'react-beautiful-dnd';
 import { AiFillDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import { v4 as uuid } from 'uuid';
 import { EditableLabel } from 'components/form';
