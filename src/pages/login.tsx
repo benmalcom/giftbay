@@ -61,8 +61,6 @@ export const Login = () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     }) // @ts-ignore
       .then(async ({ url, error }) => {
-        console.log('Error before throw ', error);
-
         if (error) throw error;
         if (url) await router.push(url);
       })

@@ -1,9 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { isEmpty } from 'lodash';
 import { Session } from 'next-auth';
-import { getSession, signOut } from 'next-auth/react';
-import toast from 'react-hot-toast';
-import { APP_BASE_URL } from 'utils/constants';
+import { getSession } from 'next-auth/react';
 // Default config options
 const defaultOptions: AxiosRequestConfig = {
   baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VERSION}`,

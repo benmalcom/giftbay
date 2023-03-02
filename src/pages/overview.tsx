@@ -37,9 +37,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
       .then(({ data }: AxiosResponse<ResumeData>) =>
         Router.push(`/builder/${data.id}`)
       )
-      .catch(err => {
-        console.log('err ', err);
-      })
+      .catch(err => toast.error('Create resume error!', err.message))
       .finally(() => setInCreateFlight(false));
   };
 
@@ -75,8 +73,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
         toast.success('Success!');
       })
       .catch(err => {
-        toast.error('Delete error!');
-        console.log('err ', err);
+        toast.error('Delete error!', err.message);
       })
       .finally(() => setInDeleteFlight(false));
   };

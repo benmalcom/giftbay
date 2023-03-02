@@ -36,7 +36,6 @@ const Settings = () => {
         toast.success('Success!');
       })
       .catch(error => {
-        console.log(error.message);
         toast.error(error.message);
       })
       .finally(() => setInUpdateUserFlight(false));
