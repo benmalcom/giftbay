@@ -1,5 +1,5 @@
 import { ListItem, UnorderedList, CloseButton } from '@chakra-ui/react';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
 
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -25,7 +25,7 @@ export const JobFunctions: React.FC<JobFunctionsProps> = ({
 }) => {
   return (
     <DndProvider backend={HTML5Backend}>
-      <UnorderedList ml={7} className="kendo-ui-list">
+      <UnorderedList ml={6} className="kendo-ui-list">
         {jobFunctions.map((item, index) => (
           <JobFunctionItem
             key={item.id}
@@ -61,6 +61,7 @@ const JobFunctionItem: React.FC<
   jobFunctionItem,
   index,
 }) => {
+  const [isEditing, setEditing] = useState(false);
   const ref = useRef(null); // Initialize the reference
 
   // useDrop hook is responsible for handling whether any item gets hovered or dropped on the element
@@ -107,11 +108,11 @@ const JobFunctionItem: React.FC<
     Initialize drag and drop into the element using its reference.
     Here we initialize both drag and drop on the same element (i.e., Image component)
   */
-  drag(drop(ref));
+  if (isEditable) drag(drop(ref));
 
   return (
     <ListItem
-      ref={ref}
+      ref={isEditing ? undefined : ref}
       style={{ opacity: isDragging ? 0 : 1 }}
       fontSize="11pt"
       sx={{
@@ -133,6 +134,8 @@ const JobFunctionItem: React.FC<
       role="group"
     >
       <EditableLabel
+        onOpenEdit={() => setEditing(true)}
+        onCloseEdit={() => setEditing(false)}
         isEditable={isEditable}
         onChange={(text: string) =>
           onSaveJobFunction({ ...jobFunctionItem, text })

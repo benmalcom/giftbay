@@ -1,7 +1,14 @@
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import { Flex, IconProps, useDisclosure } from '@chakra-ui/react';
+import {
+  Alert,
+  Flex,
+  IconProps,
+  useDisclosure,
+  usePrevious,
+} from '@chakra-ui/react';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import { AxiosResponse } from 'axios';
+import { isEqual } from 'lodash';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { HeaderTags, PageSpinner } from 'components/common';
@@ -40,6 +47,8 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
   const pdfExportComponent = React.useRef<PDFExport>(null);
 
   const { resumeId } = router.query;
+
+  const prevResume = usePrevious(resume);
 
   const fetchResume = useCallback(
     (abortSignal: AbortSignal) => {
@@ -161,16 +170,22 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
             onSaveResume={onSaveResume}
             isSavingResume={isSavingResume}
           />
-
-          <ResumeDownloadable
-            ref={pdfExportComponent}
-            user={user}
-            resume={resume}
-            isEditable
-            removeSection={removeSection}
-            setCandidate={setCandidate}
-            updateSection={updateSection}
-          />
+          <Flex flexDir="column">
+            {!!resume && !!prevResume && !isEqual(resume, prevResume) && (
+              <Alert status="warning" flexDir="column" py={1}>
+                Save your changes.
+              </Alert>
+            )}
+            <ResumeDownloadable
+              ref={pdfExportComponent}
+              user={user}
+              resume={resume}
+              isEditable
+              removeSection={removeSection}
+              setCandidate={setCandidate}
+              updateSection={updateSection}
+            />
+          </Flex>
         </Flex>
       </Flex>
     </>

@@ -19,6 +19,8 @@ type EditableInputProps = {
   showRemoveButton?: boolean;
   isEditable?: boolean;
   onRemove?(): void;
+  onOpenEdit?(): void;
+  onCloseEdit?(): void;
 };
 export const EditableLabel: React.FC<EditableInputProps> = ({
   isEditable,
@@ -29,6 +31,8 @@ export const EditableLabel: React.FC<EditableInputProps> = ({
   displayNode,
   text,
   onChange,
+  onOpenEdit,
+  onCloseEdit,
 }) => {
   const [value, setValue] = useState(text);
   const { isOpen, onToggle } = useDisclosure();
@@ -44,13 +48,21 @@ export const EditableLabel: React.FC<EditableInputProps> = ({
   }, [isOpen]);
 
   useEffect(() => {
+    if (isOpen) {
+      onOpenEdit?.();
+    } else {
+      onCloseEdit?.();
+    }
+  }, [isOpen, onCloseEdit, onOpenEdit]);
+
+  useEffect(() => {
     if (text !== value) {
       setValue(text);
     }
   }, [text, value]);
 
   const onClickReveal = () => {
-    console.log('Click reveal');
+    if (!isEditable) return;
     onToggle();
   };
 

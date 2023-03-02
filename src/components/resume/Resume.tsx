@@ -72,7 +72,7 @@ export const Resume: React.FC<ResumeProps> = ({
           width: '100%',
         },
       }}
-      p={isResumeBlank ? '10px' : '40px 60px'}
+      p={isResumeBlank ? '15px' : '0.5in 0.6in'}
     >
       {isResumeBlank ? (
         <Alert status="warning" flexDir="column" py={5}>

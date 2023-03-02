@@ -32,14 +32,7 @@ export const ResumeDownloadable = forwardRef<
   DownloadableResumeProps
 >(
   (
-    {
-      resume,
-      removeSection,
-      updateSection,
-      setCandidate,
-      user,
-      isEditable = true,
-    },
+    { resume, removeSection, updateSection, setCandidate, user, isEditable },
     pdfExportComponent
   ) => (
     <PDFExport
@@ -75,14 +68,12 @@ export const withDownloadCta = () =>
     { resume: ResumeType; user: User; isEditable?: boolean }
   >(({ isEditable, user, resume }, pdfExportComponent) => {
     const { updateSection, setCandidate, removeSection } = useResumeContext();
-    const resumeProps = { resume };
+    const resumeProps = { resume, isEditable };
     if (isEditable) {
       Object.assign(resumeProps, {
-        resume,
         updateSection,
         setCandidate,
         removeSection,
-        isEditable,
       });
     }
 
