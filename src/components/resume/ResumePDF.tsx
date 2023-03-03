@@ -130,7 +130,7 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
               Last edited:
             </Text>{' '}
             <Text color="white" fontSize="13px" fontWeight={500}>
-              {dayjs(resumeData.updatedAt).format('DD-MM-YYYY')}
+              {dayjs(resumeData.updatedAt).format('MMM D, YYYY h:mm A')}
             </Text>
           </Flex>
         )}

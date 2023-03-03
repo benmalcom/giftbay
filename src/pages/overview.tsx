@@ -45,7 +45,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
     (abortSignal: AbortSignal) => {
       setInGetFlight(true);
       getUserResumes(user.id, abortSignal)
-        .then(response => setResumeDataList(response?.data.results))
+        .then(response => setResumeDataList(response?.data.docs))
         .catch(err => {
           err?.code !== 'ERR_CANCELED' && console.log('err ', err);
         })
@@ -111,7 +111,6 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
                 as="a"
                 border="1px dashed teal"
                 borderRadius={3}
-                h="300px"
                 w="250px"
                 justify="center"
                 cursor={inCreateFlight ? 'default' : 'pointer'}

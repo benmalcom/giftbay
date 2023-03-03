@@ -63,7 +63,7 @@ export const getUserResumes = async (userId: string, signal: AbortSignal) => {
     composeRequestConfig({
       url: '/resumes',
       method: 'get',
-      params: { user: userId },
+      params: { user: userId, sort: { updatedAt: -1 } },
       signal,
     })
   );
