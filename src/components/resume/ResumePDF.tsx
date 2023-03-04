@@ -50,7 +50,7 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
         h="100%"
         position="absolute"
         zIndex={2}
-        bg="rgba(0, 0, 0, 0.5)"
+        bg="rgba(0, 0, 0, 0.6)"
         display="none"
         _groupHover={{ display: 'block' }}
       />

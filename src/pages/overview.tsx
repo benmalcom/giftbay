@@ -97,10 +97,13 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
 
           <Alert status="warning" flexDir="column" alignItems="flex-start">
             <AlertTitle fontSize="md">
-              Create new Resumes. Re-use old ones.
+              Create new Resumes. Reuse or duplicate old ones.
             </AlertTitle>{' '}
-            Maximum number of resumes is 4. You can delete old ones to free up
-            space.
+            <Text>
+              Maximum number of resumes is 4. You can delete old ones to free up
+              space.
+            </Text>
+            <Text>Hover over each resume item for call to actions.</Text>
           </Alert>
           <Flex mt={10} gridGap={8}>
             {resumeDataList.length < 4 && (
