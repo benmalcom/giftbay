@@ -18,7 +18,6 @@ import {
   AiFillDelete,
   AiOutlineEye,
 } from 'react-icons/ai';
-import { MdCallToAction } from 'react-icons/md';
 import { VscFilePdf } from 'react-icons/vsc';
 import { ResumeData, ResumeType } from 'types/resume';
 import { objFromBase64 } from 'utils/functions';
