@@ -9,14 +9,14 @@ const RefreshTokenHandler = () => {
 
   useEffect(() => {
     let queryString;
-    const currentPath = router.pathname;
+    const currentPath = router.asPath;
     if (currentPath !== '/login') queryString = `?dest=${currentPath}`;
     if (session?.error === 'RefreshAccessTokenError') {
       signOut({
         callbackUrl: `${APP_BASE_URL}/login${queryString ?? ''}`.trim(),
       });
     }
-  }, [router.pathname, session]);
+  }, [router.asPath, session]);
 
   return null;
 };

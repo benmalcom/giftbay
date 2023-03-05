@@ -16,7 +16,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { HeaderTags } from 'components/common';
-import ResumePDF from 'components/resume/ResumePDF';
+import ResumeCard from 'components/resume/ResumeCard';
 import { createResume, getUserResumes, deleteResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
 import { User } from 'types/user';
@@ -78,6 +78,8 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
       .finally(() => setInDeleteFlight(false));
   };
 
+  const hasReachedLimit = resumeDataList.length >= 4;
+
   return (
     <>
       <HeaderTags title={`${process.env.NEXT_PUBLIC_APP_NAME} - Overview`} />
@@ -106,7 +108,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
             <Text>Hover over each resume item for call to actions.</Text>
           </Alert>
           <Flex mt={10} gridGap={8}>
-            {resumeDataList.length < 4 && (
+            {!hasReachedLimit && (
               <VStack
                 onClick={() => onCreateResume()}
                 boxShadow="sm"
@@ -147,13 +149,14 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
               </Flex>
             ) : (
               resumeDataList.map(data => (
-                <ResumePDF
+                <ResumeCard
                   key={data.id}
                   resumeData={data}
                   onCreateResume={onCreateResume}
                   inCreateFlight={inCreateFlight}
                   onDeleteResume={onDeleteResume}
                   inDeleteFlight={inDeleteFlight}
+                  hasReachedLimit={hasReachedLimit}
                 />
               ))
             )}

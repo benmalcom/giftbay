@@ -112,6 +112,7 @@ const JobFunctionItem: React.FC<
 
   return (
     <ListItem
+      className="job-function-item"
       ref={isEditing ? undefined : ref}
       style={{ opacity: isDragging ? 0 : 1 }}
       fontSize="11pt"

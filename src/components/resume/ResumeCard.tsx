@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { AspectRatio, Badge, Box, Button, Flex, Text } from '@chakra-ui/react';
+import {
+  AspectRatio,
+  Badge,
+  Box,
+  Button,
+  Flex,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Link from 'next/link';
@@ -10,6 +18,7 @@ import {
   AiFillDelete,
   AiOutlineEye,
 } from 'react-icons/ai';
+import { MdCallToAction } from 'react-icons/md';
 import { VscFilePdf } from 'react-icons/vsc';
 import { ResumeData, ResumeType } from 'types/resume';
 import { objFromBase64 } from 'utils/functions';
@@ -22,14 +31,16 @@ type ResumePDFProps = {
   inCreateFlight?: boolean;
   onDeleteResume(resumeId: string): void;
   inDeleteFlight?: boolean;
+  hasReachedLimit?: boolean;
 };
 
-const ResumePDF: React.FC<ResumePDFProps> = ({
+const ResumeCard: React.FC<ResumePDFProps> = ({
   resumeData,
   inCreateFlight,
   onCreateResume,
   onDeleteResume,
   inDeleteFlight,
+  hasReachedLimit,
 }) => {
   const onDuplicate = () => {
     onCreateResume({
@@ -67,20 +78,34 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
         py={5}
         rowGap={4}
       >
-        <Badge variant="solid" colorScheme="green" textTransform="capitalize">
-          {resume.candidate.headline}
-        </Badge>
+        <VStack>
+          <Badge variant="solid" colorScheme="teal" textTransform="capitalize">
+            {resume.candidate.headline}
+          </Badge>
+          {resumeData.updatedAt && (
+            <Flex>
+              <Text color="white" fontSize="11px" fontWeight={600} mr={1}>
+                Last edited:
+              </Text>{' '}
+              <Text color="white" fontSize="11px" fontWeight={500}>
+                {dayjs(resumeData.updatedAt).format('MMM D, YYYY h:mm A')}
+              </Text>
+            </Flex>
+          )}
+        </VStack>
         <Flex gap={1}>
-          <Button
-            size="xs"
-            onClick={onDuplicate}
-            isLoading={inCreateFlight}
-            cursor="pointer"
-            title="Duplicate resume"
-          >
-            <AiFillFilePdf color="red" style={{ marginRight: '2px' }} />
-            Duplicate
-          </Button>
+          {!hasReachedLimit && (
+            <Button
+              size="xs"
+              onClick={onDuplicate}
+              isLoading={inCreateFlight}
+              cursor="pointer"
+              title="Duplicate resume"
+            >
+              <AiFillFilePdf color="red" style={{ marginRight: '2px' }} />
+              Duplicate
+            </Button>
+          )}
           {resumeData.contents ? (
             <ResumePreviewModalManager
               resume={resume}
@@ -124,16 +149,6 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
             <AiFillDelete color="white" />
           </Button>
         </Flex>
-        {resumeData.updatedAt && (
-          <Flex>
-            <Text color="white" fontSize="13px" fontWeight={600} mr={1}>
-              Last edited:
-            </Text>{' '}
-            <Text color="white" fontSize="13px" fontWeight={500}>
-              {dayjs(resumeData.updatedAt).format('MMM D, YYYY h:mm A')}
-            </Text>
-          </Flex>
-        )}
       </Flex>
 
       <AspectRatio w="220px" ratio={4 / 3}>
@@ -152,4 +167,4 @@ const ResumePDF: React.FC<ResumePDFProps> = ({
   );
 };
 
-export default ResumePDF;
+export default ResumeCard;

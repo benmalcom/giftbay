@@ -40,6 +40,7 @@ export const ResumeDownloadable = forwardRef<
       paperSize={pdfPageSizes.US}
       scale={0.645}
       avoidLinks
+      keepTogether=".job-function-item"
       fileName={formatResumeFilename(resume)}
       ref={pdfExportComponent}
       author={user.name}
@@ -85,6 +86,7 @@ export const withDownloadCta = () =>
         fileName={formatResumeFilename(resume)}
         ref={pdfExportComponent}
         author={user.name}
+        keepTogether=".job-function-item"
         creator={process.env.NEXT_PUBLIC_APP_NAME}
         title={`${resume.candidate.name} - Resume`}
       >
