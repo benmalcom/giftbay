@@ -19,6 +19,7 @@ import {
   AiOutlineEye,
 } from 'react-icons/ai';
 import { VscFilePdf } from 'react-icons/vsc';
+import { ModalManager as ConfirmationModalManager } from 'components/common/ConfirmationModal';
 import { ResumeData, ResumeType } from 'types/resume';
 import { objFromBase64 } from 'utils/functions';
 import { ModalManager as ResumePreviewModalManager } from './ResumePreviewModal';
@@ -136,17 +137,30 @@ const ResumeCard: React.FC<ResumePDFProps> = ({
               <AiOutlineEdit />
             </Button>
           </Link>
-          <Button
-            as="a"
-            size="xs"
-            colorScheme="red"
-            isLoading={inDeleteFlight}
-            onClick={() => onDeleteResume(resumeData.id)}
-            cursor="pointer"
-            title="Delete resume"
-          >
-            <AiFillDelete color="white" />
-          </Button>
+          <ConfirmationModalManager
+            triggerFunc={({ trigger, ...rest }) => (
+              <Button
+                as="a"
+                size="xs"
+                colorScheme="red"
+                isLoading={inDeleteFlight}
+                onClick={() => trigger()}
+                cursor="pointer"
+                title="Delete resume"
+                {...rest}
+              >
+                <AiFillDelete color="white" />
+              </Button>
+            )}
+            message="Are you sure you want to delete this resume?"
+            onProceed={() => onDeleteResume(resumeData.id)}
+            isProcessing={inDeleteFlight}
+            closeAfterProcessing
+            proceedButtonProps={{
+              disabled: inDeleteFlight,
+              isLoading: inDeleteFlight,
+            }}
+          />
         </Flex>
       </Flex>
 
