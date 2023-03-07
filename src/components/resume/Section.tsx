@@ -250,7 +250,7 @@ export const Section: React.FC<SectionProps> = ({
             '@media screen, print': {
               color: settings.colors.accent,
               textTransform: 'uppercase',
-              fontSize: '10.5pt',
+              fontSize: '11pt',
             },
           }}
         >

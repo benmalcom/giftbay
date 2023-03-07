@@ -74,9 +74,13 @@ ul {
       }
     }
     &.inline {
+      display: flex;
       li {
+        display: flex;
+        align-items: center;
         &::after {
-          margin-top: 6px;
+          margin-top: 3px;
+          margin-left: 5px;
         }
       }
     }

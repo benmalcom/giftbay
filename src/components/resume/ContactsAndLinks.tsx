@@ -38,7 +38,7 @@ export const ContactsAndLinks: React.FC<ContactInformationProps> = ({
           }}
           {...rest}
         >
-          <UnorderedList mx={0} className="kendo-ui-list inline">
+          <UnorderedList mx={0} fontSize={0} className="kendo-ui-list inline">
             {Object.values(contactsAndLinks)
               .filter(item => Boolean(item))
               .map(item => (
