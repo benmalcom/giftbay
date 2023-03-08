@@ -56,10 +56,12 @@ export function isResumePDFReady(resume: ResumeType) {
   );
 }
 
-export function formatResumeFilename(resume: ResumeType) {
+export function formatResumeFilename(resume: ResumeType, fileName?: string) {
   const ownerName = resume.candidate.name.replaceAll(' ', '_');
   const suffix = resume.candidate.headline.match(/\b(\w)/g)?.join('');
-  return `${ownerName}_Resume_${suffix}`;
+  let resumeFilename = `${ownerName}_Resume_${suffix}`;
+  if (fileName) resumeFilename += `_${fileName}`;
+  return resumeFilename;
 }
 
 // Generate from server, should be used inside component

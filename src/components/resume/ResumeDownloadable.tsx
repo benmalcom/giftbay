@@ -25,7 +25,7 @@ type NotEditableResumeProps = {
 };
 
 type ResumeProps = EditableResumeProps | NotEditableResumeProps;
-type DownloadableResumeProps = ResumeProps & { user: User };
+type DownloadableResumeProps = ResumeProps & { user: User; filename?: string };
 
 export const ResumeDownloadable = forwardRef<
   PDFExport,

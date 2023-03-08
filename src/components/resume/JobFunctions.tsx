@@ -69,7 +69,7 @@ const JobFunctionItem: React.FC<
     // Accept will make sure only these element type can be droppable on this element
     accept: 'JobFunctionItem',
     // @ts-ignore: Type not specified
-    hover(item: any) {
+    hover(item: DragObject) {
       if (!ref.current) {
         return;
       }
@@ -77,6 +77,7 @@ const JobFunctionItem: React.FC<
       // current element where the dragged element is hovered on
       const hoverIndex = index;
       // If the dragged element is hovered in the same place, then do nothing
+
       if (dragIndex === hoverIndex) {
         return;
       }
@@ -86,7 +87,7 @@ const JobFunctionItem: React.FC<
         Update the index for dragged item directly to avoid flickering
         when the image was half dragged into the next
       */
-      item.index = hoverIndex;
+      // item.index = hoverIndex;
     },
   });
 

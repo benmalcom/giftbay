@@ -177,6 +177,7 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
               </Alert>
             )}
             <ResumeDownloadable
+              filename={fileName}
               ref={pdfExportComponent}
               user={user}
               resume={resume}
