@@ -28,8 +28,8 @@ type ControlsProps = Pick<
   isSavingResume?: boolean;
   isActiveControls?: boolean;
   toggleControls(): void;
-  onChangeFileName(e: React.FormEvent<HTMLInputElement>): void;
-  fileName: string;
+  onChangeName(e: React.FormEvent<HTMLInputElement>): void;
+  resumeName: string;
 };
 export const Controls: React.FC<ControlsProps> = ({
   onGenerate,
@@ -40,8 +40,8 @@ export const Controls: React.FC<ControlsProps> = ({
   updateResumeSettings,
   onSaveResume,
   isSavingResume,
-  onChangeFileName,
-  fileName,
+  onChangeName,
+  resumeName,
   isActiveControls,
   toggleControls,
 }) => {
@@ -171,11 +171,11 @@ export const Controls: React.FC<ControlsProps> = ({
           />
         </Flex>{' '}
         <Stack>
-          <Text mr={3}>File name: </Text>
+          <Text mr={3}>Resume name: </Text>
           <Input
-            placeholder="Resume file name (optional)"
-            onChange={onChangeFileName}
-            value={fileName}
+            placeholder="Resume  name (optional)"
+            onChange={onChangeName}
+            value={resumeName}
           />
         </Stack>
       </Stack>

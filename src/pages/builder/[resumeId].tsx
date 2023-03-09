@@ -41,7 +41,7 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
   const router = useRouter();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [isSavingResume, setIsSavingResume] = useState(false);
-  const [fileName, setFileName] = useState('');
+  const [resumeName, setResumeName] = useState('');
   const { isOpen: isActiveControls, onToggle: toggleControls } =
     useDisclosure();
   const pdfExportComponent = React.useRef<PDFExport>(null);
@@ -79,9 +79,11 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
 
   const onSaveResume = () => {
     setIsSavingResume(true);
-    updateResume(resumeId as string, {
+    const payload: Partial<ResumeData> = {
       contents: objectToBase64(resume),
-    })
+    };
+    if (resumeName) payload.name = resumeName;
+    updateResume(resumeId as string, payload)
       .then(({ data }) => {
         if (data.contents) {
           const resume = objFromBase64(data.contents);
@@ -114,8 +116,8 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
     setIsGeneratingPDF(false);
   };
 
-  const onChangeFileName = (e: React.FormEvent<HTMLInputElement>) =>
-    setFileName(e.currentTarget.value);
+  const onChangeName = (e: React.FormEvent<HTMLInputElement>) =>
+    setResumeName(e.currentTarget.value);
 
   if (inGetFlight || !resume) return <PageSpinner />;
 
@@ -159,8 +161,8 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
           <Controls
             isActiveControls={isActiveControls}
             toggleControls={toggleControls}
-            fileName={fileName}
-            onChangeFileName={onChangeFileName}
+            resumeName={resumeName}
+            onChangeName={onChangeName}
             onGenerate={onGenerate}
             isGeneratingPDF={isGeneratingPDF}
             setCandidate={setCandidate}
@@ -177,7 +179,6 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
               </Alert>
             )}
             <ResumeDownloadable
-              filename={fileName}
               ref={pdfExportComponent}
               user={user}
               resume={resume}

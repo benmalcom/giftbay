@@ -10,6 +10,7 @@ import {
   Tr,
   Table,
   Skeleton,
+  Badge,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -81,23 +82,30 @@ const ResumeList: React.FC<ResumePDFProps> = ({
                   <Td> {index + 1}</Td>
                   <Td>
                     {resume ? (
-                      <ResumePreviewModalManager
-                        resume={resume}
-                        triggerFunc={({ trigger, ...rest }) => (
-                          <Button
-                            variant="link"
-                            as="a"
-                            size="sm"
-                            colorScheme="twitter"
-                            onClick={() => trigger()}
-                            cursor="pointer"
-                            title="View resume"
-                            {...rest}
-                          >
-                            {resume.candidate.headline}
-                          </Button>
+                      <>
+                        <ResumePreviewModalManager
+                          resume={resume}
+                          triggerFunc={({ trigger, ...rest }) => (
+                            <Button
+                              variant="link"
+                              as="a"
+                              size="sm"
+                              colorScheme="twitter"
+                              onClick={() => trigger()}
+                              cursor="pointer"
+                              title="View resume"
+                              {...rest}
+                            >
+                              {resume.candidate.headline}
+                            </Button>
+                          )}
+                        />
+                        {resumeData.name && (
+                          <Badge variant="outline" colorScheme="green" ml={2}>
+                            {resumeData.name}
+                          </Badge>
                         )}
-                      />
+                      </>
                     ) : (
                       '-'
                     )}

@@ -87,6 +87,7 @@ export type ItemListType = {
 export type ResumeData = {
   id: string;
   user: string;
+  name?: string;
   contents: string;
   fileContents?: string;
   updatedAt: string;
