@@ -15,12 +15,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Link from 'next/link';
 import React from 'react';
-import {
-  AiOutlineCopy,
-  AiOutlineEdit,
-  AiFillDelete,
-  AiOutlineEye,
-} from 'react-icons/ai';
+import { AiOutlineCopy, AiOutlineEdit, AiFillDelete } from 'react-icons/ai';
 import { ModalManager as ConfirmationModalManager } from 'components/common/ConfirmationModal';
 import { ResumeData } from 'types/resume';
 import { objFromBase64 } from 'utils/functions';
