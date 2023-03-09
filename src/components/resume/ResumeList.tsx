@@ -22,6 +22,20 @@ import { objFromBase64 } from 'utils/functions';
 import { ModalManager as ResumePreviewModalManager } from './ResumePreviewModal';
 dayjs.extend(relativeTime);
 
+const LoadingSkeleton = () => (
+  <>
+    {Array.from(new Array(4).keys()).map(item => (
+      <Tr key={item} w="full">
+        {Array.from(new Array(4).keys()).map(item => (
+          <Td key={item}>
+            <Skeleton w="full" h="30px" />
+          </Td>
+        ))}
+      </Tr>
+    ))}
+  </>
+);
+
 type ResumePDFProps = {
   resumeDataList: ResumeData[];
   onCreateResume(payload: Record<string, unknown>): void;
@@ -59,102 +73,100 @@ const ResumeList: React.FC<ResumePDFProps> = ({
           </Tr>
         </Thead>
         <Tbody>
-          {inGetFlight
-            ? Array.from(new Array(4).keys()).map(item => (
-                <Tr key={item} w="full">
-                  <Skeleton w="full" h="full" />
-                </Tr>
-              ))
-            : resumeDataList.map((resumeData, index) => {
-                const resume = objFromBase64(resumeData.contents);
-                return (
-                  <Tr key={resumeData.id}>
-                    <Td> {index + 1}</Td>
-                    <Td>
-                      {resumeData.contents ? (
-                        <ResumePreviewModalManager
-                          resume={resume}
-                          triggerFunc={({ trigger, ...rest }) => (
-                            <Button
-                              variant="link"
-                              as="a"
-                              size="sm"
-                              colorScheme="twitter"
-                              isLoading={inDeleteFlight}
-                              onClick={() => trigger()}
-                              cursor="pointer"
-                              title="View resume"
-                              {...rest}
-                            >
-                              {resume.candidate.headline}
-                            </Button>
-                          )}
-                        />
-                      ) : (
-                        '-'
-                      )}
-                    </Td>
-                    <Td>
-                      {dayjs(resumeData.updatedAt).format('MMM D, YYYY h:mm A')}
-                    </Td>
-                    <Td>
-                      <Flex gap={2} justify="end">
-                        {!hasReachedLimit && (
+          {inGetFlight ? (
+            <LoadingSkeleton />
+          ) : (
+            resumeDataList.map((resumeData, index) => {
+              const resume = objFromBase64(resumeData.contents);
+              return (
+                <Tr key={resumeData.id}>
+                  <Td> {index + 1}</Td>
+                  <Td>
+                    {resumeData.contents ? (
+                      <ResumePreviewModalManager
+                        resume={resume}
+                        triggerFunc={({ trigger, ...rest }) => (
                           <Button
-                            size="xs"
-                            onClick={() => onDuplicate(resumeData)}
-                            isLoading={inCreateFlight}
+                            variant="link"
+                            as="a"
+                            size="sm"
+                            colorScheme="twitter"
+                            isLoading={inDeleteFlight}
+                            onClick={() => trigger()}
                             cursor="pointer"
-                            title="Duplicate resume"
+                            title="View resume"
+                            {...rest}
                           >
-                            <AiOutlineCopy
-                              color="teal"
-                              style={{ marginRight: '2px' }}
-                            />
-                            Duplicate
+                            {resume.candidate.headline}
                           </Button>
                         )}
+                      />
+                    ) : (
+                      '-'
+                    )}
+                  </Td>
+                  <Td>
+                    {dayjs(resumeData.updatedAt).format('MMM D, YYYY h:mm A')}
+                  </Td>
+                  <Td>
+                    <Flex gap={2} justify="end">
+                      {!hasReachedLimit && (
+                        <Button
+                          size="xs"
+                          onClick={() => onDuplicate(resumeData)}
+                          isLoading={inCreateFlight}
+                          cursor="pointer"
+                          title="Duplicate resume"
+                        >
+                          <AiOutlineCopy
+                            color="teal"
+                            style={{ marginRight: '2px' }}
+                          />
+                          Duplicate
+                        </Button>
+                      )}
 
-                        <Link href={`/builder/${resumeData.id}`}>
+                      <Link href={`/builder/${resumeData.id}`}>
+                        <Button
+                          as="a"
+                          size="xs"
+                          colorScheme="orange"
+                          cursor="pointer"
+                          title="Edit resume"
+                        >
+                          <AiOutlineEdit />
+                        </Button>
+                      </Link>
+                      <ConfirmationModalManager
+                        triggerFunc={({ trigger, ...rest }) => (
                           <Button
                             as="a"
                             size="xs"
-                            colorScheme="orange"
+                            colorScheme="red"
+                            isLoading={inDeleteFlight}
+                            onClick={() => trigger()}
                             cursor="pointer"
-                            title="Edit resume"
+                            title="Delete resume"
+                            {...rest}
                           >
-                            <AiOutlineEdit />
+                            <AiFillDelete color="white" />
                           </Button>
-                        </Link>
-                        <ConfirmationModalManager
-                          triggerFunc={({ trigger, ...rest }) => (
-                            <Button
-                              as="a"
-                              size="xs"
-                              colorScheme="red"
-                              isLoading={inDeleteFlight}
-                              onClick={() => trigger()}
-                              cursor="pointer"
-                              title="Delete resume"
-                              {...rest}
-                            >
-                              <AiFillDelete color="white" />
-                            </Button>
-                          )}
-                          message="Are you sure you want to delete this resume?"
-                          onProceed={() => onDeleteResume(resumeData.id)}
-                          isProcessing={inDeleteFlight}
-                          closeAfterProcessing
-                          proceedButtonProps={{
-                            disabled: inDeleteFlight,
-                            isLoading: inDeleteFlight,
-                          }}
-                        />
-                      </Flex>
-                    </Td>
-                  </Tr>
-                );
-              })}
+                        )}
+                        message="Are you sure you want to delete this resume?"
+                        onProceed={() => onDeleteResume(resumeData.id)}
+                        isProcessing={inDeleteFlight}
+                        closeAfterProcessing
+                        proceedButtonProps={{
+                          disabled: inDeleteFlight,
+                          isLoading: inDeleteFlight,
+                        }}
+                      />
+                    </Flex>
+                  </Td>
+                </Tr>
+              );
+            })
+          )}
         </Tbody>
       </Table>
     </TableContainer>
