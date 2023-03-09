@@ -9,6 +9,8 @@ import {
   AspectRatio,
   Skeleton,
   AlertTitle,
+  Stack,
+  Button,
 } from '@chakra-ui/react';
 import { AxiosResponse } from 'axios';
 import Router from 'next/router';
@@ -17,9 +19,11 @@ import toast from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { HeaderTags } from 'components/common';
 import ResumeCard from 'components/resume/ResumeCard';
+import ResumeList from 'components/resume/ResumeList';
 import { createResume, getUserResumes, deleteResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
 import { User } from 'types/user';
+import { MAXIMUM_RESUME_LIMIT } from 'utils/constants';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
 
 type OverviewProps = {
@@ -78,13 +82,13 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
       .finally(() => setInDeleteFlight(false));
   };
 
-  const hasReachedLimit = resumeDataList.length >= 4;
+  const hasReachedLimit = resumeDataList.length >= MAXIMUM_RESUME_LIMIT;
 
   return (
     <>
       <HeaderTags title={`${process.env.NEXT_PUBLIC_APP_NAME} - Overview`} />
 
-      <Flex bg="#F7FAFC" flex={1}>
+      <Flex flex={1}>
         <Container
           py={{ base: '8', md: '12' }}
           mt={{ base: '8', md: '12' }}
@@ -92,7 +96,7 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
         >
           <Flex mb={7} align="center">
             <Text mr={1}>Welcome,</Text>
-            <Heading as="h5" size="sm" fontWeight={500}>
+            <Heading as="h4" size="md" fontWeight={500}>
               {user.name}.
             </Heading>
           </Flex>
@@ -102,12 +106,24 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
               Create new Resumes. Reuse or duplicate old ones.
             </AlertTitle>{' '}
             <Text>
-              Maximum number of resumes is 4. You can delete old ones to free up
-              space.
+              Maximum number of resumes is {MAXIMUM_RESUME_LIMIT}. You can
+              delete old ones to free up space.
             </Text>
             <Text>Hover over each resume item for call to actions.</Text>
           </Alert>
-          <Flex mt={10} gridGap={8}>
+          <Stack mt={10} gridGap={8} direction="column">
+            {!hasReachedLimit && (
+              <Flex justify="end">
+                <Button
+                  leftIcon={<AiOutlinePlus fontWeight={400} color="white" />}
+                  colorScheme="teal"
+                  variant="solid"
+                >
+                  New Resume
+                </Button>
+              </Flex>
+            )}
+            {/*
             {!hasReachedLimit && (
               <VStack
                 onClick={() => onCreateResume()}
@@ -136,8 +152,19 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
                 )}
               </VStack>
             )}
+*/}
 
-            {inGetFlight ? (
+            <ResumeList
+              resumeDataList={resumeDataList}
+              onCreateResume={onCreateResume}
+              inCreateFlight={inCreateFlight}
+              onDeleteResume={onDeleteResume}
+              inDeleteFlight={inDeleteFlight}
+              hasReachedLimit={hasReachedLimit}
+              inGetFlight={inGetFlight}
+            />
+
+            {/*            {inGetFlight ? (
               <Flex gridGap={8}>
                 {Array.from(new Array(3).keys()).map(item => (
                   <Skeleton key={item}>
@@ -159,8 +186,8 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
                   hasReachedLimit={hasReachedLimit}
                 />
               ))
-            )}
-          </Flex>
+            )}*/}
+          </Stack>
         </Container>
       </Flex>
     </>

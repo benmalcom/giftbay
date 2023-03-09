@@ -8,7 +8,6 @@ import {
   HeadingProps,
   CloseButton,
 } from '@chakra-ui/react';
-import { debounce } from 'lodash';
 import React, { useState, useRef, useEffect } from 'react';
 
 type EditableInputProps = {
@@ -72,8 +71,6 @@ export const EditableLabel: React.FC<EditableInputProps> = ({
     onChange?.(e.target.value);
   };
 
-  const debouncedHandleChange = debounce(handleChange, 1000);
-
   return isOpen ? (
     <Textarea
       ref={inputRef}
@@ -83,7 +80,7 @@ export const EditableLabel: React.FC<EditableInputProps> = ({
       onBlur={onClickReveal}
       fontSize="16px"
       {...inputProps}
-      onChange={debouncedHandleChange}
+      onChange={handleChange}
       boxShadow="md"
       value={value}
       _focus={{ outline: 'none', boxShadow: 'md' }}

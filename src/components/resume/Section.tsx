@@ -218,8 +218,8 @@ export const Section: React.FC<SectionProps> = ({
   };
 
   const onJobFunctionDrop = (
-    dragIndex: number,
-    hoverIndex: number,
+    sourceIndex: number,
+    destinationIndex: number,
     jobRoleId: string
   ) => {
     const sectionPayload = structuredClone(section);
@@ -230,9 +230,9 @@ export const Section: React.FC<SectionProps> = ({
     if (jobRoleIndex === -1) throw new Error('Cannot find job role');
     const jobRole = sectionPayload.items[jobRoleIndex].content as JobRoleType;
     const jobFunctions = [...jobRole.jobFunctions];
-    const tmp = jobFunctions[dragIndex];
-    jobFunctions[dragIndex] = jobFunctions[hoverIndex];
-    jobFunctions[hoverIndex] = tmp;
+    const tmp = jobFunctions[sourceIndex];
+    jobFunctions[sourceIndex] = jobFunctions[destinationIndex];
+    jobFunctions[destinationIndex] = tmp;
     jobRole.jobFunctions = jobFunctions;
     sectionPayload.items[jobRoleIndex].content = jobRole;
     updateSection?.(sectionPayload);
@@ -372,9 +372,10 @@ export const Section: React.FC<SectionProps> = ({
               onRemove={jobRoleId =>
                 onRemoveSectionItem(jobRoleId, SectionItemType.JobRole)
               }
-              onJobFunctionDragEnd={(dragIndex: number, hoverIndex: number) =>
-                onJobFunctionDrop(dragIndex, hoverIndex, jobRole.id)
-              }
+              onJobFunctionDragEnd={(
+                sourceIndex: number,
+                destinationIndex: number
+              ) => onJobFunctionDrop(sourceIndex, destinationIndex, jobRole.id)}
             />
           );
         }

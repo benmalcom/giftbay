@@ -8,3 +8,5 @@ export const pdfPageSizes = {
   EUROPE: ['210mm', '297mm'],
   A4: ['8.27in', '11.7in'],
 };
+
+export const MAXIMUM_RESUME_LIMIT = 5;

@@ -1,8 +1,14 @@
 import { ListItem, UnorderedList, CloseButton } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
-import { useDrag, useDrop, DndProvider } from 'react-dnd';
+import React, { Ref, useState } from 'react';
+import {
+  DragDropContext,
+  Draggable,
+  DraggableProvidedDraggableProps,
+  DraggableProvidedDragHandleProps,
+  Droppable,
+  DropResult,
+} from 'react-beautiful-dnd';
 
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { EditableLabel } from 'components/form';
 import { JobFunctionType, ResumeSettingsType } from 'types/resume';
 
@@ -12,7 +18,7 @@ type JobFunctionsProps = {
   jobFunctions: JobFunctionType[];
   settings: ResumeSettingsType;
   isEditable?: boolean;
-  onDragEnd(dragIndex: number, hoverIndex: number): void;
+  onDragEnd(sourceIndex: number, destinationIndex: number): void;
 };
 
 export const JobFunctions: React.FC<JobFunctionsProps> = ({
@@ -23,23 +29,54 @@ export const JobFunctions: React.FC<JobFunctionsProps> = ({
   settings,
   isEditable,
 }) => {
+  const handleDragEnd = (result: DropResult) => {
+    // `destination` is `undefined` if the item was dropped outside the list
+    // In this case, do nothing
+    if (!result.destination) {
+      return;
+    }
+
+    onDragEnd(result.source.index, result.destination.index);
+  };
+
   return (
-    <DndProvider backend={HTML5Backend}>
-      <UnorderedList ml={6} className="kendo-ui-list">
-        {jobFunctions.map((item, index) => (
-          <JobFunctionItem
-            key={item.id}
-            onRemoveJobFunction={onRemoveJobFunction}
-            onSaveJobFunction={onSaveJobFunction}
-            settings={settings}
-            isEditable={isEditable}
-            jobFunctionItem={item}
-            onDragEnd={onDragEnd}
-            index={index}
-          />
-        ))}
-      </UnorderedList>
-    </DndProvider>
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Droppable droppableId="droppable">
+        {(provided, snapshot) => (
+          <UnorderedList
+            ml={6}
+            className="kendo-ui-list"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {jobFunctions.map((item, index) => (
+              <Draggable
+                key={item.id}
+                draggableId={`${item.id}-id`}
+                index={index}
+              >
+                {(provided, snapshot) => (
+                  <JobFunctionItem
+                    onRemoveJobFunction={onRemoveJobFunction}
+                    onSaveJobFunction={onSaveJobFunction}
+                    settings={settings}
+                    isEditable={isEditable}
+                    jobFunctionItem={item}
+                    onDragEnd={onDragEnd}
+                    index={index}
+                    draggableInnerRef={provided.innerRef}
+                    draggableProps={provided.draggableProps}
+                    dragHandlerProps={provided.dragHandleProps}
+                    isDragging={snapshot.isDragging}
+                  />
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </UnorderedList>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };
 
@@ -47,76 +84,37 @@ JobFunctions.displayName = 'JobFunctions';
 
 export default JobFunctions;
 
-const JobFunctionItem: React.FC<
-  Omit<JobFunctionsProps, 'jobFunctions'> & {
-    jobFunctionItem: JobFunctionType;
-    index: number;
-  }
-> = ({
+type JobFunctionItemProps = Omit<JobFunctionsProps, 'jobFunctions'> & {
+  jobFunctionItem: JobFunctionType;
+  index: number;
+  dragHandlerProps?: DraggableProvidedDragHandleProps | null;
+  draggableProps: DraggableProvidedDraggableProps;
+  draggableInnerRef: Ref<HTMLLIElement>;
+  isDragging?: boolean;
+};
+const JobFunctionItem: React.FC<JobFunctionItemProps> = ({
   onSaveJobFunction,
   onRemoveJobFunction,
-  onDragEnd,
   settings,
   isEditable,
   jobFunctionItem,
-  index,
+  draggableProps,
+  dragHandlerProps,
+  draggableInnerRef,
+  isDragging,
 }) => {
   const [isEditing, setEditing] = useState(false);
-  const ref = useRef(null); // Initialize the reference
-
-  // useDrop hook is responsible for handling whether any item gets hovered or dropped on the element
-  const [, drop] = useDrop({
-    // Accept will make sure only these element type can be droppable on this element
-    accept: 'JobFunctionItem',
-    // @ts-ignore: Type not specified
-    hover(item: DragObject) {
-      if (!ref.current) {
-        return;
-      }
-      const dragIndex = item.index;
-      // current element where the dragged element is hovered on
-      const hoverIndex = index;
-      // If the dragged element is hovered in the same place, then do nothing
-
-      if (dragIndex === hoverIndex) {
-        return;
-      }
-      // If it is dragged around other elements, then move the image and set the state with position changes
-      onDragEnd(dragIndex, hoverIndex);
-      /*
-        Update the index for dragged item directly to avoid flickering
-        when the image was half dragged into the next
-      */
-      // item.index = hoverIndex;
-    },
-  });
-
-  // useDrag will be responsible for making an element draggable. It also expose, isDragging method to add any styles while dragging
-  const [{ isDragging }, drag] = useDrag(() => ({
-    // what type of item this to determine if a drop target accepts it
-    type: 'JobFunctionItem',
-    // data of the item to be available to the drop methods
-    item: { id: jobFunctionItem.id, index },
-    // method to collect additional data for drop handling like whether is currently being dragged
-    collect: monitor => {
-      return {
-        isDragging: monitor.isDragging(),
-      };
-    },
-  }));
-
-  /*
-    Initialize drag and drop into the element using its reference.
-    Here we initialize both drag and drop on the same element (i.e., Image component)
-  */
-  if (isEditable) drag(drop(ref));
 
   return (
     <ListItem
       className="job-function-item"
-      ref={isEditing ? undefined : ref}
-      style={{ opacity: isDragging ? 0 : 1 }}
+      {...draggableProps}
+      {...dragHandlerProps}
+      /*      ref={isEditing ? undefined : draggableInnerRef}*/
+      ref={draggableInnerRef}
+      // style={{ opacity: isDragging ? 0 : 1 }}
       fontSize="11pt"
+      opacity={isDragging ? 0.7 : 1}
       sx={{
         '@media screen, print': {
           color: settings.colors.common,
