@@ -1,13 +1,9 @@
 import {
   Container,
   Flex,
-  VStack,
   Text,
   Alert,
   Heading,
-  Spinner,
-  AspectRatio,
-  Skeleton,
   AlertTitle,
   Stack,
   Button,
@@ -18,7 +14,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { HeaderTags } from 'components/common';
-import ResumeCard from 'components/resume/ResumeCard';
 import ResumeList from 'components/resume/ResumeList';
 import { createResume, getUserResumes, deleteResume } from 'services/resume';
 import { ResumeData } from 'types/resume';
@@ -30,30 +25,35 @@ type OverviewProps = {
   user: User;
 };
 const Overview: React.FC<OverviewProps> = ({ user }) => {
-  const [inCreateFlight, setInCreateFlight] = useState(false);
-  const [inGetFlight, setInGetFlight] = useState(false);
-  const [inDeleteFlight, setInDeleteFlight] = useState(false);
+  const [inFlight, setInFlight] = useState<{
+    create: boolean;
+    fetch: boolean;
+    [key: string]: boolean;
+  }>({
+    create: false,
+    fetch: true,
+  });
   const [resumeDataList, setResumeDataList] = useState<ResumeData[]>([]);
 
-  const onCreateResume = (payload?: Record<string, unknown>) => {
-    setInCreateFlight(true);
-    createResume({ user: user.id, ...payload })
+  const onCreateResume = () => {
+    setInFlight(state => ({ ...state, create: true }));
+    createResume({ user: user.id })
       .then(({ data }: AxiosResponse<ResumeData>) =>
         Router.push(`/builder/${data.id}`)
       )
       .catch(err => toast.error('Create resume error!', err.message))
-      .finally(() => setInCreateFlight(false));
+      .finally(() => setInFlight(state => ({ ...state, create: false })));
   };
 
   const fetchResumes = useCallback(
     (abortSignal: AbortSignal) => {
-      setInGetFlight(true);
+      setInFlight(state => ({ ...state, fetch: true }));
       getUserResumes(user.id, abortSignal)
         .then(response => setResumeDataList(response?.data.docs))
         .catch(err => {
           err?.code !== 'ERR_CANCELED' && console.log('err ', err);
         })
-        .finally(() => setInGetFlight(false));
+        .finally(() => setInFlight(state => ({ ...state, fetch: false })));
     },
     [user.id]
   );
@@ -67,20 +67,51 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
     };
   }, [fetchResumes]);
 
-  const onDeleteResume = (resumeId: string) => {
-    setInDeleteFlight(true);
-    deleteResume(resumeId)
+  const onDeleteResume = (resumeDataId: string) => {
+    setInFlight(state => ({
+      ...state,
+      [`delete_${resumeDataId}`]: true,
+    }));
+    deleteResume(resumeDataId)
       .then(() => {
         setResumeDataList(currentList =>
-          currentList.filter(item => item.id !== resumeId)
+          currentList.filter(item => item.id !== resumeDataId)
         );
         toast.success('Success!');
       })
       .catch(err => {
         toast.error('Delete error!', err.message);
       })
-      .finally(() => setInDeleteFlight(false));
+      .finally(() =>
+        setInFlight(state => ({
+          ...state,
+          [`delete_${resumeDataId}`]: false,
+        }))
+      );
   };
+
+  const onDuplicateResume = (resumeData: ResumeData) => {
+    setInFlight(state => ({
+      ...state,
+      [`duplicate_${resumeData.id}`]: true,
+    }));
+    createResume({ user: resumeData.user, contents: resumeData.contents })
+      .then(({ data }: AxiosResponse<ResumeData>) =>
+        Router.push(`/builder/${data.id}`)
+      )
+      .catch(err => toast.error('Create resume error!', err.message))
+      .finally(() =>
+        setInFlight(state => ({
+          ...state,
+          [`duplicate_${resumeData.id}`]: false,
+        }))
+      );
+  };
+
+  const inDeleteFlight = (resumeDataId: string) =>
+    inFlight[`delete_${resumeDataId}`];
+  const inDuplicateFlight = (resumeDataId: string) =>
+    inFlight[`duplicate_${resumeDataId}`];
 
   const hasReachedLimit = resumeDataList.length >= MAXIMUM_RESUME_LIMIT;
 
@@ -118,75 +149,22 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
                   leftIcon={<AiOutlinePlus fontWeight={400} color="white" />}
                   colorScheme="teal"
                   variant="solid"
+                  isLoading={inFlight.create}
+                  onClick={onCreateResume}
                 >
                   New Resume
                 </Button>
               </Flex>
             )}
-            {/*
-            {!hasReachedLimit && (
-              <VStack
-                onClick={() => onCreateResume()}
-                boxShadow="sm"
-                bg="white"
-                as="a"
-                border="1px dashed teal"
-                borderRadius={3}
-                w="250px"
-                justify="center"
-                cursor={inCreateFlight ? 'default' : 'pointer'}
-                _hover={{
-                  boxShadow:
-                    '0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-                }}
-              >
-                {inCreateFlight ? (
-                  <Spinner size="xl" />
-                ) : (
-                  <>
-                    <AiOutlinePlus size={50} fontWeight={400} color="teal" />
-                    <Text fontSize="lg" fontWeight={500} color="blackAlpha.700">
-                      New Resume
-                    </Text>
-                  </>
-                )}
-              </VStack>
-            )}
-*/}
-
             <ResumeList
               resumeDataList={resumeDataList}
-              onCreateResume={onCreateResume}
-              inCreateFlight={inCreateFlight}
               onDeleteResume={onDeleteResume}
-              inDeleteFlight={inDeleteFlight}
+              onDuplicateResume={onDuplicateResume}
               hasReachedLimit={hasReachedLimit}
-              inGetFlight={inGetFlight}
+              inGetFlight={inFlight.fetch}
+              inDuplicateFlight={inDuplicateFlight}
+              inDeleteFlight={inDeleteFlight}
             />
-
-            {/*            {inGetFlight ? (
-              <Flex gridGap={8}>
-                {Array.from(new Array(3).keys()).map(item => (
-                  <Skeleton key={item}>
-                    <AspectRatio w="220px" ratio={4 / 3}>
-                      <Flex />
-                    </AspectRatio>
-                  </Skeleton>
-                ))}
-              </Flex>
-            ) : (
-              resumeDataList.map(data => (
-                <ResumeCard
-                  key={data.id}
-                  resumeData={data}
-                  onCreateResume={onCreateResume}
-                  inCreateFlight={inCreateFlight}
-                  onDeleteResume={onDeleteResume}
-                  inDeleteFlight={inDeleteFlight}
-                  hasReachedLimit={hasReachedLimit}
-                />
-              ))
-            )}*/}
           </Stack>
         </Container>
       </Flex>

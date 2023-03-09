@@ -38,29 +38,23 @@ const LoadingSkeleton = () => (
 
 type ResumePDFProps = {
   resumeDataList: ResumeData[];
-  onCreateResume(payload: Record<string, unknown>): void;
-  inCreateFlight?: boolean;
   onDeleteResume(resumeId: string): void;
-  inDeleteFlight?: boolean;
+  onDuplicateResume(resumeData: ResumeData): void;
+  inDeleteFlight(resumeId: string): boolean;
+  inDuplicateFlight(resumeId: string): boolean;
   hasReachedLimit?: boolean;
   inGetFlight?: boolean;
 };
 
 const ResumeList: React.FC<ResumePDFProps> = ({
   resumeDataList,
-  inCreateFlight,
-  onCreateResume,
   onDeleteResume,
   inDeleteFlight,
   hasReachedLimit,
   inGetFlight,
+  onDuplicateResume,
+  inDuplicateFlight,
 }) => {
-  const onDuplicate = (resumeData: ResumeData) => {
-    onCreateResume({
-      contents: resumeData.contents,
-      fileContents: resumeData.fileContents,
-    });
-  };
   return (
     <TableContainer w="full">
       <Table size="sm" colorScheme="teal">
@@ -78,6 +72,8 @@ const ResumeList: React.FC<ResumePDFProps> = ({
           ) : (
             resumeDataList.map((resumeData, index) => {
               const resume = objFromBase64(resumeData.contents);
+              const isDeleting = inDeleteFlight(resumeData.id);
+              const isDuplicating = inDuplicateFlight(resumeData.id);
               return (
                 <Tr key={resumeData.id}>
                   <Td> {index + 1}</Td>
@@ -91,7 +87,6 @@ const ResumeList: React.FC<ResumePDFProps> = ({
                             as="a"
                             size="sm"
                             colorScheme="twitter"
-                            isLoading={inDeleteFlight}
                             onClick={() => trigger()}
                             cursor="pointer"
                             title="View resume"
@@ -113,8 +108,8 @@ const ResumeList: React.FC<ResumePDFProps> = ({
                       {!hasReachedLimit && (
                         <Button
                           size="xs"
-                          onClick={() => onDuplicate(resumeData)}
-                          isLoading={inCreateFlight}
+                          onClick={() => onDuplicateResume(resumeData)}
+                          isLoading={isDuplicating}
                           cursor="pointer"
                           title="Duplicate resume"
                         >
@@ -143,7 +138,7 @@ const ResumeList: React.FC<ResumePDFProps> = ({
                             as="a"
                             size="xs"
                             colorScheme="red"
-                            isLoading={inDeleteFlight}
+                            isLoading={isDeleting}
                             onClick={() => trigger()}
                             cursor="pointer"
                             title="Delete resume"
@@ -154,11 +149,11 @@ const ResumeList: React.FC<ResumePDFProps> = ({
                         )}
                         message="Are you sure you want to delete this resume?"
                         onProceed={() => onDeleteResume(resumeData.id)}
-                        isProcessing={inDeleteFlight}
+                        isProcessing={isDeleting}
                         closeAfterProcessing
                         proceedButtonProps={{
-                          disabled: inDeleteFlight,
-                          isLoading: inDeleteFlight,
+                          disabled: isDeleting,
+                          isLoading: isDeleting,
                         }}
                       />
                     </Flex>
