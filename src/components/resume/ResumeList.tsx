@@ -71,14 +71,16 @@ const ResumeList: React.FC<ResumePDFProps> = ({
             <LoadingSkeleton />
           ) : (
             resumeDataList.map((resumeData, index) => {
-              const resume = objFromBase64(resumeData.contents);
+              const resume = resumeData.contents
+                ? objFromBase64(resumeData.contents)
+                : null;
               const isDeleting = inDeleteFlight(resumeData.id);
               const isDuplicating = inDuplicateFlight(resumeData.id);
               return (
                 <Tr key={resumeData.id}>
                   <Td> {index + 1}</Td>
                   <Td>
-                    {resumeData.contents ? (
+                    {resume ? (
                       <ResumePreviewModalManager
                         resume={resume}
                         triggerFunc={({ trigger, ...rest }) => (
