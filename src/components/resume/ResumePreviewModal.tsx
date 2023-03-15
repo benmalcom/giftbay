@@ -46,7 +46,7 @@ const ResumePreviewModal: React.FC<ModalProps> = ({
         scrollBehavior="inside"
       >
         <ModalOverlay />
-        <ModalContent pt={5} pb={10}>
+        <ModalContent pt={5} pb={10} bg="#f7f7f7">
           <ModalHeader>
             <Button
               onClick={onGenerate}
@@ -56,7 +56,7 @@ const ResumePreviewModal: React.FC<ModalProps> = ({
             </Button>
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody as={Flex} justifyContent="center">
+          <ModalBody as={Flex} justifyContent="center" py={5}>
             <ResumeDownloadable
               ref={pdfExportComponent}
               user={user}

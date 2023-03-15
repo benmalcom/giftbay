@@ -68,6 +68,7 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
           } else {
             setResume(blankResume);
           }
+          setResumeName(data.name ?? '');
         })
         .catch(err => {
           err?.code !== 'ERR_CANCELED' && console.log('err ', err);

@@ -87,6 +87,7 @@ const ResumeList: React.FC<ResumePDFProps> = ({
                           resume={resume}
                           triggerFunc={({ trigger, ...rest }) => (
                             <Button
+                              id="btn"
                               variant="link"
                               as="a"
                               size="sm"

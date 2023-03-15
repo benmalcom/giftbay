@@ -49,7 +49,23 @@ const Overview: React.FC<OverviewProps> = ({ user }) => {
     (abortSignal: AbortSignal) => {
       setInFlight(state => ({ ...state, fetch: true }));
       getUserResumes(user.id, abortSignal)
-        .then(response => setResumeDataList(response?.data.docs))
+        .then(response => {
+          // Move tagged resumes up.
+          const list = response?.data.docs;
+          const primaryResume = list.find((item: ResumeData) =>
+            item.name?.match(/primary/i)
+          );
+          const secondaryResume = list.find((item: ResumeData) =>
+            item.name?.match(/secondary/i)
+          );
+          const mainResumes = [primaryResume, secondaryResume].filter(Boolean);
+          const otherResumes = list.filter(
+            (item: ResumeData) =>
+              item?.name !== primaryResume?.name &&
+              item?.name !== secondaryResume?.name
+          );
+          setResumeDataList(mainResumes.concat(otherResumes));
+        })
         .catch(err => {
           err?.code !== 'ERR_CANCELED' && console.log('err ', err);
         })
