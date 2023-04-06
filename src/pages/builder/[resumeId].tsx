@@ -187,6 +187,7 @@ export const Builder: React.FC<BuilderProps> = ({ user }) => {
               removeSection={removeSection}
               setCandidate={setCandidate}
               updateSection={updateSection}
+              onSaveResume={onSaveResume}
             />
           </Flex>
         </Flex>

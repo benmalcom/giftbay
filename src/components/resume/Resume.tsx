@@ -35,6 +35,7 @@ type ResumeProps = {
   setCandidate?(candidate: Partial<Candidate>): void;
   updateSection?(section: SectionType): void;
   removeSection?(id: string): void;
+  onSaveResume?(): void;
 };
 export const Resume: React.FC<ResumeProps> = ({
   resume,
@@ -42,6 +43,7 @@ export const Resume: React.FC<ResumeProps> = ({
   updateSection,
   setCandidate,
   isEditable = false,
+  onSaveResume,
 }) => {
   const initRef = useRef();
 

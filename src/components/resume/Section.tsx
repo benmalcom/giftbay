@@ -84,23 +84,39 @@ export const Section: React.FC<SectionProps> = ({
 
   const onAddJobFunctions = (
     jobRoleId: string,
-    values: Record<string, number>
+    values: Record<string, number | string>
   ) => {
-    const jobFunctions = [];
-    for (let i = 0; i < values.count; i++) {
-      jobFunctions.push({ id: uuid(), text: loremIpsum.text, jobRoleId });
-    }
-
     const sectionPayload = structuredClone(section);
     const jobRoleIndex = sectionPayload.items.findIndex(
       item =>
         item.type === SectionItemType.JobRole && item.content.id === jobRoleId
     );
     if (jobRoleIndex === -1) throw new Error('Cannot find job role');
-
     const jobRole = sectionPayload.items[jobRoleIndex].content as JobRoleType;
-    jobRole.jobFunctions.push(...jobFunctions);
-    sectionPayload.items[jobRoleIndex].content = jobRole;
+
+    // Check if it's bulleted list
+    if ('text' in values) {
+      const inputText = values.text as string;
+      /*const dot = '•';
+      const hasBullets = inputText.startsWith('•');
+      if (hasBullets) {
+        inputText.replaceAll('•', '');
+        console.log('inputText ', inputText);
+      }*/
+      const texts = inputText.split(/\r?\n/);
+      jobRole.jobFunctions = texts.filter(Boolean).map(text => ({
+        id: uuid(),
+        text: text.replaceAll('•', ''),
+        jobRoleId,
+      }));
+    } else {
+      const jobFunctions = [];
+      for (let i = 0; i < values.count; i++) {
+        jobFunctions.push({ id: uuid(), text: loremIpsum.text, jobRoleId });
+      }
+      jobRole.jobFunctions.push(...jobFunctions);
+      sectionPayload.items[jobRoleIndex].content = jobRole;
+    }
     updateSection?.(sectionPayload);
   };
 
@@ -112,6 +128,7 @@ export const Section: React.FC<SectionProps> = ({
         item.content.id === values.jobRoleId
     );
     if (jobRoleIndex === -1) throw new Error('Cannot find job role');
+
     const jobRole = sectionPayload.items[jobRoleIndex].content as JobRoleType;
     const jobFunctions = jobRole.jobFunctions;
     const jobFunctionIndex = jobFunctions.findIndex(

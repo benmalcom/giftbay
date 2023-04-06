@@ -11,6 +11,7 @@ import Resume from './Resume';
 
 type EditableResumeProps = {
   isEditable?: true;
+  onSaveResume(): void;
 } & Pick<
   ResumeContextType,
   'resume' | 'removeSection' | 'updateSection' | 'setCandidate'
@@ -22,6 +23,7 @@ type NotEditableResumeProps = {
   removeSection: never;
   updateSection: never;
   setCandidate: never;
+  onSaveResume: never;
 };
 
 type ResumeProps = EditableResumeProps | NotEditableResumeProps;
@@ -32,7 +34,15 @@ export const ResumeDownloadable = forwardRef<
   DownloadableResumeProps
 >(
   (
-    { resume, removeSection, updateSection, setCandidate, user, isEditable },
+    {
+      resume,
+      removeSection,
+      updateSection,
+      setCandidate,
+      user,
+      isEditable,
+      onSaveResume,
+    },
     pdfExportComponent
   ) => (
     <PDFExport
@@ -53,6 +63,7 @@ export const ResumeDownloadable = forwardRef<
         updateSection={updateSection}
         setCandidate={setCandidate}
         removeSection={removeSection}
+        onSaveResume={onSaveResume}
       />
     </PDFExport>
   )

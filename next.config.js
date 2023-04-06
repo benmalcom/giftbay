@@ -15,7 +15,7 @@ const nextConfig = {
       ],
     },
   ],*/
-  webpack: config => {
+  webpack: (config, op) => {
     // don't resolve 'fs' module on the client to prevent this error on build --> Error: Can't resolve 'fs'
     config.plugins = [
       ...config.plugins,

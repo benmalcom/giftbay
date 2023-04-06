@@ -12,8 +12,8 @@ import {
   Stack,
   FormControl,
   FormLabel,
-  Input,
   FormErrorMessage,
+  Textarea,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
@@ -27,35 +27,44 @@ type FormProps = {
 };
 
 type FormValuesType = {
-  count: number;
+  text: string;
 };
 
 const schema = yup
   .object({
-    count: yup
-      .number()
-      .required('Count is required')
-      .typeError('Must be a valid number')
-      .min(1, 'Must be at least one job responsibility'),
+    text: yup
+      .string()
+      .required('This is required')
+      .typeError('Must be a valid text'),
   })
   .required();
 
-const JobFunctions: React.FC<FormProps> = ({ onSave, isOpen, onClose }) => {
+const AddBulletedListModal: React.FC<FormProps> = ({
+  onSave,
+  isOpen,
+  onClose,
+}) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors = {} },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { count: 3 },
   });
 
-  const onSubmit = (values: FormValuesType) => {
-    onSave(values);
+  const onSubmit = (values: Record<string, string | number>) => {
+    onSave(values as FormValuesType);
+    handleClose();
+  };
+
+  const handleClose = () => {
+    reset();
     onClose();
   };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleClose} size="xl">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Job Responsibilities</ModalHeader>
@@ -72,18 +81,18 @@ const JobFunctions: React.FC<FormProps> = ({ onSave, isOpen, onClose }) => {
             >
               <Stack spacing="6">
                 <Stack spacing="5">
-                  <FormControl isRequired isInvalid={Boolean(errors.count)}>
-                    <FormLabel htmlFor="count">Number of List Items</FormLabel>
-                    <Input
-                      id="count"
-                      type="number"
-                      {...register('count')}
-                      placeholder="E.g 3"
+                  <FormControl isRequired isInvalid={Boolean(errors.text)}>
+                    <FormLabel htmlFor="text">
+                      Paste the list copied from ChatGPT
+                    </FormLabel>
+                    <Textarea
+                      {...register('text')}
+                      placeholder="List copied from ChatGPT here"
                       errorBorderColor="red.300"
+                      rows={10}
                     />
                     <FormErrorMessage>
-                      {errors?.count?.message &&
-                        errors.count.message.toString()}
+                      {errors?.text?.message && errors.text.message.toString()}
                     </FormErrorMessage>
                   </FormControl>
                 </Stack>
@@ -116,7 +125,11 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
   const { isOpen, onToggle } = useDisclosure();
   return (
     <>
-      <JobFunctions isOpen={isOpen} onClose={onToggle} onSave={onSave} />
+      <AddBulletedListModal
+        isOpen={isOpen}
+        onClose={onToggle}
+        onSave={onSave}
+      />
       {triggerFunc({
         trigger: onToggle,
       })}

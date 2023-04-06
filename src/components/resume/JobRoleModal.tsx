@@ -15,9 +15,10 @@ import {
   Input,
   FormErrorMessage,
   Checkbox,
+  usePrevious,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { JobRoleType } from 'types/resume';
@@ -67,6 +68,11 @@ const JobRoleModal: React.FC<FormProps> = ({
     resolver: yupResolver(schema),
     defaultValues: { isInline: false, ...(initialValues || {}) },
   });
+
+  const prevInitialValues = usePrevious(initialValues);
+  useEffect(() => {
+    if (prevInitialValues !== initialValues) reset(initialValues);
+  }, [initialValues, prevInitialValues, reset]);
 
   const onSubmit = (values: Record<string, unknown>) => {
     onSave(values as JobRoleType);
@@ -176,7 +182,7 @@ const JobRoleModal: React.FC<FormProps> = ({
                     </FormControl>
                   </Stack>
                   <Stack spacing="1" direction="row" justifyContent="end">
-                    <Button colorScheme="gray" mr={3} onClick={onClose}>
+                    <Button colorScheme="gray" mr={3} onClick={handleClose}>
                       Close
                     </Button>
                     <Button type="submit" colorScheme="teal">

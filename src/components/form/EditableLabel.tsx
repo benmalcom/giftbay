@@ -14,6 +14,7 @@ type EditableInputProps = {
   text: string;
   inputProps?: TextareaProps;
   onChange?(value: string): void;
+  onBlur?(): void;
   displayNode?: React.ElementType;
   displayNodeProps?: TextProps | HeadingProps;
   showRemoveButton?: boolean;
@@ -33,6 +34,7 @@ export const EditableLabel: React.FC<EditableInputProps> = ({
   onChange,
   onOpenEdit,
   onCloseEdit,
+  onBlur,
 }) => {
   const [value, setValue] = useState(text);
   const { isOpen, onToggle } = useDisclosure();
@@ -77,12 +79,17 @@ export const EditableLabel: React.FC<EditableInputProps> = ({
       placeholder="Enter text here"
       size="sm"
       w="full"
-      onBlur={onClickReveal}
+      onBlur={() => {
+        onClickReveal();
+        onBlur?.();
+      }}
       fontSize="16px"
       {...inputProps}
       onChange={handleChange}
       boxShadow="md"
       value={value}
+      h="auto"
+      px="2px"
       _focus={{ outline: 'none', boxShadow: 'md' }}
     />
   ) : (

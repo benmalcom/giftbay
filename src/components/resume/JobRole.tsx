@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import React, { forwardRef, MutableRefObject, Ref, useRef } from 'react';
 import { AiFillDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
+import { ModalManager as BulletedListModalManager } from 'components/resume/AddBulletedListModal';
 import JobFunctions from 'components/resume/JobFunctions';
 import { ModalManager as JobFunctionsModalManager } from 'components/resume/JobFunctionsModal';
 import {
@@ -28,7 +29,10 @@ import { ModalManager as JobRoleModalManager } from './JobRoleModal';
 type JobRoleProps = {
   onSave(values: JobRoleType): void;
   onSaveJobFunction(values: JobFunctionType): void;
-  onAddJobFunctions(jobRoleId: string, values: Record<string, number>): void;
+  onAddJobFunctions(
+    jobRoleId: string,
+    values: Record<string, number | string>
+  ): void;
   onRemoveJobFunction(jobFunctionId: string, jobRoleId: string): void;
   onRemove(jobRoleId: string): void;
   jobRole: JobRoleType;
@@ -311,6 +315,26 @@ const CtaButtons = forwardRef<
                       mr="10px"
                     >
                       Job Responsibilities
+                    </Button>
+                  )}
+                  onSave={values => onAddJobFunctions(jobRole.id, values)}
+                />
+
+                <BulletedListModalManager
+                  triggerFunc={({
+                    trigger,
+                    ...rest
+                  }: ModalTriggerFunctionProps) => (
+                    <Button
+                      size="xs"
+                      {...rest}
+                      onClick={() => {
+                        trigger();
+                        onClose();
+                      }}
+                      mr="10px"
+                    >
+                      Paste from ChatGPT
                     </Button>
                   )}
                   onSave={values => onAddJobFunctions(jobRole.id, values)}

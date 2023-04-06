@@ -111,7 +111,7 @@ const JobFunctionItem: React.FC<JobFunctionItemProps> = ({
       {...draggableProps}
       {...dragHandlerProps}
       /*      ref={isEditing ? undefined : draggableInnerRef}*/
-      ref={draggableInnerRef}
+      ref={isEditable ? draggableInnerRef : null}
       // style={{ opacity: isDragging ? 0 : 1 }}
       fontSize="11pt"
       opacity={isDragging ? 0.7 : 1}
