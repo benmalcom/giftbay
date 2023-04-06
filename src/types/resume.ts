@@ -79,8 +79,8 @@ export type ResumeSettingsType = {
 
 export type ItemListType = {
   id: string;
-  name: string;
-  content: string;
+  text: string;
+  parentId: string;
   sectionId: string;
 };
 

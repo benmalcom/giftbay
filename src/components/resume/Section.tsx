@@ -30,8 +30,6 @@ import {
   SectionType,
 } from 'types/resume';
 import { ModalManager as AddSectionModalManager } from './AddSectionModal';
-import ItemList from './ItemList';
-import { ModalManager as InlineListModalModalManager } from './ItemListModal';
 import { ModalManager as JobRoleModalModalManager } from './JobRoleModal';
 
 type SectionProps = {
@@ -321,25 +319,6 @@ export const Section: React.FC<SectionProps> = ({
                         onSave={onSaveJobRole}
                       />
 
-                      <InlineListModalModalManager
-                        triggerFunc={({
-                          trigger,
-                          ...rest
-                        }: ModalTriggerFunctionProps) => (
-                          <Button
-                            size="xs"
-                            {...rest}
-                            onClick={() => {
-                              trigger();
-                              onClose();
-                            }}
-                            mr="10px"
-                          >
-                            Inline List
-                          </Button>
-                        )}
-                        onSave={onSaveInlineList}
-                      />
                       <Button size="xs" onClick={onAddParagraph} mr="10px">
                         Paragraph
                       </Button>
@@ -393,20 +372,6 @@ export const Section: React.FC<SectionProps> = ({
                 sourceIndex: number,
                 destinationIndex: number
               ) => onJobFunctionDrop(sourceIndex, destinationIndex, jobRole.id)}
-            />
-          );
-        }
-        if (sectionItem.type === SectionItemType.InlineList) {
-          return (
-            <ItemList
-              isEditable={isEditable}
-              settings={settings}
-              key={(sectionItem.content as ItemListType).id}
-              onSave={onSaveInlineList}
-              onRemoveInlineList={inlineListId =>
-                onRemoveSectionItem(inlineListId, SectionItemType.InlineList)
-              }
-              inlineList={sectionItem.content as ItemListType}
             />
           );
         }

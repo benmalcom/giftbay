@@ -103,7 +103,7 @@ const JobFunctionItem: React.FC<JobFunctionItemProps> = ({
   draggableInnerRef,
   isDragging,
 }) => {
-  const [isEditing, setEditing] = useState(false);
+  const [, setEditing] = useState(false);
 
   return (
     <ListItem

@@ -281,70 +281,6 @@ const CtaButtons = forwardRef<
     _groupHover={{ display: isEditable ? 'inline-block' : undefined }}
     ml="15px"
   >
-    <Popover
-      closeOnBlur={false}
-      placement="left"
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      initialFocusRef={initRef}
-    >
-      {({ onClose }) => (
-        <>
-          <PopoverTrigger>
-            <Button size="xs" mr="10px">
-              <AiOutlinePlus />
-            </Button>
-          </PopoverTrigger>
-          <Portal>
-            <PopoverContent>
-              <PopoverHeader>Add contents</PopoverHeader>
-              <PopoverCloseButton />
-              <PopoverBody py="10px">
-                <JobFunctionsModalManager
-                  triggerFunc={({
-                    trigger,
-                    ...rest
-                  }: ModalTriggerFunctionProps) => (
-                    <Button
-                      size="xs"
-                      {...rest}
-                      onClick={() => {
-                        trigger();
-                        onClose();
-                      }}
-                      mr="10px"
-                    >
-                      Job Responsibilities
-                    </Button>
-                  )}
-                  onSave={values => onAddJobFunctions(jobRole.id, values)}
-                />
-
-                <BulletedListModalManager
-                  triggerFunc={({
-                    trigger,
-                    ...rest
-                  }: ModalTriggerFunctionProps) => (
-                    <Button
-                      size="xs"
-                      {...rest}
-                      onClick={() => {
-                        trigger();
-                        onClose();
-                      }}
-                      mr="10px"
-                    >
-                      Paste from ChatGPT
-                    </Button>
-                  )}
-                  onSave={values => onAddJobFunctions(jobRole.id, values)}
-                />
-              </PopoverBody>
-            </PopoverContent>
-          </Portal>
-        </>
-      )}
-    </Popover>
     <JobRoleModalManager
       onSave={onSave}
       initialValues={jobRole}
@@ -353,6 +289,29 @@ const CtaButtons = forwardRef<
           <AiOutlineEdit />
         </Button>
       )}
+    />
+    <JobFunctionsModalManager
+      triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
+        <Button
+          size="xs"
+          {...rest}
+          onClick={() => trigger()}
+          mr="10px"
+          leftIcon={<AiOutlinePlus />}
+        >
+          Responsibilities
+        </Button>
+      )}
+      onSave={values => onAddJobFunctions(jobRole.id, values)}
+    />
+
+    <BulletedListModalManager
+      triggerFunc={({ trigger, ...rest }: ModalTriggerFunctionProps) => (
+        <Button size="xs" {...rest} onClick={() => trigger()} mr="10px">
+          Paste from ChatGPT
+        </Button>
+      )}
+      onSave={values => onAddJobFunctions(jobRole.id, values)}
     />
     <Button size="xs" onClick={() => onRemove(jobRole.id)}>
       <AiFillDelete color="red" />
