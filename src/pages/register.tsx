@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Container,
   FormControl,
   FormLabel,
@@ -10,7 +9,6 @@ import {
   Stack,
   Text,
   useBreakpointValue,
-  useColorModeValue,
   Link as ChakraLink,
   FormErrorMessage,
   Alert,
@@ -26,7 +24,8 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
 import { HeaderTags } from 'components/common';
-import { PasswordInput } from 'components/form';
+import { Button } from 'components/common/Button';
+import { PasswordInput } from 'components/forms';
 
 const schema = yup
   .object({
@@ -115,7 +114,7 @@ export const Register = () => {
                 <Text color="muted">Already have an account?</Text>
                 <Link href="/login" passHref>
                   <ChakraLink
-                    color="teal"
+                    color="teal.500"
                     size="lg"
                     textDecoration="none"
                     cursor="pointer"
@@ -128,13 +127,12 @@ export const Register = () => {
           </Stack>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box
-              py={{ base: '0', sm: '8' }}
+              py={{ base: '4', sm: '8' }}
               px={{ base: '4', sm: '10' }}
+              w={{ base: '95%', sm: 'auto' }}
+              mx="auto"
               bg={useBreakpointValue({ base: 'transparent', sm: 'bg-surface' })}
-              boxShadow={{
-                base: 'none',
-                sm: useColorModeValue('md', 'md-dark'),
-              }}
+              boxShadow="md"
               borderRadius={{ base: 'none', sm: 'xl' }}
             >
               <Stack spacing="6">
@@ -196,7 +194,7 @@ export const Register = () => {
                   </FormControl>
                 </Stack>
                 <Stack spacing="6">
-                  <Button type="submit" colorScheme="teal" isLoading={inFlight}>
+                  <Button type="submit" variant="primary" isLoading={inFlight}>
                     Sign up
                   </Button>
                 </Stack>

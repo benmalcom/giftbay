@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Checkbox,
   Container,
   FormControl,
@@ -11,7 +10,6 @@ import {
   Stack,
   Text,
   useBreakpointValue,
-  useColorModeValue,
   Link as ChakraLink,
   FormErrorMessage,
 } from '@chakra-ui/react';
@@ -26,7 +24,8 @@ import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
 import { HeaderTags } from 'components/common';
-import { PasswordInput } from 'components/form';
+import { Button } from 'components/common/Button';
+import { PasswordInput } from 'components/forms';
 
 const schema = yup
   .object({
@@ -89,14 +88,9 @@ export const Login = () => {
       >
         <Stack spacing="8">
           <Stack spacing="6">
-            {/*{authMessage && (
-            <Alert status="error">
-              <AlertIcon />
-              <AlertDescription>{authMessage}</AlertDescription>
-            </Alert>
-          )}*/}
             <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
               <Heading
+                color="#0d0d0d"
                 size={useBreakpointValue({ base: 'xs', md: 'sm', lg: 'lg' })}
               >
                 Log in to your account
@@ -105,7 +99,7 @@ export const Login = () => {
                 <Text color="muted">Don't have an account?</Text>
                 <Link href="/register" passHref>
                   <ChakraLink
-                    color="teal"
+                    color="teal.500"
                     size="lg"
                     textDecoration="none"
                     cursor="pointer"
@@ -118,13 +112,12 @@ export const Login = () => {
           </Stack>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box
-              py={{ base: '0', sm: '8' }}
+              py={{ base: '4', sm: '8' }}
               px={{ base: '4', sm: '10' }}
-              bg={useBreakpointValue({ base: 'transparent', sm: 'bg-surface' })}
-              boxShadow={{
-                base: 'none',
-                sm: useColorModeValue('md', 'md-dark'),
-              }}
+              w={{ base: '95%', sm: 'auto' }}
+              mx="auto"
+              bg={useBreakpointValue({ base: 'transparent', sm: 'white' })}
+              boxShadow="base"
               borderRadius={{ base: 'none', sm: 'xl' }}
             >
               <Stack spacing="6">
@@ -172,7 +165,7 @@ export const Login = () => {
                   />
                   <Link href="/register" passHref>
                     <ChakraLink
-                      color="teal"
+                      color="teal.500"
                       size="lg"
                       textDecoration="none"
                       cursor="pointer"
@@ -182,7 +175,7 @@ export const Login = () => {
                   </Link>
                 </HStack>
                 <Stack spacing="6">
-                  <Button type="submit" colorScheme="teal" isLoading={inFlight}>
+                  <Button type="submit" variant="primary" isLoading={inFlight}>
                     Sign in
                   </Button>
                 </Stack>

@@ -1,5 +1,4 @@
 import {
-  Button,
   Container,
   Heading,
   VStack,
@@ -14,6 +13,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { Button } from 'components/common/Button';
 import { verifyEmail } from 'services/auth';
 
 export const VerifyEmail = () => {
@@ -53,7 +53,7 @@ export const VerifyEmail = () => {
             <Text color="muted" mb={4}>
               Please wait
             </Text>
-            <Spinner size="md" color="teal" />
+            <Spinner size="md" color="teal.500" />
           </VStack>
         </Stack>
       );
@@ -73,11 +73,11 @@ export const VerifyEmail = () => {
           <Button
             isLoading={inFlight}
             w="80%"
-            colorScheme="red"
             size="md"
             textDecoration="none"
             cursor="pointer"
             onClick={handleEmailVerification}
+            variant="outline"
           >
             Try again
           </Button>
@@ -97,7 +97,7 @@ export const VerifyEmail = () => {
           <Button
             w="80%"
             as="a"
-            colorScheme="teal"
+            variant="primary"
             size="md"
             textDecoration="none"
             cursor="pointer"

@@ -13,13 +13,13 @@ import toast from 'react-hot-toast';
 import { PageSpinner } from 'components/common';
 import ChangePasswordForm, {
   ChangePasswordFormData,
-} from 'components/settings/ChangePasswordForm';
+} from 'components/forms/settings/ChangePasswordForm';
 import UserDetailsForm, {
   UserDetailsFormData,
-} from 'components/settings/UserDetailsForm';
+} from 'components/forms/settings/UserDetailsForm';
 import useCurrentUser from 'hooks/useCurrentUser';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
-import { updateUserDetails } from '../services/user';
+import { updateUser } from '../services/user';
 
 const Settings = () => {
   const [inUpdateUserFlight, setInUpdateUserFlight] = useState(false);
@@ -31,7 +31,7 @@ const Settings = () => {
     setInUpdateUserFlight(true);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    updateUserDetails(user!.id, values)
+    updateUser(user!.id, values)
       .then(() => {
         toast.success('Success!');
       })

@@ -12,7 +12,7 @@ const styles = {
       padding: 0,
       fontFamily: `'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
       color: mode('gray.800', 'whiteAlpha.900')(props),
-      bg: mode('#f7f7f7', 'gray.800')(props),
+      bg: mode('gray.100', 'gray.800')(props),
       lineHeight: 'base',
       ' > :last-child': {
         overflow: 'hidden',

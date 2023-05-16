@@ -1,8 +1,6 @@
 import {
   Flex,
-  Box,
   Container,
-  useColorModeValue,
   Button,
   IconButton,
   HStack,
@@ -13,7 +11,6 @@ import { signOut } from 'next-auth/react';
 import React from 'react';
 import { AiOutlinePoweroff } from 'react-icons/ai';
 import { Logo } from 'components/common';
-import useIsPDFGeneratePage from 'hooks/useIsPDFGeneratePage';
 import { logOutUser } from 'services/auth';
 import { User } from 'types/user';
 import { APP_BASE_URL } from 'utils/constants';
@@ -28,29 +25,25 @@ type NavBarProps = {
 };
 
 const NavBar: React.FC<NavBarProps> = ({ user }) => {
-  const boxShadow = useColorModeValue('xs', 'xs-dark');
-  const isGeneratePDF = useIsPDFGeneratePage();
-
   const handleLogOut = async () => {
     signOut({ callbackUrl: APP_BASE_URL });
     await logOutUser();
   };
 
-  if (isGeneratePDF) return null;
-
   const isAuthenticated = Boolean(user);
 
   return (
-    <Box as="section" w="full" position="fixed" zIndex={10}>
-      <Box
-        as="nav"
-        bg="#eee"
-        w="full"
-        boxShadow={boxShadow}
-        borderBottom="1px solid #ddd"
-      >
-        <Container py={1.5} maxW="7xl">
-          <HStack spacing="10" justify="space-between">
+    <Flex
+      w="full"
+      minH="70px"
+      maxH="70px"
+      bg="white"
+      shadow="sm"
+      borderBottom="1px solid #ddd"
+    >
+      <Flex as="nav" w="full" h="full" align="center">
+        <Container py={1.5} maxW="7xl" h="full" alignItems="center">
+          <Flex justify="space-between" align="center" h="full">
             <Link href={isAuthenticated ? '/overview' : '/'} passHref>
               <a>
                 <Logo />
@@ -98,20 +91,28 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
                 </HStack>
               </Flex>
             ) : (
-              <Flex justify="end">
+              <Flex justify="end" align="center" columnGap={5}>
+                <Link href="/registry" passHref>
+                  <a>Registry</a>
+                </Link>
                 <ButtonGroup variant="link" spacing="8">
                   <Link href="/login" passHref>
-                    <Button as="a" textDecoration="none">
+                    <Button
+                      as="a"
+                      variant="outline"
+                      textDecoration="none"
+                      borderRadius="30px"
+                    >
                       Sign In
                     </Button>
                   </Link>
                 </ButtonGroup>
               </Flex>
             )}
-          </HStack>
+          </Flex>
         </Container>
-      </Box>
-    </Box>
+      </Flex>
+    </Flex>
   );
 };
 
