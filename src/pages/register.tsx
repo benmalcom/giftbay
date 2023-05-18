@@ -127,13 +127,13 @@ export const Register = () => {
           </Stack>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box
-              py={{ base: '4', sm: '8' }}
-              px={{ base: '4', sm: '10' }}
+              py={{ base: '7', sm: '8' }}
+              px={{ base: '5', sm: '10' }}
               w={{ base: '95%', sm: 'auto' }}
               mx="auto"
-              bg={useBreakpointValue({ base: 'transparent', sm: 'bg-surface' })}
+              bg="white"
               boxShadow="md"
-              borderRadius={{ base: 'none', sm: 'xl' }}
+              borderRadius="xl"
             >
               <Stack spacing="6">
                 <Stack spacing="5">

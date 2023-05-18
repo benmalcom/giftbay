@@ -112,7 +112,7 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
                   <Link href="/login" passHref>
                     <Button
                       as="a"
-                      variant="outline"
+                      variant="solid"
                       textDecoration="none"
                       borderRadius="30px"
                     >

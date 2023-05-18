@@ -15,7 +15,7 @@ const showProps: StyleProps = {
   justifyContent: 'center',
   alignItems: 'center',
   textAlign: 'center',
-  animation: `${fade} 2s ease-in-out`,
+  animation: `${fade} 1.5s ease-in-out`,
 };
 
 const notShowProps: StyleProps = {

@@ -1,21 +1,15 @@
 import { Flex, Heading, Text, Container, VStack, Box } from '@chakra-ui/react';
-import { HOW_IT_WORKS, HIW_ICON_PROPS } from './data';
+import { FEATURES } from './data';
 
-const HowItWorks = () => (
-  <Flex
-    w="full"
-    minH="500px"
-    bg="white"
-    borderBottom="1px solid #ddd"
-    py="50px"
-  >
+const Features = () => (
+  <Flex w="full" minH="500px" shadow="base" py="50px" bg="purple.50">
     <Container py={1.5} maxW="7xl" h="full" alignItems="center">
       <VStack>
         <VStack
           w={{ base: '100%', md: '80%', lg: '60%' }}
           alignItems="center"
           spacing={6}
-          mb="80px"
+          mb="50px"
         >
           <Heading
             as="h5"
@@ -23,59 +17,62 @@ const HowItWorks = () => (
             color="purple.500"
             textTransform="uppercase"
           >
-            How it works
+            Features
           </Heading>
           <Heading as="h3" size="lg" textAlign="center">
-            Step into the world of gift registry magic.
+            Why choose us?
           </Heading>
-          <Box bg="gray.50" p={5} boxShadow="sm">
+          <Box>
             <Text fontSize="md" fontWeight={400} textAlign="center">
-              Unleash the power of gift registry bliss: embark on a seamless
-              journey from wishlist to wow, empowering you to effortlessly
-              create, share, and celebrate your special moments with
-              unparalleled ease and joy.
+              Because you deserve the best! Choose us for gift registry
+              excellence, make your celebrations extraordinary. Immerse yourself
+              in a world of unparalleled selection, effortless simplicity,
+              unwavering customer satisfaction, and exquisite attention to
+              detail, as we transform your special moments into unforgettable
+              memories.
             </Text>
           </Box>
         </VStack>
         <Flex
           align="center"
           justify={{
-            base: 'space-around',
-            md: 'space-between',
+            base: 'space-between',
+            md: 'space-around',
             lg: 'space-around',
           }}
           flexDir={{
             base: 'column',
             md: 'row',
           }}
-          gap={{
-            base: 10,
-            md: 'unset',
-          }}
+          gap="20px"
           w="100%"
+          flexWrap="wrap"
         >
-          {HOW_IT_WORKS.map((item, index) => (
+          {FEATURES.map((item, index) => (
             <VStack
               key={index}
-              w={{ base: '300px', md: '32%', lg: '300px' }}
-              h={{ base: '300px', md: '250px', lg: '300px' }}
-              // boxShadow="md"
-              // bg="#ecfdd8"
-              border="1px solid gray.100"
-              borderRadius={20}
+              w={{ base: '320px', md: '48%', lg: '400px' }}
+              h={{ base: '300px', md: '200px', lg: '200px' }}
+              boxShadow="sm"
+              bg="white"
               justifyContent="center"
               p="25px"
+              position="relative"
             >
               <Flex
-                w="60px"
-                h="60px"
-                borderRadius="8px"
+                w="35px"
+                h="35px"
                 align="center"
                 justify="center"
-                bg="purple.50"
-                boxShadow="sm"
+                bg="purple.500"
+                boxShadow="md"
+                position="absolute"
+                left={0}
+                top={0}
               >
-                <item.Icon {...HIW_ICON_PROPS} />
+                <Text fontSize="lxl" fontWeight={700} color="white">
+                  {index + 1}
+                </Text>
               </Flex>
               <Text
                 fontSize={{ base: 'xl', md: 'md', lg: 'xl' }}
@@ -96,4 +93,4 @@ const HowItWorks = () => (
   </Flex>
 );
 
-export default HowItWorks;
+export default Features;
