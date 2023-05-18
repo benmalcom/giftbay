@@ -2,8 +2,8 @@ import { Flex, Image, StyleProps, keyframes } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 
 const fade = keyframes`
-  from {opacity: 0.1}
-  to {opacity: 1}
+  from {opacity: 0.1; transform: scale(0.8)}
+  to {opacity: 1; transform: scale(1)}
 `;
 
 const showProps: StyleProps = {
@@ -15,7 +15,7 @@ const showProps: StyleProps = {
   justifyContent: 'center',
   alignItems: 'center',
   textAlign: 'center',
-  animation: `${fade} 1.5s ease-in-out`,
+  animation: `${fade} 2s ease-in-out`,
 };
 
 const notShowProps: StyleProps = {

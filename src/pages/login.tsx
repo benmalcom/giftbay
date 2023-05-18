@@ -99,7 +99,7 @@ export const Login = () => {
                 <Text color="muted">Don't have an account?</Text>
                 <Link href="/register" passHref>
                   <ChakraLink
-                    color="teal.500"
+                    color="purple.500"
                     size="lg"
                     textDecoration="none"
                     cursor="pointer"
@@ -165,7 +165,7 @@ export const Login = () => {
                   />
                   <Link href="/register" passHref>
                     <ChakraLink
-                      color="teal.500"
+                      color="purple.500"
                       size="lg"
                       textDecoration="none"
                       cursor="pointer"

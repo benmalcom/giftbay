@@ -114,7 +114,7 @@ export const Register = () => {
                 <Text color="muted">Already have an account?</Text>
                 <Link href="/login" passHref>
                   <ChakraLink
-                    color="teal.500"
+                    color="purple.500"
                     size="lg"
                     textDecoration="none"
                     cursor="pointer"

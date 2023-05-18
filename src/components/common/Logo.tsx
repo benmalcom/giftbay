@@ -50,7 +50,7 @@ export const Logo = () => {
       <Highlight
         query="."
         styles={{
-          color: 'teal.500',
+          color: 'purple.500',
           fontSize: '2xl',
         }}
       >

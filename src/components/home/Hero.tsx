@@ -20,13 +20,13 @@ const carouselImages = [
 ];
 const Hero = () => (
   <Flex
-    h={{ sm: 'fit-content', '2xl': 'calc(100vh - 70px)' }}
+    h={{ sm: 'fit-content', '2xl': 'calc(80vh - 70px)' }}
     w="100%"
     mx="auto"
     align={{ sm: 'unset', xl: 'center' }}
     flexDir={{ base: 'column', lg: 'row' }}
-    bg="#e2f0f1"
-    shadow="base"
+    bg="purple.50"
+    shadow="sm"
   >
     <Flex
       gap={4}
@@ -47,13 +47,13 @@ const Hero = () => (
           query="gift registry"
           styles={{
             rounded: 'full',
-            color: 'teal.500',
+            color: 'purple.500',
           }}
         >
           The gift registry you need.
         </Highlight>
       </Heading>
-      <Text lineHeight="120%" fontSize="l" color="gray.700" fontWeight={500}>
+      <Text lineHeight="120%" fontSize="l" color="purple.900" fontWeight={500}>
         Create a personalized Gift Registry for your special occasions and get
         the perfect presents every time. Your special occasions should be all
         about you, and our gift registry is here to make that happen.
@@ -66,7 +66,7 @@ const Hero = () => (
             textDecoration="none"
             cursor="pointer"
             borderRadius="30px"
-            colorScheme="teal"
+            colorScheme="purple"
             size="lg"
             w="fit-content"
           >
@@ -84,21 +84,27 @@ const Hero = () => (
       flexWrap="wrap"
     >
       <Flex
-        w={{ base: '100%', md: '65%', lg: '100%', xl: '85%' }}
-        h={{ base: '330px', md: '500px', lg: '100%', xl: '80%' }}
+        w={{ base: '100%', md: '65%', lg: '100%', xl: '80%' }}
+        h={{ base: '330px', md: '500px', lg: '100%', xl: '98%' }}
         bg="white"
         borderRadius="50%"
         align="center"
         justify="center"
-        borderColor="pink.200"
-        borderWidth="30px"
-        borderStyle="double"
         // transform="skew(-0.06turn, 0deg)"
         boxShadow="sm"
         // background={`url(/images/wl5.jpg) no-repeat center center fixed`}
         // backgroundSize="cover"
       >
-        <Carousel images={carouselImages} />
+        <Flex
+          w="90%"
+          h="90%"
+          borderRadius="inherit"
+          borderWidth="10px"
+          borderColor="pink.200"
+          borderStyle="solid"
+        >
+          <Carousel images={carouselImages} />
+        </Flex>
       </Flex>
     </Flex>
   </Flex>

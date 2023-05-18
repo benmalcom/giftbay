@@ -33,7 +33,7 @@ const styles = {
 };
 
 const fonts = {
-  heading: `'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
+  heading: `'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
   body: `'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
 };
 

@@ -53,7 +53,7 @@ export const VerifyEmail = () => {
             <Text color="muted" mb={4}>
               Please wait
             </Text>
-            <Spinner size="md" color="teal.500" />
+            <Spinner size="md" color="purple.500" />
           </VStack>
         </Stack>
       );

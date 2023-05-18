@@ -122,7 +122,7 @@ const UserDetailsForm: React.FC<FormProps> = ({
             </FormControl>
           </Stack>
           <Stack spacing="1" direction="row" justifyContent="end">
-            <Button type="submit" colorScheme="teal" isLoading={loading}>
+            <Button type="submit" colorScheme="purple" isLoading={loading}>
               Submit
             </Button>
           </Stack>

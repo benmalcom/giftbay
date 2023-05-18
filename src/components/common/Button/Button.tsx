@@ -36,7 +36,7 @@ function PrimaryButton(props: ButtonProps) {
   return (
     <ChakraButton
       color="white"
-      bgGradient="linear(to-r, teal.500, teal.300)"
+      bgGradient="linear(to-r, purple.500, purple.300)"
       opacity="0.9"
       _hover={{ opacity: 1 }}
       _active={{ opacity: 1 }}

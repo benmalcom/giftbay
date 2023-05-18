@@ -7,6 +7,7 @@ import {
   ButtonGroup,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import React from 'react';
 import { AiOutlinePoweroff } from 'react-icons/ai';
@@ -25,24 +26,36 @@ type NavBarProps = {
 };
 
 const NavBar: React.FC<NavBarProps> = ({ user }) => {
+  const router = useRouter();
   const handleLogOut = async () => {
     signOut({ callbackUrl: APP_BASE_URL });
     await logOutUser();
   };
 
   const isAuthenticated = Boolean(user);
+  const isHomepage = router.pathname === '/';
+  const wrapperBg = isHomepage ? 'purple.50' : 'white';
+  const wrapperBorder = isHomepage ? 'none' : '1px solid #ddd';
+  const containerBorder = isHomepage ? '1px solid #ddd' : 'none';
 
   return (
     <Flex
       w="full"
       minH="70px"
       maxH="70px"
-      bg="white"
+      bg={wrapperBg}
+      borderBottom={wrapperBorder}
       shadow="sm"
-      borderBottom="1px solid #ddd"
     >
       <Flex as="nav" w="full" h="full" align="center">
-        <Container py={1.5} maxW="7xl" h="full" alignItems="center">
+        <Container
+          py={1.5}
+          maxW="7xl"
+          h="full"
+          alignItems="center"
+          bg="white"
+          border={containerBorder}
+        >
           <Flex justify="space-between" align="center" h="full">
             <Link href={isAuthenticated ? '/overview' : '/'} passHref>
               <a>
