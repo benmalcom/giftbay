@@ -10,7 +10,7 @@ const styles = {
     body: {
       margin: 0,
       padding: 0,
-      fontFamily: `'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
+      fontFamily: `'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
       color: mode('gray.800', 'whiteAlpha.900')(props),
       bg: mode('gray.100', 'gray.800')(props),
       lineHeight: 'base',
@@ -34,7 +34,7 @@ const styles = {
 
 const fonts = {
   heading: `'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
-  body: `'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
+  body: `'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
 };
 
 export const theme = extendTheme({

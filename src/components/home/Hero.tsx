@@ -31,7 +31,7 @@ const Hero = () => (
     <Flex
       gap={4}
       flexDir="column"
-      p={{ base: '40px 25px', md: 50, '2xl': 100 }}
+      p={{ base: '45px 25px', md: 50, '2xl': 100 }}
       w={{ base: '100%', lg: '60%', xl: '50%' }}
       mx="auto"
     >
@@ -53,7 +53,7 @@ const Hero = () => (
           The gift registry you need.
         </Highlight>
       </Heading>
-      <Text lineHeight="120%" fontSize="l" color="purple.900" fontWeight={500}>
+      <Text lineHeight="150%" fontSize="l" color="gray.700" fontWeight={500}>
         Create a personalized Gift Registry for your special occasions and get
         the perfect presents every time. Your special occasions should be all
         about you, and our gift registry is here to make that happen.
