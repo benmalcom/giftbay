@@ -8,8 +8,8 @@ const HowItWorks = () => (
         <VStack
           w={{ base: '100%', md: '80%', lg: '60%' }}
           alignItems="center"
-          spacing={6}
-          mb="80px"
+          spacing={5}
+          mb="70px"
         >
           <Heading
             as="h5"
