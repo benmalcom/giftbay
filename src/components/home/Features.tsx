@@ -2,7 +2,7 @@ import { Flex, Heading, Text, Container, VStack, Box } from '@chakra-ui/react';
 import { FEATURES } from './data';
 
 const Features = () => (
-  <Flex w="full" minH="500px" shadow="base" py="50px" bg="purple.50">
+  <Flex w="full" minH="500px" py="70px" bg="purple.50">
     <Container py={1.5} maxW="7xl" h="full" alignItems="center">
       <VStack>
         <VStack

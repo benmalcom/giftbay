@@ -5,13 +5,14 @@ import {
 import { match } from 'ts-pattern';
 
 type ButtonProps = ChakraButtonProps & {
-  variant?: 'outline' | 'primary';
+  variant?: 'outline' | 'primary' | 'light';
 };
 
-export function Button({ variant = 'primary', ...props }: ButtonProps) {
+export default function Button({ variant = 'primary', ...props }: ButtonProps) {
   return match(variant)
     .with('outline', () => <OutlineButton {...props} />)
     .with('primary', () => <PrimaryButton {...props} />)
+    .with('light', () => <LightButton {...props} />)
     .exhaustive();
 }
 
@@ -37,6 +38,20 @@ function PrimaryButton(props: ButtonProps) {
     <ChakraButton
       color="white"
       bgGradient="linear(to-r, purple.500, purple.300)"
+      opacity="0.9"
+      _hover={{ opacity: 1 }}
+      _active={{ opacity: 1 }}
+      _disabled={{ opacity: 8 }}
+      {...props}
+    />
+  );
+}
+
+function LightButton(props: ButtonProps) {
+  return (
+    <ChakraButton
+      color="purple.500"
+      bg="purple.50"
       opacity="0.9"
       _hover={{ opacity: 1 }}
       _active={{ opacity: 1 }}

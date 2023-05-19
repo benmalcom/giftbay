@@ -20,7 +20,7 @@ const carouselImages = [
 ];
 const Hero = () => (
   <Flex
-    h={{ sm: 'fit-content', '2xl': 'calc(80vh - 70px)' }}
+    h={{ sm: 'fit-content', '2xl': 'calc(75vh - 70px)' }}
     w="100%"
     mx="auto"
     align={{ sm: 'unset', xl: 'center' }}
@@ -76,7 +76,7 @@ const Hero = () => (
       </Box>
     </Flex>
     <Flex
-      p={{ base: '40px 25px', md: 50, '2xl': 100 }}
+      p={{ base: '40px 25px', md: 50, '2xl': 90 }}
       w={{ base: '100%', lg: '50%' }}
       h="full"
       align={{ base: 'center', '2xl': 'center' }}
@@ -84,8 +84,8 @@ const Hero = () => (
       flexWrap="wrap"
     >
       <Flex
-        w={{ base: '100%', md: '65%', lg: '100%', xl: '80%' }}
-        h={{ base: '330px', md: '500px', lg: '100%', xl: '98%' }}
+        w={{ base: '100%', md: '75%', lg: '100%', xl: '80%' }}
+        h={{ base: '330px', md: '500px', lg: '100%', xl: '100%' }}
         bg="white"
         borderRadius="50%"
         align="center"

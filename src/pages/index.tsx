@@ -7,7 +7,7 @@ const Home = () => {
     <>
       <HeaderTags title={`${process.env.NEXT_PUBLIC_APP_NAME} - Home`} />
 
-      <VStack w="full" mt={0}>
+      <VStack w="full" spacing={0}>
         <Hero />
         <HowItWorks />
         <Attractions />

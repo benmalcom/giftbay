@@ -2,13 +2,7 @@ import { Flex, Heading, Text, Container, VStack, Box } from '@chakra-ui/react';
 import { HOW_IT_WORKS, HIW_ICON_PROPS } from './data';
 
 const HowItWorks = () => (
-  <Flex
-    w="full"
-    minH="500px"
-    bg="white"
-    borderBottom="1px solid #ddd"
-    py="50px"
-  >
+  <Flex w="full" minH="500px" bg="white" py="70px">
     <Container py={1.5} maxW="7xl" h="full" alignItems="center">
       <VStack>
         <VStack
