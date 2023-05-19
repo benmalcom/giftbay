@@ -55,7 +55,7 @@ const Attractions = () => (
           w="fit-content"
           variant="light"
         >
-          Get started
+          Sign me up!
         </Button>
       </Link>
     </VStack>

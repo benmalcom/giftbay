@@ -1,6 +1,12 @@
 import { VStack } from '@chakra-ui/react';
 import { HeaderTags } from 'components/common';
-import { Hero, HowItWorks, Attractions, Features } from 'components/home';
+import {
+  Hero,
+  HowItWorks,
+  Attractions,
+  Features,
+  Testimonials,
+} from 'components/home';
 
 const Home = () => {
   return (
@@ -12,6 +18,7 @@ const Home = () => {
         <HowItWorks />
         <Attractions />
         <Features />
+        <Testimonials />
       </VStack>
     </>
   );

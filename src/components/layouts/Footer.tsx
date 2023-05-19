@@ -9,7 +9,13 @@ import {
 import { FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => (
-  <Box w="full" minH="70px" boxSizing="border-box" bg="white" boxShadow="base">
+  <Box
+    w="full"
+    minH="70px"
+    boxSizing="border-box"
+    bg="white"
+    borderTop="1px solid #CBD5E0"
+  >
     <Container as="footer" role="contentinfo" maxW="7xl" h="full">
       <Flex
         gap={{ base: '4', md: '5' }}
