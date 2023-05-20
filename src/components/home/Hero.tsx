@@ -13,9 +13,8 @@ const carouselImages = [
   '/images/carousel/img7.jpg',
   '/images/carousel/img8.jpg',
   '/images/carousel/img9.jpg',
+  '/images/carousel/img10.jpg',
   '/images/carousel/img11.jpg',
-  '/images/carousel/img12.jpg',
-  '/images/carousel/img13.jpg',
   '/images/carousel/img.avif',
 ];
 const Hero = () => (

@@ -6,6 +6,7 @@ import {
   Attractions,
   Features,
   Testimonials,
+  NewsLetter,
 } from 'components/home';
 
 const Home = () => {

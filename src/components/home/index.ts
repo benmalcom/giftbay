@@ -3,3 +3,4 @@ export { default as HowItWorks } from './HowItWorks';
 export { default as Attractions } from './Attractions';
 export { default as Features } from './Features';
 export { default as Testimonials } from './Testimonials';
+export { default as NewsLetter } from './NewsLetter';
