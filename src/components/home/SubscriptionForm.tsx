@@ -20,8 +20,15 @@ const SubscriptionForm = () => {
   const [error, setError] = useState(false);
 
   return (
-    <Flex h="200px" align="center" justify="center">
-      <Container maxW="lg" bg="white" boxShadow="xl" rounded="lg" p={6}>
+    <Flex
+      h="200px"
+      align="center"
+      justify="center"
+      shadow="md"
+      rounded="lg"
+      bg="white"
+    >
+      <Container maxW="lg" bg="white" rounded="lg" p={6}>
         <Heading
           as="h2"
           fontSize={{ base: 'xl', sm: '2xl' }}
@@ -29,7 +36,7 @@ const SubscriptionForm = () => {
           mb={5}
           color="gray.700"
         >
-          Subscribe to our Newsletter
+          Subscribe to our newsletter
         </Heading>
         <Stack
           direction={{ base: 'column', md: 'row' }}
@@ -54,8 +61,6 @@ const SubscriptionForm = () => {
         >
           <FormControl>
             <Input
-              variant="solid"
-              borderWidth={1}
               color="gray.800"
               _placeholder={{
                 color: 'gray.400',

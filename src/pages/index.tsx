@@ -20,6 +20,7 @@ const Home = () => {
         <Attractions />
         <Features />
         <Testimonials />
+        <NewsLetter />
       </VStack>
     </>
   );
