@@ -2,7 +2,12 @@ import { Flex, Heading, Text, VStack, Container } from '@chakra-ui/react';
 import SubscriptionForm from './SubscriptionForm';
 
 const NewsLetter = () => (
-  <Flex w="full" minH="400px" py="70px" bg="gray.100" alignItems="center">
+  <Flex
+    w="full"
+    minH={{ base: '500px', md: '400px' }}
+    bg="gray.100"
+    alignItems={{ base: 'unset', lg: 'center' }}
+  >
     <Container
       maxW="7xl"
       alignItems="center"
