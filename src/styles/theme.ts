@@ -33,7 +33,7 @@ const styles = {
 
 const fonts = {
   heading: `'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
-  body: `'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
+  body: `'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
 };
 
 export const theme = extendTheme({

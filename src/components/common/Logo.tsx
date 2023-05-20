@@ -48,10 +48,9 @@ export const Logo = () => {
 
     <Heading as="h5" size="md" userSelect="none" color="subtle">
       <Highlight
-        query="."
+        query="Bay."
         styles={{
           color: 'purple.500',
-          fontSize: '2xl',
         }}
       >
         {`${appName}.`}

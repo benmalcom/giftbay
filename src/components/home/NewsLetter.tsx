@@ -1,5 +1,5 @@
 import { Flex, Heading, Text, VStack, Container } from '@chakra-ui/react';
-import SubscriptionForm from './SubscriptionForm';
+import NewsLetterForm from './NewsLetterForm';
 
 const NewsLetter = () => (
   <Flex
@@ -49,7 +49,7 @@ const NewsLetter = () => (
           justifyContent="center"
           h="full"
         >
-          <SubscriptionForm />
+          <NewsLetterForm />
         </VStack>
       </Flex>
     </Container>
