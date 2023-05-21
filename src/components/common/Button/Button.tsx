@@ -5,7 +5,7 @@ import {
 import { match } from 'ts-pattern';
 
 type ButtonProps = ChakraButtonProps & {
-  variant?: 'outline' | 'primary' | 'light';
+  variant?: 'outline' | 'primary' | 'light' | 'transparent';
 };
 
 export default function Button({ variant = 'primary', ...props }: ButtonProps) {
@@ -13,6 +13,7 @@ export default function Button({ variant = 'primary', ...props }: ButtonProps) {
     .with('outline', () => <OutlineButton {...props} />)
     .with('primary', () => <PrimaryButton {...props} />)
     .with('light', () => <LightButton {...props} />)
+    .with('transparent', () => <TransparentButton {...props} />)
     .exhaustive();
 }
 
@@ -41,7 +42,7 @@ function PrimaryButton(props: ButtonProps) {
       opacity="0.9"
       _hover={{ opacity: 1 }}
       _active={{ opacity: 1 }}
-      _disabled={{ opacity: 8 }}
+      _disabled={{ opacity: 0.8 }}
       {...props}
     />
   );
@@ -55,7 +56,21 @@ function LightButton(props: ButtonProps) {
       opacity="0.9"
       _hover={{ opacity: 1 }}
       _active={{ opacity: 1 }}
-      _disabled={{ opacity: 8 }}
+      _disabled={{ opacity: 0.8 }}
+      {...props}
+    />
+  );
+}
+
+function TransparentButton(props: ButtonProps) {
+  return (
+    <ChakraButton
+      bg="transparent"
+      opacity="0.9"
+      border="1px solid currentcolor"
+      _hover={{ opacity: 1, bg: 'transparent' }}
+      _active={{ opacity: 1, bg: 'transparent' }}
+      _disabled={{ opacity: 0.8, bg: 'transparent' }}
       {...props}
     />
   );

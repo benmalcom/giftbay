@@ -1,4 +1,4 @@
-import { ResumeData, ResumeType } from 'types/resume';
+import { ResumeData, ResumeType } from 'types/event';
 
 export function objectToBase64(obj: Record<string, unknown>) {
   const jsonString = JSON.stringify(obj);
