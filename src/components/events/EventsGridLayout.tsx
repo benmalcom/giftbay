@@ -1,16 +1,16 @@
 import { Grid } from '@chakra-ui/react';
 import React from 'react';
-import { EventType } from 'types/event';
+import { EventFormPayload, EventType } from 'types/event';
 import AddEventCard from './AddEventCard';
 import EventCard from './EventCard';
 import EventCardSkeleton from './EventCardSkeleton';
 
 type EventsGridLayoutProps = {
+  onSave(values: EventFormPayload): void;
   events: EventType[];
-  loading?: boolean;
 };
 
-const EventsGridLayout: React.FC<EventsGridLayoutProps> = () => {
+const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({ onSave }) => {
   return (
     <Grid
       gridTemplateColumns={{
@@ -21,7 +21,7 @@ const EventsGridLayout: React.FC<EventsGridLayoutProps> = () => {
       }}
       gridGap="6"
     >
-      <AddEventCard onClick={() => console.log('')} />
+      <AddEventCard onSave={onSave} />
       <EventCardSkeleton />
       {/*      {loading
         ? Array(4)

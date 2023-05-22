@@ -33,3 +33,15 @@ export const CARD_COLORS = {
     complement: '#0f161b',
   },
 };
+
+export const EVENT_CATEGORIES: { value: string; label: string }[] = [
+  { value: 'birthday', label: 'Birthday' },
+  { value: 'recreation', label: 'Recreation' },
+  { value: 'bridal_shower', label: 'Bridal Shower' },
+  { value: 'baby_shower', label: 'Baby Shower' },
+  { value: 'dinner', label: 'Dinner' },
+  { value: 'wedding_reception', label: 'Wedding/Reception' },
+  { value: 'valentine', label: 'Valentine' },
+  { value: 'hangouts_meetups', label: 'Hangouts/Meetups' },
+  { value: 'others', label: 'Others' },
+];

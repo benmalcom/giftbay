@@ -48,7 +48,7 @@ export const Logo = () => {
 
     <Heading as="h5" size="md" userSelect="none" color="subtle">
       <Highlight
-        query="Bay."
+        query={['G', '.']}
         styles={{
           color: 'purple.500',
         }}
