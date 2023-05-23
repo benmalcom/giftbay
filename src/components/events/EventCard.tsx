@@ -4,6 +4,7 @@ import {
   Text,
   Button as ChakraButton,
   Image,
+  Box,
 } from '@chakra-ui/react';
 import { pick } from 'lodash';
 import Link from 'next/link';
@@ -23,6 +24,7 @@ type EventCardProps = {
 };
 const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
   const [event, setEvent] = useState(evt);
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
   const handleColorSelect = (color: EventCardColor) => {
     setEvent(event => ({ ...event, ...color }));
@@ -38,7 +40,19 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
         y: -1,
         scale: 1.01,
       }}
+      pos="relative"
     >
+      {isMenuOpen && (
+        <Box
+          pos="absolute"
+          top={0}
+          bottom={0}
+          left={0}
+          right={0}
+          bg="rgba(0,0,0,0.5)"
+          borderRadius="inherit"
+        />
+      )}
       <FlexColumn p="3" gridGap="2" h="full" w="full">
         <Flex justify="space-between" w="full" h="50%">
           <FlexColumn rowGap={5}>
@@ -51,6 +65,8 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
                 {event.name}
               </Text>
               <EventCardDropdownMenu
+                onCloseMenu={() => setMenuOpen(false)}
+                onOpenMenu={() => setMenuOpen(true)}
                 currentColor={pick(event, [
                   'backgroundColor',
                   'foregroundColor',
