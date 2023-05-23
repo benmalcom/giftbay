@@ -3,8 +3,13 @@ import Link from 'next/link';
 import { MdOutlineKeyboardBackspace } from 'react-icons/md';
 import { FlexColumn } from 'components/common/MotionContainers';
 import { EventsGridLayout } from 'components/events';
+import events from 'data/events.json';
+import { EventFormPayload } from 'types/event';
 
 const Events = () => {
+  const onSaveEvent = (event: EventFormPayload) => {
+    console.log('event ', event);
+  };
   return (
     <Container py={1.5} maxW="7xl" h="full" alignItems="center" mt="25px">
       <FlexColumn w="full" rowGap={10} mt={10}>
@@ -26,7 +31,7 @@ const Events = () => {
             </Button>
           </Link>
         </Box>
-        <EventsGridLayout events={[]} />
+        <EventsGridLayout events={events} onSave={onSaveEvent} />
       </FlexColumn>
     </Container>
   );

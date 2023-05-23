@@ -8,9 +8,14 @@ import EventCardSkeleton from './EventCardSkeleton';
 type EventsGridLayoutProps = {
   onSave(values: EventFormPayload): void;
   events: EventType[];
+  loading?: boolean;
 };
 
-const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({ onSave }) => {
+const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({
+  onSave,
+  events,
+  loading,
+}) => {
   return (
     <Grid
       gridTemplateColumns={{
@@ -22,15 +27,12 @@ const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({ onSave }) => {
       gridGap="6"
     >
       <AddEventCard onSave={onSave} />
-      <EventCardSkeleton />
-      {/*      {loading
+
+      {loading
         ? Array(4)
             .fill(0)
-            .map((_, i) => <ProjectCardSkeleton variant="all" key={i} />)
-        : events?.map(project => (
-            <EventCard key={project.id} project={project} variant="all" />
-          ))}*/}
-      <EventCard />
+            .map((_, i) => <EventCardSkeleton key={i} />)
+        : events?.map(event => <EventCard key={event.id} event={event} />)}
     </Grid>
   );
 };

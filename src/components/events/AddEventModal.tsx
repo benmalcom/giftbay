@@ -69,6 +69,8 @@ const AddEventModal: React.FC<FormProps> = ({
   const isLastStep = currentStep === LAST_STEP;
   const isFirstStep = currentStep === FIRST_STEP;
 
+  console.log('inUploadFlight ', inUploadFlight);
+
   const defaultValues = {
     isPublic: true,
     date: new Date(),
@@ -108,11 +110,11 @@ const AddEventModal: React.FC<FormProps> = ({
   const formValues = watch();
 
   const handleCoverPhotoUpload = async (files: File[]) => {
-    setInUploadFlight(true);
     if (!files.length) {
       setValue('coverPhoto', undefined);
       return;
     }
+    setInUploadFlight(true);
     const file = files[0];
     const payload = new FormData();
     payload.append('type', 'banner');
@@ -122,7 +124,7 @@ const AddEventModal: React.FC<FormProps> = ({
       setValue('coverPhoto', data?.file?.url);
       toast.success('Cover photo uploaded');
     } catch (e: any) {
-      toast.error(e.message ?? 'Unable to upload banner');
+      toast.error(e.message ?? 'Unable to upload cover photo');
     } finally {
       setInUploadFlight(false);
     }
@@ -332,7 +334,7 @@ const AddEventModal: React.FC<FormProps> = ({
                             </FormHelperText>
                             <EventDropZone
                               showPreview
-                              onUpload={files => handleCoverPhotoUpload(files)}
+                              onUpload={handleCoverPhotoUpload}
                               maxFiles={1}
                               loading={inUploadFlight}
                             />

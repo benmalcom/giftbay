@@ -1,5 +1,13 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Box, Flex, Image, Skeleton, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Image,
+  Skeleton,
+  Text,
+  usePrevious,
+} from '@chakra-ui/react';
+import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { FlexColumn } from 'components/common/MotionContainers';
@@ -21,13 +29,14 @@ const EventDropZone: React.FC<MyDropzoneProps> = ({
 }) => {
   const [files, setFiles] = useState<UploadedFile[]>([]);
 
+  const prevFiles = usePrevious(files);
   useEffect(() => {
-    onUpload(files);
+    if (!isEqual(prevFiles, files)) onUpload(files);
     return () => {
       // Make sure to revoke the data uris to avoid memory leaks
       files.forEach(file => URL.revokeObjectURL(file.preview));
     };
-  }, [files, onUpload]);
+  }, [files, onUpload, prevFiles]);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: { 'image/*': [] },

@@ -1,4 +1,5 @@
 export type EventType = {
+  lastGiftImageUrl: string | undefined;
   id: string;
   user: string;
   name: string;

@@ -17,7 +17,7 @@ const Attractions = () => (
       bg="white"
     >
       <Image
-        src="/images/devices3.jpg"
+        src="/images/responsive.jpg"
         alt="Device responsiveness"
         w="full"
         h="100%"

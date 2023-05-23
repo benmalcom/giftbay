@@ -1,0 +1,47 @@
+[
+  {
+    "id": "id01",
+    "name": "Black valentine's night special",
+    "category": "valentine",
+    "description": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "thankYouNote": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "date": "2023-05-23T01:13:08.399Z",
+    "isPublic": false,
+    "user": "xia0c2jrpq",
+    "coverPhoto": "",
+    "backgroundColor": "#7f2ee6",
+    "foregroundColor": "#ffffff",
+    "lastGiftImageUrl": "\\images\\ear_buds.png",
+    "slug": "abcd1-efgh-ijk2"
+  },
+  {
+    "id": "id02",
+    "name": "Exclusive house warming and opening night",
+    "category": "others",
+    "description": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "thankYouNote": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "date": "2023-04-19T01:13:08.399Z",
+    "isPublic": false,
+    "user": "xia9c2jrp3",
+    "coverPhoto": "",
+    "backgroundColor": "#ffca0f",
+    "foregroundColor": "#0f161b",
+    "lastGiftImageUrl": "\\images\\camera.png",
+    "slug": "abcd-efgh-ijk2"
+  },
+  {
+    "id": "id03",
+    "name": "Honeymoon fund and contrib",
+    "category": "others",
+    "description": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "thankYouNote": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    "date": "2023-05-10T01:07:08.399Z",
+    "isPublic": false,
+    "user": "xia9c2jrp3",
+    "coverPhoto": "",
+    "backgroundColor": "#f1f1f1",
+    "foregroundColor": "#060607",
+    "lastGiftImageUrl": "\\images\\gas_cooker.png",
+    "slug": "abcd-efgh-ijk3"
+  }
+]
