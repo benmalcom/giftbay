@@ -11,35 +11,36 @@ import {
   PopoverHeader,
   PopoverBody,
   Flex,
-  Box,
   Heading,
   Button,
   Stack,
 } from '@chakra-ui/react';
 import React from 'react';
-import { EventCardColor } from 'types/event';
+import { transformEventToFormValues } from 'components/events/utils';
+import { EventCardColor, EventFormPayload, EventType } from 'types/event';
 import { EVENT_CARD_COLORS } from 'utils/constants';
+import { ModalManager as EventModalManager } from './AddEventModal';
 
 type ComponentProps = {
   iconButtonProps: IconButtonProps;
-  onSelectColor(color: EventCardColor): void;
-  currentColor: EventCardColor;
+  onSave(values: Partial<EventFormPayload>): void;
+  event: EventType;
   onOpenMenu(): void;
   onCloseMenu(): void;
 };
 const EventCardDropdownMenu: React.FC<ComponentProps> = ({
   iconButtonProps,
-  onSelectColor,
-  currentColor,
+  event,
   onCloseMenu,
   onOpenMenu,
+  onSave,
 }) => {
   return (
     <Popover
       placement="bottom-end"
-      isLazy
-      onClose={onCloseMenu}
-      onOpen={onOpenMenu}
+      onClose={() => onCloseMenu()}
+      onOpen={() => onOpenMenu()}
+      lazyBehavior="unmount"
     >
       <PopoverTrigger>
         <IconButton {...iconButtonProps} />
@@ -69,9 +70,21 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
                   Card Actions
                 </Heading>
                 <Flex w="full" h="fit-content" columnGap={3}>
-                  <Button colorScheme="purple" size="xs" variant="outline">
-                    Edit this card
-                  </Button>
+                  <EventModalManager
+                    initialValues={transformEventToFormValues(event)}
+                    triggerFunc={({ trigger }) => (
+                      <Button
+                        onClick={() => trigger()}
+                        colorScheme="purple"
+                        size="xs"
+                        variant="outline"
+                      >
+                        Edit this card
+                      </Button>
+                    )}
+                    onSave={onSave}
+                  />
+
                   <Button colorScheme="red" size="xs">
                     Delete
                   </Button>
@@ -95,14 +108,14 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
                       align="center"
                       justify="center"
                       onClick={() =>
-                        onSelectColor({
+                        onSave({
                           backgroundColor: color.value,
                           foregroundColor: color.complement,
                         })
                       }
                     >
-                      {color.value === currentColor.backgroundColor &&
-                        color.complement === currentColor.foregroundColor && (
+                      {color.value === event.backgroundColor &&
+                        color.complement === event.foregroundColor && (
                           <CheckIcon color={color.complement} boxSize="0.6em" />
                         )}
                     </Flex>

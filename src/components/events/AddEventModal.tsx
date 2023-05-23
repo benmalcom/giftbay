@@ -34,17 +34,17 @@ import toast from 'react-hot-toast';
 import { FaTimesCircle } from 'react-icons/fa';
 import { Select } from 'components/common/Select';
 import {
-  parseEventFormPayload,
+  parseEventFormValues,
   useEventFormSchema,
 } from 'components/events/utils';
+import { uploadImage } from 'services/media';
 import { EventFormPayload, EventFormValues, EventType } from 'types/event';
 import { EVENT_CATEGORIES } from 'utils/constants';
 import EventDropZone from './EventDropZone';
-import { uploadImage } from '../../services/media';
 
 type FormProps = {
   onSave(values: EventFormPayload): void;
-  initialValues?: Partial<EventType>;
+  initialValues?: Partial<EventFormValues>;
   isOpen: boolean;
   onClose(): void;
   loading?: boolean;
@@ -69,8 +69,6 @@ const AddEventModal: React.FC<FormProps> = ({
   const isLastStep = currentStep === LAST_STEP;
   const isFirstStep = currentStep === FIRST_STEP;
 
-  console.log('inUploadFlight ', inUploadFlight);
-
   const defaultValues = {
     isPublic: true,
     date: new Date(),
@@ -83,7 +81,7 @@ const AddEventModal: React.FC<FormProps> = ({
 
   const onSubmitForm = (values: Record<string, unknown>) => {
     if (isLastStep) {
-      const payload = parseEventFormPayload(values as EventFormValues);
+      const payload = parseEventFormValues(values as EventFormValues);
       onSave(payload);
       onClose();
     } else {
@@ -134,12 +132,15 @@ const AddEventModal: React.FC<FormProps> = ({
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent w={{ base: '98%', md: 'full' }}>
           <form onSubmit={handleSubmit(onSubmitForm)}>
             <ModalHeader fontSize="lg">
               A little info on your Special Occasion
             </ModalHeader>
-            <ModalCloseButton outline="none" _active={{ outline: 'one' }} />
+            <ModalCloseButton
+              outline="none"
+              _active={{ outline: 'one', border: 'none' }}
+            />
             <ModalBody>
               <Progress
                 colorScheme="purple"
@@ -383,7 +384,7 @@ const AddEventModal: React.FC<FormProps> = ({
 
 type ModalManagerProps = {
   onSave(values: EventFormPayload): void;
-  initialValues?: Partial<EventType>;
+  initialValues?: Partial<EventFormValues>;
   triggerFunc({ trigger }: { trigger(): void }): React.ReactNode;
 };
 

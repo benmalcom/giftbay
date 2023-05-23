@@ -1,7 +1,8 @@
 import { omit } from 'lodash';
 import { useEffect, useState } from 'react';
 import * as yup from 'yup';
-import { EventFormPayload, EventFormValues } from 'types/event';
+import { EventFormPayload, EventFormValues, EventType } from 'types/event';
+import { EVENT_CATEGORIES } from 'utils/constants';
 
 const getSchemaByStep = (step: number) => {
   switch (step) {
@@ -32,9 +33,21 @@ export const useEventFormSchema = ({ step }: { step: number }) => {
   return schema;
 };
 
-export const parseEventFormPayload = (values: EventFormValues) => {
+export const parseEventFormValues = (values: EventFormValues) => {
   const payload = { ...omit(values, ['category', 'date']) } as EventFormPayload;
   if (values.category) payload.category = values.category.value;
   if (values.date) payload.date = values.date.toISOString();
+  return payload;
+};
+
+export const transformEventToFormValues = (event: EventType) => {
+  const payload = {
+    ...omit(event, ['category', 'date']),
+  } as Partial<EventFormValues>;
+  if (event.category)
+    payload.category = EVENT_CATEGORIES.find(
+      item => item.value === event.category
+    );
+  if (event.date) payload.date = new Date(event.date);
   return payload;
 };

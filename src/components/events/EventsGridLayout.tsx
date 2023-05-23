@@ -19,7 +19,8 @@ const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({
   return (
     <Grid
       gridTemplateColumns={{
-        base: '1fr',
+        base: '100%',
+        sm: '95%',
         md: 'repeat(2, 1fr)',
         lg: 'repeat(3, 1fr)',
         xl: 'repeat(4, 1fr)',

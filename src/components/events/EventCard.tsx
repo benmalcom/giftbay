@@ -6,7 +6,6 @@ import {
   Image,
   Box,
 } from '@chakra-ui/react';
-import { pick } from 'lodash';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -16,7 +15,7 @@ import {
   FlexColumn,
   MotionFlexColumn,
 } from 'components/common/MotionContainers';
-import { EventCardColor, EventType } from 'types/event';
+import { EventCardColor, EventFormPayload, EventType } from 'types/event';
 import EventCardDropdownMenu from './EventCardDropdownMenu';
 
 type EventCardProps = {
@@ -26,9 +25,9 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
   const [event, setEvent] = useState(evt);
   const [isMenuOpen, setMenuOpen] = useState(false);
 
-  const handleColorSelect = (color: EventCardColor) => {
-    setEvent(event => ({ ...event, ...color }));
-  };
+  const handleEventSave = (values: Partial<EventFormPayload>) =>
+    setEvent(event => ({ ...event, ...values }));
+
   return (
     <MotionFlexColumn
       bg={event.backgroundColor}
@@ -55,8 +54,8 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
       )}
       <FlexColumn p="3" gridGap="2" h="full" w="full">
         <Flex justify="space-between" w="full" h="50%">
-          <FlexColumn rowGap={5}>
-            <Flex columnGap={2}>
+          <FlexColumn rowGap={5} w="full">
+            <Flex columnGap={2} w="full" justify="space-between">
               <Text
                 fontSize="xl"
                 color={event.foregroundColor}
@@ -67,11 +66,8 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
               <EventCardDropdownMenu
                 onCloseMenu={() => setMenuOpen(false)}
                 onOpenMenu={() => setMenuOpen(true)}
-                currentColor={pick(event, [
-                  'backgroundColor',
-                  'foregroundColor',
-                ])}
-                onSelectColor={handleColorSelect}
+                event={event}
+                onSave={handleEventSave}
                 iconButtonProps={{
                   isRound: true,
                   'aria-label': 'project actions',

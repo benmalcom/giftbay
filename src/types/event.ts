@@ -14,6 +14,7 @@ export type EventType = {
   foregroundColor: string;
 };
 
+// Values from event form
 export type EventFormValues = Pick<
   EventType,
   | 'name'
@@ -28,6 +29,7 @@ export type EventFormValues = Pick<
   category: { label: string; value: string };
 };
 
+// Values to event form
 export type EventFormPayload = Pick<
   EventType,
   | 'name'
