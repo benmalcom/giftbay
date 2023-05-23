@@ -5,6 +5,7 @@ import {
   Button as ChakraButton,
   Image,
 } from '@chakra-ui/react';
+import { pick } from 'lodash';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -50,6 +51,10 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
                 {event.name}
               </Text>
               <EventCardDropdownMenu
+                currentColor={pick(event, [
+                  'backgroundColor',
+                  'foregroundColor',
+                ])}
                 onSelectColor={handleColorSelect}
                 iconButtonProps={{
                   isRound: true,
