@@ -1,6 +1,8 @@
 import {
   Alert,
+  AlertDescription,
   AlertIcon,
+  AlertTitle,
   Box,
   Button,
   Container,
@@ -38,9 +40,20 @@ const Events = () => {
         <Heading as="h3" size="lg" color="gray.600">
           My special moments
         </Heading>
-        <Alert status="warning" variant="left-accent">
-          <AlertIcon />
-          Here's a quick look at the events you've created in the past.
+        <Alert
+          status="warning"
+          variant="left-accent"
+          flexDirection="column"
+          alignItems="flex-start"
+          w="full"
+        >
+          <AlertTitle mb={1} fontSize="lg">
+            Your Celebrations, Your Events: Welcome to Your Personalized Event
+            List!{' '}
+          </AlertTitle>
+          <AlertDescription>
+            Here's a quick look at the events you've created in the past.
+          </AlertDescription>
         </Alert>
 
         <EventsGridLayout
