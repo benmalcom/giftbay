@@ -12,6 +12,7 @@ import RefreshTokenHandler from 'components/RefreshTokenHandler';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
 import { User } from 'types/user';
+import 'components/events/EventCardDropdownMenu.css';
 
 type NextPageWithLayout = NextPage & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

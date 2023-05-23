@@ -3,7 +3,7 @@ const appBaseUrl =
 
 export const APP_BASE_URL = appBaseUrl;
 
-export const CARD_COLORS = {
+export const EVENT_CARD_COLORS = {
   white: {
     value: '#ffffff',
     complement: '#121314',

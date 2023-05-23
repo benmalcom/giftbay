@@ -41,3 +41,8 @@ export type EventFormPayload = Pick<
   date: string;
   category: string;
 };
+
+export type EventCardColor = {
+  backgroundColor: string;
+  foregroundColor: string;
+};
