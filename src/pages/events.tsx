@@ -48,8 +48,8 @@ const Events = () => {
           w="full"
         >
           <AlertTitle mb={1} fontSize="lg">
-            Your Celebrations, Your Events: Welcome to Your Personalized Event
-            List!{' '}
+            Your Celebrations, Your Events: Welcome to your personalized event
+            list.
           </AlertTitle>
           <AlertDescription>
             Here's a quick look at the events you've created in the past.
