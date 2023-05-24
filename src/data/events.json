@@ -12,7 +12,8 @@
     "backgroundColor": "#7f2ee6",
     "foregroundColor": "#ffffff",
     "lastGiftImageUrl": "\\images\\ear_buds.png",
-    "slug": "abcd1-efgh-ijk2"
+    "slug": "abcd1-efgh-ijk2",
+    "currency": "dollar"
   },
   {
     "id": "id02",
@@ -27,7 +28,8 @@
     "backgroundColor": "#ffca0f",
     "foregroundColor": "#0f161b",
     "lastGiftImageUrl": "\\images\\camera.png",
-    "slug": "abcd-efgh-ijk2"
+    "slug": "abcd-efgh-ijk2",
+    "currency": "pound"
   },
   {
     "id": "id03",
@@ -42,6 +44,7 @@
     "backgroundColor": "#f1f1f1",
     "foregroundColor": "#060607",
     "lastGiftImageUrl": "\\images\\gas_cooker.png",
-    "slug": "abcd-efgh-ijk3"
+    "slug": "abcd-efgh-ijk3",
+    "currency": "naira"
   }
 ]

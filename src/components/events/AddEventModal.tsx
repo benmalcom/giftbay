@@ -38,9 +38,9 @@ import {
   useEventFormSchema,
 } from 'components/events/utils';
 import { uploadImage } from 'services/media';
-import { EventFormPayload, EventFormValues, EventType } from 'types/event';
-import { EVENT_CATEGORIES } from 'utils/constants';
-import EventDropZone from './EventDropZone';
+import { EventFormPayload, EventFormValues } from 'types/event';
+import { CURRENCIES, EVENT_CATEGORIES } from 'utils/constants';
+import EventDropZone from './MyDropZone';
 
 type FormProps = {
   onSave(values: EventFormPayload): void;
@@ -100,6 +100,7 @@ const AddEventModal: React.FC<FormProps> = ({
     formState: { errors = {} },
     watch,
     setValue,
+    reset,
   } = useForm({
     mode: 'onSubmit',
     defaultValues,
@@ -128,9 +129,14 @@ const AddEventModal: React.FC<FormProps> = ({
     }
   };
 
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
+
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent w={{ base: '98%', md: 'full' }}>
           <form onSubmit={handleSubmit(onSubmitForm)}>
@@ -270,10 +276,37 @@ const AddEventModal: React.FC<FormProps> = ({
                             errors.description.message.toString()}
                         </FormErrorMessage>
                       </FormControl>
-                      <FormControl isInvalid={Boolean(errors.isPublic)}>
+                      <FormControl
+                        isInvalid={Boolean(errors.currency)}
+                        zIndex={3}
+                      >
+                        <FormLabel htmlFor="category" fontWeight={400}>
+                          Preferred currency
+                        </FormLabel>
                         <FormHelperText mb={2}>
-                          Should we display this in our public registry?
+                          In what currency will you be receiving cash gifts?
                         </FormHelperText>
+                        <Controller
+                          control={control}
+                          render={({ field: { onChange, onBlur, value } }) => (
+                            <Select
+                              placeholder="Select..."
+                              name="currency"
+                              isClearable
+                              onChange={onChange}
+                              onBlur={onBlur}
+                              options={CURRENCIES}
+                              value={value}
+                            />
+                          )}
+                          name="currency"
+                        />
+                        <FormErrorMessage>
+                          {errors?.currency?.message &&
+                            errors.currency.message.toString()}
+                        </FormErrorMessage>
+                      </FormControl>
+                      <FormControl isInvalid={Boolean(errors.isPublic)}>
                         <Controller
                           control={control}
                           render={({ field: { onChange, value, name } }) => (
@@ -283,7 +316,7 @@ const AddEventModal: React.FC<FormProps> = ({
                               name={name}
                               colorScheme="purple"
                             >
-                              Make it public
+                              Display publicly?
                             </Checkbox>
                           )}
                           name="isPublic"

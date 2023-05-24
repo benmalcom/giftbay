@@ -2,7 +2,6 @@ import { CheckIcon } from '@chakra-ui/icons';
 import {
   IconButton,
   Portal,
-  IconButtonProps,
   PopoverTrigger,
   Popover,
   PopoverContent,
@@ -14,26 +13,30 @@ import {
   Heading,
   Button,
   Stack,
+  Icon,
 } from '@chakra-ui/react';
 import React from 'react';
+import { AiOutlinePlus } from 'react-icons/ai';
 import { transformEventToFormValues } from 'components/events/utils';
-import { EventCardColor, EventFormPayload, EventType } from 'types/event';
+import { EventFormPayload, EventType } from 'types/event';
+import { WishlistFormPayload } from 'types/wishlist';
 import { EVENT_CARD_COLORS } from 'utils/constants';
 import { ModalManager as EventModalManager } from './AddEventModal';
+import { ModalManager as WishlistItemModalManager } from './AddWishlistItemModal';
 
 type ComponentProps = {
-  iconButtonProps: IconButtonProps;
   onSave(values: Partial<EventFormPayload>): void;
+  onSaveWishlist(values: WishlistFormPayload): void;
   event: EventType;
   onOpenMenu(): void;
   onCloseMenu(): void;
 };
 const EventCardDropdownMenu: React.FC<ComponentProps> = ({
-  iconButtonProps,
   event,
   onCloseMenu,
   onOpenMenu,
   onSave,
+  onSaveWishlist,
 }) => {
   return (
     <Popover
@@ -43,7 +46,22 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
       lazyBehavior="unmount"
     >
       <PopoverTrigger>
-        <IconButton {...iconButtonProps} />
+        <IconButton
+          isRound
+          icon={<Icon as={AiOutlinePlus} />}
+          onClick={event => event.stopPropagation()}
+          fontSize="lg"
+          size="xs"
+          variant="outline"
+          bg={event.foregroundColor}
+          color={event.backgroundColor}
+          opacity="0.9"
+          border="1px solid currentcolor"
+          _hover={{ opacity: 1 }}
+          _active={{ opacity: 1 }}
+          _disabled={{ opacity: 0.8 }}
+          aria-label={'card-options'}
+        />
       </PopoverTrigger>
       <Portal>
         <PopoverContent _focus={{ boxShadow: 'none' }} w="250px" shadow="xl">
@@ -57,9 +75,19 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
                   Wishlists
                 </Heading>
                 <Flex w="full" h="fit-content" justifyContent="space-between">
-                  <Button colorScheme="purple" size="xs">
-                    Add item to Wishlist
-                  </Button>
+                  <WishlistItemModalManager
+                    onSave={onSaveWishlist}
+                    triggerFunc={({ trigger }) => (
+                      <Button
+                        onClick={() => trigger()}
+                        colorScheme="purple"
+                        size="xs"
+                      >
+                        Add item to Wishlist
+                      </Button>
+                    )}
+                  />
+
                   <Button colorScheme="purple" size="xs" variant="outline">
                     View Wishlist
                   </Button>

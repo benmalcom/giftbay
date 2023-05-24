@@ -20,12 +20,14 @@ type MyDropzoneProps = {
   showPreview?: boolean;
   loading?: boolean;
   maxFiles?: number;
+  dropPlaceholder?: React.ReactNode;
 };
-const EventDropZone: React.FC<MyDropzoneProps> = ({
+const MyDropzone: React.FC<MyDropzoneProps> = ({
   onUpload,
   showPreview,
   loading,
   maxFiles,
+  dropPlaceholder,
 }) => {
   const [files, setFiles] = useState<UploadedFile[]>([]);
 
@@ -80,19 +82,21 @@ const EventDropZone: React.FC<MyDropzoneProps> = ({
         ) : (
           <>
             <input {...getInputProps()} />
-            <Flex
-              cursor="pointer"
-              overflow="hidden"
-              whiteSpace="nowrap"
-              align="center"
-              justify="center"
-              w="full"
-              h="full"
-            >
-              <Text fontSize="sm">
-                Drag 'n' drop some files here, or click to select files
-              </Text>
-            </Flex>
+            {dropPlaceholder ?? (
+              <Flex
+                cursor="pointer"
+                overflow="hidden"
+                whiteSpace="nowrap"
+                align="center"
+                justify="center"
+                w="full"
+                h="full"
+              >
+                <Text fontSize="sm">
+                  Drag 'n' drop some files here, or click to select files
+                </Text>
+              </Flex>
+            )}
           </>
         )}
       </Flex>
@@ -151,4 +155,4 @@ const EventDropZone: React.FC<MyDropzoneProps> = ({
   );
 };
 
-export default EventDropZone;
+export default MyDropzone;

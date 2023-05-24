@@ -5,6 +5,7 @@ export type EventType = {
   name: string;
   description?: string;
   category: string;
+  currency: string;
   isPublic: boolean;
   date: string;
   thankYouNote?: string;
@@ -27,6 +28,7 @@ export type EventFormValues = Pick<
 > & {
   date: Date;
   category: { label: string; value: string };
+  currency: { label: string; value: string };
 };
 
 // Values to event form
@@ -42,6 +44,7 @@ export type EventFormPayload = Pick<
 > & {
   date: string;
   category: string;
+  currency: string;
 };
 
 export type EventCardColor = {

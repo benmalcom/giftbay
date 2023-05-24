@@ -18,11 +18,15 @@ const styles = {
         marginBottom: '-1px',
       },
     },
+    input: {
+      borderColor: 'gray.600',
+    },
     '#__next': {
       height: '100%',
     },
     '*::placeholder': {
-      color: mode('gray.400', 'whiteAlpha.400')(props),
+      color: mode('gray.500', 'whiteAlpha.400')(props),
+      fontSize: '14px',
     },
     '*, *::before, &::after': {
       borderColor: mode('gray.200', 'whiteAlpha.300')(props),

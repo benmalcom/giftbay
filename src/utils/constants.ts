@@ -45,3 +45,15 @@ export const EVENT_CATEGORIES: { value: string; label: string }[] = [
   { value: 'hangouts_meetups', label: 'Hangouts/Meetups' },
   { value: 'others', label: 'Others' },
 ];
+
+export const GIFT_FORMAT = [
+  { label: 'Cash', value: 'cash' },
+  { label: 'Product & Services', value: 'product_services' },
+];
+
+export const CURRENCIES = [
+  { label: '₦ - Nigerian Naira', value: 'naira', symbol: '₦' },
+  { label: '$ - Dollars', value: 'dollar', symbol: '$' },
+  { label: '£ - Pounds', value: 'pound', symbol: '£' },
+  { label: '€ - Euro', value: 'euro', symbol: '€' },
+];

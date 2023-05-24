@@ -1,6 +1,5 @@
 import {
   Flex,
-  Icon,
   Text,
   Button as ChakraButton,
   Image,
@@ -8,14 +7,15 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
 import { FiExternalLink } from 'react-icons/fi';
 import { Button } from 'components/common/Button';
 import {
   FlexColumn,
   MotionFlexColumn,
 } from 'components/common/MotionContainers';
-import { EventCardColor, EventFormPayload, EventType } from 'types/event';
+import { EventFormPayload, EventType } from 'types/event';
+import { WishlistFormPayload } from 'types/wishlist';
+import { CURRENCIES } from 'utils/constants';
 import EventCardDropdownMenu from './EventCardDropdownMenu';
 
 type EventCardProps = {
@@ -28,6 +28,12 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
   const handleEventSave = (values: Partial<EventFormPayload>) =>
     setEvent(event => ({ ...event, ...values }));
 
+  const handleWishlistSave = (values: Partial<WishlistFormPayload>) =>
+    console.log('Wishlist ', values);
+
+  const preferredCurrency = CURRENCIES.find(
+    item => item.value === event.currency
+  );
   return (
     <MotionFlexColumn
       bg={event.backgroundColor}
@@ -68,24 +74,7 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
                 onOpenMenu={() => setMenuOpen(true)}
                 event={event}
                 onSave={handleEventSave}
-                iconButtonProps={{
-                  isRound: true,
-                  'aria-label': 'project actions',
-                  icon: <Icon as={AiOutlinePlus} />,
-                  onClick: event => {
-                    event.stopPropagation();
-                  },
-                  fontSize: 'lg',
-                  size: 'xs',
-                  variant: 'outline',
-                  bg: event.foregroundColor,
-                  color: event.backgroundColor,
-                  opacity: '0.9',
-                  border: '1px solid currentcolor',
-                  _hover: { opacity: 1 },
-                  _active: { opacity: 1 },
-                  _disabled: { opacity: 0.8 },
-                }}
+                onSaveWishlist={handleWishlistSave}
               />
             </Flex>
             <Button
@@ -96,7 +85,7 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
               width="fit-content"
               fontWeight={400}
             >
-              $250,000
+              {preferredCurrency?.symbol}250,000
             </Button>
           </FlexColumn>
         </Flex>
