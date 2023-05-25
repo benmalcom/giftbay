@@ -5,7 +5,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
   Box,
   useBreakpointValue,
@@ -33,6 +32,7 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { FaTimesCircle } from 'react-icons/fa';
+import { CustomModalCloseButton } from 'components/common/Button';
 import { Select } from 'components/common/Select';
 import {
   parseEventFormValues,
@@ -146,10 +146,8 @@ const AddEventModal: React.FC<FormProps> = ({
             <ModalHeader fontSize="lg">
               A little info on your Special Occasion
             </ModalHeader>
-            <ModalCloseButton
-              outline="none"
-              _active={{ outline: 'one', border: 'none' }}
-            />
+            <CustomModalCloseButton />
+
             <ModalBody>
               <Progress
                 colorScheme="purple"

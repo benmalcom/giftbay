@@ -5,7 +5,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
   Stack,
   FormControl,
@@ -32,7 +31,10 @@ import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { BsImage } from 'react-icons/bs';
 import { DropzoneInPlace } from 'components/common';
-import { Button as CustomButton } from 'components/common/Button';
+import {
+  Button as CustomButton,
+  CustomModalCloseButton,
+} from 'components/common/Button';
 import {
   getWishlistFormSchema,
   parseWishlistFormValues,
@@ -126,15 +128,13 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
       colorScheme="purple"
     >
       <ModalOverlay />
-      <ModalContent w={{ base: '98%', md: 'full' }}>
+      <ModalContent w={{ base: '98%', md: 'full' }} pos="relative">
         <form onSubmit={handleSubmit(onSubmitForm)}>
           <ModalHeader fontSize="xl" color="gray.500">
             Wishlist Item
           </ModalHeader>
-          <ModalCloseButton
-            outline="none"
-            _active={{ outline: 'one', border: 'none' }}
-          />
+          <CustomModalCloseButton />
+
           <ModalBody pb={5}>
             <Stack spacing={5}>
               <FormControl isInvalid={Boolean(errors.name)}>
