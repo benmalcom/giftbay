@@ -126,6 +126,7 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
       onClose={handleClose}
       variant="subtle"
       colorScheme="purple"
+      size="lg"
     >
       <ModalOverlay />
       <ModalContent w={{ base: '98%', md: 'full' }} pos="relative">

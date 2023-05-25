@@ -139,7 +139,7 @@ const AddEventModal: React.FC<FormProps> = ({
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={handleClose}>
+      <Modal isOpen={isOpen} onClose={handleClose} size="lg">
         <ModalOverlay />
         <ModalContent w={{ base: '98%', md: 'full' }}>
           <form onSubmit={handleSubmit(onSubmitForm)}>
@@ -262,8 +262,8 @@ const AddEventModal: React.FC<FormProps> = ({
                       <FormControl isInvalid={Boolean(errors.name)}>
                         <FormLabel htmlFor="name">Description</FormLabel>
                         <FormHelperText mb={2}>
-                          Describe in detail what this is about, it will be
-                          shown to users subscribing to your registry.
+                          Supply a little detail about this, it will be shown to
+                          users subscribing to your registry.
                         </FormHelperText>
                         <Textarea
                           id="description"

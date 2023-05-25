@@ -20,6 +20,7 @@ import {
 import React, { useState } from 'react';
 import { BsCardImage } from 'react-icons/bs';
 import { CiCirclePlus } from 'react-icons/ci';
+import { FiChevronRight, FiChevronDown } from 'react-icons/fi';
 import { GoKebabVertical } from 'react-icons/go';
 import {
   Button as CustomButton,
@@ -52,6 +53,7 @@ const WishlistModal: React.FC<WishlistProps> = ({
       onClose={onClose}
       variant="subtle"
       colorScheme="purple"
+      size="lg"
     >
       <ModalOverlay />
       <ModalContent w={{ base: '98%', md: 'full' }} pos="relative">
@@ -147,14 +149,22 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
       <Flex
         align="center"
         minH="60px"
-        columnGap={3}
+        columnGap={2}
         px={1}
         _hover={{
           bg: showExtra ? undefined : 'gray.50',
         }}
         mt={0}
       >
-        <Checkbox colorScheme="purple" />
+        {!showExtra && <Checkbox colorScheme="purple" size="md" />}
+
+        <Icon
+          as={showExtra ? FiChevronDown : FiChevronRight}
+          boxSize="1.2em"
+          cursor="pointer"
+          onClick={() => setShowExtra(visibility => !visibility)}
+          color={showExtra ? 'purple.300' : 'gray.500'}
+        />
         <Box
           w="40px"
           h="35px"
@@ -182,17 +192,13 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
         </Box>
         <Flex flex={1} flexDir="column">
           <Flex w="full" justify="space-between" columnGap={4}>
-            <Text fontSize="sm" noOfLines={1}>
+            <Text fontSize={{ base: 'xs', md: 'md' }} noOfLines={1}>
               {wishlistItem.name}
             </Text>
-            <Text fontSize="sm">{nf.format(wishlistItem.amount)}</Text>
+            <Text fontSize="xs">{nf.format(wishlistItem.amount)}</Text>
           </Flex>
         </Flex>
-        <Icon
-          as={GoKebabVertical}
-          cursor="pointer"
-          onClick={() => setShowExtra(visibility => !visibility)}
-        />
+        <Icon as={GoKebabVertical} cursor="pointer" />
       </Flex>
       {showExtra && (
         <Flex flexDir="column" w="full" flexWrap="wrap" px={1} rowGap={2}>
