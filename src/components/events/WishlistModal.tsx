@@ -56,7 +56,7 @@ const WishlistModal: React.FC<WishlistProps> = ({
       size="lg"
     >
       <ModalOverlay />
-      <ModalContent w={{ base: '98%', md: 'full' }} pos="relative">
+      <ModalContent w={{ base: '99%', md: 'full' }} pos="relative">
         <ModalHeader fontSize="xl" color="gray.500">
           My Wishlist
         </ModalHeader>
@@ -162,34 +162,10 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
           as={showExtra ? FiChevronDown : FiChevronRight}
           boxSize="1.2em"
           cursor="pointer"
+          mx={3}
           onClick={() => setShowExtra(visibility => !visibility)}
           color={showExtra ? 'purple.300' : 'gray.500'}
         />
-        <Box
-          w="40px"
-          h="35px"
-          border="0.5px solid"
-          borderColor="gray.300"
-          p="1px"
-        >
-          {wishlistItem.imageUrl ? (
-            <Image
-              w="full"
-              h="full"
-              src={wishlistItem.imageUrl}
-              alt="wishlist-item"
-              objectFit="cover"
-            />
-          ) : (
-            <Icon
-              as={BsCardImage}
-              w="full"
-              h="full"
-              cursor="pointer"
-              color="purple.300"
-            />
-          )}
-        </Box>
         <Flex flex={1} flexDir="column">
           <Flex w="full" justify="space-between" columnGap={4}>
             <Text fontSize={{ base: 'xs', md: 'md' }} noOfLines={1}>
@@ -201,28 +177,55 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
         <Icon as={GoKebabVertical} cursor="pointer" />
       </Flex>
       {showExtra && (
-        <Flex flexDir="column" w="full" flexWrap="wrap" px={1} rowGap={2}>
-          <Heading as="h6" size="xs">
-            {wishlistItem.name}
-          </Heading>
-          {wishlistItem.externalUrl && (
-            <Stack spacing={0}>
-              <Text fontSize="xs" noOfLines={1} fontWeight={500}>
-                Link to item
-              </Text>
-              <ChakraLink
-                fontSize="xs"
-                href={wishlistItem.externalUrl}
-                isExternal
-                color="blue.500"
-              >
-                <Text fontSize="xs" noOfLines={1}>
-                  {wishlistItem.externalUrl}
+        <Flex columnGap={3}>
+          <Box
+            w="50px"
+            h="45px"
+            border="0.5px solid"
+            borderColor="gray.300"
+            p="1px"
+          >
+            {wishlistItem.imageUrl ? (
+              <Image
+                w="full"
+                h="full"
+                src={wishlistItem.imageUrl}
+                alt="wishlist-item"
+                objectFit="cover"
+              />
+            ) : (
+              <Icon
+                as={BsCardImage}
+                w="full"
+                h="full"
+                cursor="pointer"
+                color="purple.300"
+              />
+            )}
+          </Box>
+          <Flex flexDir="column" w="full" flexWrap="wrap" px={1} rowGap={2}>
+            <Heading as="h6" size="xs">
+              {wishlistItem.name}
+            </Heading>
+            {wishlistItem.externalUrl && (
+              <Stack spacing={0}>
+                <Text fontSize="xs" noOfLines={1} fontWeight={500}>
+                  Link to item
                 </Text>
-              </ChakraLink>
-            </Stack>
-          )}
-          <Text fontSize="xs">{wishlistItem.description}</Text>
+                <ChakraLink
+                  fontSize="xs"
+                  href={wishlistItem.externalUrl}
+                  isExternal
+                  color="blue.500"
+                >
+                  <Text fontSize="xs" noOfLines={1}>
+                    {wishlistItem.externalUrl}
+                  </Text>
+                </ChakraLink>
+              </Stack>
+            )}
+            <Text fontSize="xs">{wishlistItem.description}</Text>
+          </Flex>
         </Flex>
       )}
     </Stack>
