@@ -24,8 +24,9 @@ import {
   Button as CustomButton,
   CustomModalCloseButton,
 } from 'components/common/Button';
+import { ModalManager as WishlistItemModalManager } from 'components/events/AddWishlistItemModal';
 import { CurrencyType } from 'types/common';
-import { WishlistType } from 'types/wishlist';
+import { WishlistFormPayload, WishlistType } from 'types/wishlist';
 
 type WishlistProps = {
   wishlist: WishlistType[];
@@ -33,6 +34,7 @@ type WishlistProps = {
   onClose(): void;
   loading?: boolean;
   preferredCurrency: CurrencyType;
+  onSaveWishlist(values: WishlistFormPayload): void;
 };
 
 const WishlistModal: React.FC<WishlistProps> = ({
@@ -41,6 +43,7 @@ const WishlistModal: React.FC<WishlistProps> = ({
   onClose,
   loading,
   preferredCurrency,
+  onSaveWishlist,
 }) => {
   return (
     <Modal
@@ -71,18 +74,25 @@ const WishlistModal: React.FC<WishlistProps> = ({
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <CustomButton
-            leftIcon={<CiCirclePlus size={30} />}
-            as="a"
-            textDecoration="none"
-            cursor="pointer"
-            colorScheme="purple"
-            variant="outline"
-            size="md"
-            w="full"
-          >
-            Add Item{' '}
-          </CustomButton>
+          <WishlistItemModalManager
+            preferredCurrency={preferredCurrency!.symbol}
+            onSave={onSaveWishlist}
+            triggerFunc={({ trigger }) => (
+              <CustomButton
+                onClick={() => trigger()}
+                leftIcon={<CiCirclePlus size={30} />}
+                as="a"
+                textDecoration="none"
+                cursor="pointer"
+                colorScheme="purple"
+                variant="outline"
+                size="md"
+                w="full"
+              >
+                Add Item
+              </CustomButton>
+            )}
+          />
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -93,6 +103,7 @@ type ModalManagerProps = {
   triggerFunc({ trigger }: { trigger(): void }): React.ReactNode;
   wishlist: WishlistType[];
   preferredCurrency: CurrencyType;
+  onSaveWishlist(values: WishlistFormPayload): void;
 };
 
 export const ModalManager: React.FC<ModalManagerProps> = ({

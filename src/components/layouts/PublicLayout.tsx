@@ -8,7 +8,7 @@ type LayoutProps = {
   children: React.ReactNode;
   user?: User;
 };
-export const MainLayout: React.FC<LayoutProps> = ({ children }) => {
+export const PublicLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <Flex w="full" h="full" align="center" flexDir="column">
       <NavBar />
@@ -20,4 +20,4 @@ export const MainLayout: React.FC<LayoutProps> = ({ children }) => {
   );
 };
 
-export default MainLayout;
+export default PublicLayout;

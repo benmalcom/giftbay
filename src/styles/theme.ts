@@ -19,7 +19,7 @@ const styles = {
       },
     },
     input: {
-      borderColor: 'gray.600',
+      border: '2px solid gray.800',
     },
     '#__next': {
       height: '100%',
@@ -43,6 +43,13 @@ const fonts = {
 export const theme = extendTheme({
   fonts,
   styles,
+  components: {
+    Input: {
+      baseStyle: {
+        field: {},
+      },
+    },
+  },
 });
 
 export default theme;

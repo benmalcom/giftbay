@@ -24,14 +24,11 @@ import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { transformEventToFormValues } from 'components/events/utils';
 import { EventFormPayload, EventType } from 'types/event';
-import { WishlistFormPayload } from 'types/wishlist';
-import { CURRENCIES, EVENT_CARD_COLORS } from 'utils/constants';
+import { EVENT_CARD_COLORS } from 'utils/constants';
 import { ModalManager as EventModalManager } from './AddEventModal';
-import { ModalManager as WishlistItemModalManager } from './AddWishlistItemModal';
 
 type ComponentProps = {
   onSave(values: Partial<EventFormPayload>): void;
-  onSaveWishlist(values: WishlistFormPayload): void;
   event: EventType;
   onOpenMenu(): void;
   onCloseMenu(): void;
@@ -41,12 +38,7 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
   onCloseMenu,
   onOpenMenu,
   onSave,
-  onSaveWishlist,
 }) => {
-  const preferredCurrency = CURRENCIES.find(
-    item => item.value === event!.currency
-  );
-
   return (
     <Popover
       placement="bottom-end"
@@ -79,30 +71,6 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
           <PopoverHeader fontWeight="bold">Quick Actions</PopoverHeader>
           <PopoverBody w="full" h="fit-content" p={3}>
             <Stack spacing={4} mt={2}>
-              <Stack spacing={2}>
-                <Heading as="h6" size="xs" fontWeight={500}>
-                  Wishlists
-                </Heading>
-                <Flex w="full" h="fit-content" justifyContent="space-between">
-                  <WishlistItemModalManager
-                    preferredCurrency={preferredCurrency!.symbol}
-                    onSave={onSaveWishlist}
-                    triggerFunc={({ trigger }) => (
-                      <Button
-                        onClick={() => trigger()}
-                        colorScheme="purple"
-                        size="xs"
-                      >
-                        Add item to Wishlist
-                      </Button>
-                    )}
-                  />
-
-                  <Button colorScheme="purple" size="xs" variant="outline">
-                    View Wishlist
-                  </Button>
-                </Flex>
-              </Stack>
               <Stack spacing={2}>
                 <Heading as="h6" size="xs" fontWeight={500}>
                   Event Actions
