@@ -15,6 +15,7 @@ import {
   Box,
   Skeleton,
   Link as ChakraLink,
+  Heading,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { BsCardImage } from 'react-icons/bs';
@@ -195,9 +196,12 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
       </Flex>
       {showExtra && (
         <Flex flexDir="column" w="full" flexWrap="wrap" px={1} rowGap={2}>
+          <Heading as="h6" size="xs">
+            {wishlistItem.name}
+          </Heading>
           {wishlistItem.externalUrl && (
             <Stack spacing={0}>
-              <Text fontSize="xs" noOfLines={1} fontWeight={600}>
+              <Text fontSize="xs" noOfLines={1} fontWeight={500}>
                 Link to item
               </Text>
               <ChakraLink
