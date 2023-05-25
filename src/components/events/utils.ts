@@ -55,13 +55,13 @@ export const useEventFormSchema = ({ step }: { step: number }) => {
 
 export const getWishlistFormSchema = () => {
   return yup.object().shape({
-    amount: yup.number().required(),
+    amount: yup.number().typeError('Valid amount required').required(),
     quantity: yup.number().required(),
     giftFormat: yup.string().required(),
-    name: yup.string().required(),
+    name: yup.string().required('This is required'),
     imageUrl: yup.string(),
     externalUrl: yup.string(),
-    allowPartialPayment: yup.boolean(),
+    allowPartialPayments: yup.boolean(),
   });
 };
 

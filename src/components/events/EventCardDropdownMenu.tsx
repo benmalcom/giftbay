@@ -1,4 +1,9 @@
-import { CheckIcon } from '@chakra-ui/icons';
+import {
+  CheckIcon,
+  DeleteIcon,
+  EditIcon,
+  SettingsIcon,
+} from '@chakra-ui/icons';
 import {
   IconButton,
   Portal,
@@ -20,7 +25,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { transformEventToFormValues } from 'components/events/utils';
 import { EventFormPayload, EventType } from 'types/event';
 import { WishlistFormPayload } from 'types/wishlist';
-import { EVENT_CARD_COLORS } from 'utils/constants';
+import { CURRENCIES, EVENT_CARD_COLORS } from 'utils/constants';
 import { ModalManager as EventModalManager } from './AddEventModal';
 import { ModalManager as WishlistItemModalManager } from './AddWishlistItemModal';
 
@@ -38,6 +43,10 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
   onSave,
   onSaveWishlist,
 }) => {
+  const preferredCurrency = CURRENCIES.find(
+    item => item.value === event!.currency
+  );
+
   return (
     <Popover
       placement="bottom-end"
@@ -64,7 +73,7 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
         />
       </PopoverTrigger>
       <Portal>
-        <PopoverContent _focus={{ boxShadow: 'none' }} w="250px" shadow="xl">
+        <PopoverContent _focus={{ boxShadow: 'none' }} w="260px" shadow="xl">
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverHeader fontWeight="bold">Quick Actions</PopoverHeader>
@@ -76,6 +85,7 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
                 </Heading>
                 <Flex w="full" h="fit-content" justifyContent="space-between">
                   <WishlistItemModalManager
+                    preferredCurrency={preferredCurrency!.symbol}
                     onSave={onSaveWishlist}
                     triggerFunc={({ trigger }) => (
                       <Button
@@ -95,9 +105,9 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
               </Stack>
               <Stack spacing={2}>
                 <Heading as="h6" size="xs" fontWeight={500}>
-                  Card Actions
+                  Event Actions
                 </Heading>
-                <Flex w="full" h="fit-content" columnGap={3}>
+                <Flex w="full" h="fit-content" columnGap={2}>
                   <EventModalManager
                     initialValues={transformEventToFormValues(event)}
                     triggerFunc={({ trigger }) => (
@@ -106,14 +116,21 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
                         colorScheme="purple"
                         size="xs"
                         variant="outline"
+                        leftIcon={<EditIcon />}
                       >
-                        Edit this card
+                        Edit
                       </Button>
                     )}
                     onSave={onSave}
                   />
-
-                  <Button colorScheme="red" size="xs">
+                  <Button
+                    colorScheme="purple"
+                    size="xs"
+                    leftIcon={<SettingsIcon />}
+                  >
+                    Settings
+                  </Button>
+                  <Button colorScheme="red" size="xs" leftIcon={<DeleteIcon />}>
                     Delete
                   </Button>
                 </Flex>
@@ -127,7 +144,7 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
                     <Flex
                       key={index}
                       bg={color.value}
-                      border="1px solid"
+                      border="1px double"
                       borderColor={color.complement}
                       w="25px"
                       h="25px"

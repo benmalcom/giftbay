@@ -8,7 +8,7 @@ export type WishlistType = {
   externalUrl?: string;
   amount: number;
   quantity: number;
-  allowPartialPayment?: boolean;
+  allowPartialPayments?: boolean;
 };
 
 // Values from wishlist form

@@ -1,4 +1,4 @@
-import { DynamicObject } from 'types/global';
+import { DynamicObject } from 'types/common';
 
 export type ApiResponseError = {
   code: number;

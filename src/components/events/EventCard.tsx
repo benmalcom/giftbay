@@ -13,10 +13,12 @@ import {
   FlexColumn,
   MotionFlexColumn,
 } from 'components/common/MotionContainers';
+import wishlist from 'data/wishlist.json';
 import { EventFormPayload, EventType } from 'types/event';
 import { WishlistFormPayload } from 'types/wishlist';
 import { CURRENCIES } from 'utils/constants';
 import EventCardDropdownMenu from './EventCardDropdownMenu';
+import { ModalManager as WishlistModalManager } from './WishlistModal';
 
 type EventCardProps = {
   event: EventType;
@@ -61,7 +63,7 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
       <FlexColumn p="3" gridGap="2" h="full" w="full">
         <Flex justify="space-between" w="full" h="50%">
           <FlexColumn rowGap={5} w="full">
-            <Flex columnGap={2} w="full" justify="space-between">
+            <Flex w="full" justify="space-between">
               <Text
                 fontSize="xl"
                 color={event.foregroundColor}
@@ -77,16 +79,23 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
                 onSaveWishlist={handleWishlistSave}
               />
             </Flex>
-            <Button
-              variant="transparent"
-              color={event.foregroundColor}
-              bg="transparent"
-              rounded="3xl"
-              width="fit-content"
-              fontWeight={400}
-            >
-              {preferredCurrency?.symbol}250,000
-            </Button>
+            <WishlistModalManager
+              preferredCurrency={preferredCurrency!}
+              triggerFunc={({ trigger }) => (
+                <Button
+                  onClick={() => trigger()}
+                  variant="transparent"
+                  color={event.foregroundColor}
+                  bg="transparent"
+                  rounded="3xl"
+                  width="fit-content"
+                  fontWeight={400}
+                >
+                  {preferredCurrency?.symbol}250,000
+                </Button>
+              )}
+              wishlist={wishlist}
+            />
           </FlexColumn>
         </Flex>
         <Flex align="center" gridGap="4" h="50%" w="full">

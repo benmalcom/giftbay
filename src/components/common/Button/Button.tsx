@@ -22,13 +22,14 @@ function OutlineButton(props: ButtonProps) {
     <ChakraButton
       variant="outline"
       bg="white"
-      borderColor="pink.200"
-      color="pink.700"
+      borderColor="purple.200"
+      color="purple.700"
       shadow="sm"
       fontWeight="500"
-      _hover={{ bg: 'pink.800', color: 'white' }}
-      _active={{ bg: 'pink.900', color: 'white' }}
-      _disabled={{ bg: 'pink.300', color: 'white' }}
+      opacity="0.9"
+      _hover={{ bg: 'purple.50', opacity: 1 }}
+      _active={{ bg: 'purple.50', opacity: 1 }}
+      _disabled={{ bg: 'purple.50', opacity: 0.8 }}
       {...props}
     />
   );
@@ -38,7 +39,7 @@ function PrimaryButton(props: ButtonProps) {
   return (
     <ChakraButton
       color="white"
-      bgGradient="linear(to-r, purple.500, purple.300)"
+      bgGradient="linear(to-r, purple.500, purple.400)"
       opacity="0.9"
       _hover={{ opacity: 1 }}
       _active={{ opacity: 1 }}

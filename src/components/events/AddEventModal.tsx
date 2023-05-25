@@ -27,6 +27,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -122,8 +123,10 @@ const AddEventModal: React.FC<FormProps> = ({
       const { data } = await uploadImage(payload);
       setValue('coverPhoto', data?.file?.url);
       toast.success('Cover photo uploaded');
-    } catch (e: any) {
-      toast.error(e.message ?? 'Unable to upload cover photo');
+    } catch (err: unknown) {
+      toast.error(
+        (err as AxiosError).message ?? 'Unable to upload cover photo'
+      );
     } finally {
       setInUploadFlight(false);
     }

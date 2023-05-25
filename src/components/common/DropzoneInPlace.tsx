@@ -94,7 +94,12 @@ const DropzoneInPlace: React.FC<MyDropzoneProps> = ({
             cursor="pointer"
             onClick={() => handleRemove(0)}
           />
-          <Image w="full" h="full" src={files[0].preview} alt={`Preview`} />
+          <Image
+            w="full"
+            h="full"
+            src={files[0].preview}
+            alt={`Image preview`}
+          />
         </Box>
       ) : (
         <>

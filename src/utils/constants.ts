@@ -49,11 +49,12 @@ export const EVENT_CATEGORIES: { value: string; label: string }[] = [
 export const GIFT_FORMAT = [
   { label: 'Cash', value: 'cash' },
   { label: 'Product & Services', value: 'product_services' },
+  { label: 'Vouchers & Gift cards', value: 'vouchers_gift_cards' },
 ];
 
 export const CURRENCIES = [
-  { label: '₦ - Nigerian Naira', value: 'naira', symbol: '₦' },
-  { label: '$ - Dollars', value: 'dollar', symbol: '$' },
-  { label: '£ - Pounds', value: 'pound', symbol: '£' },
-  { label: '€ - Euro', value: 'euro', symbol: '€' },
+  { label: '₦ - Nigerian Naira', value: 'naira', symbol: '₦', code: 'NGN' },
+  { label: '$ - Dollars', value: 'dollar', symbol: '$', code: 'USD' },
+  { label: '£ - Pounds', value: 'pound', symbol: '£', code: 'GBP' },
+  { label: '€ - Euro', value: 'euro', symbol: '€', code: 'EUR' },
 ];

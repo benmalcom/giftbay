@@ -78,7 +78,8 @@
     "max-len": ["off", { "code": 120 }],
     "import/no-anonymous-default-export": "off",
     "react/react-in-jsx-scope": "off",
-    "react/no-unescaped-entities": "off"
+    "react/no-unescaped-entities": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   },
   "settings": {
     "import/resolver": {
