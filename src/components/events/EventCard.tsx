@@ -76,10 +76,10 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
                 onOpenMenu={() => setMenuOpen(true)}
                 event={event}
                 onSave={handleEventSave}
-                onSaveWishlist={handleWishlistSave}
               />
             </Flex>
             <WishlistModalManager
+              onSaveWishlist={handleWishlistSave}
               preferredCurrency={preferredCurrency!}
               triggerFunc={({ trigger }) => (
                 <Button
