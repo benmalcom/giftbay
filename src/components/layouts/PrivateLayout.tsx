@@ -22,13 +22,11 @@ import {
   MenuList,
 } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
-import { ReactText } from 'react';
 import { IconType } from 'react-icons';
 import {
   FiHome,
   FiTrendingUp,
   FiCompass,
-  FiStar,
   FiSettings,
   FiMenu,
   FiBell,
@@ -43,15 +41,10 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome },
   { name: 'Trending', icon: FiTrendingUp },
   { name: 'Explore', icon: FiCompass },
-  { name: 'Favourites', icon: FiStar },
   { name: 'Settings', icon: FiSettings },
 ];
 
-export default function SidebarWithHeader({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function PrivateLayout({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -66,7 +59,6 @@ export default function SidebarWithHeader({
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        size="full"
       >
         <DrawerContent>
           <SidebarContent onClose={onClose} />
@@ -74,9 +66,9 @@ export default function SidebarWithHeader({
       </Drawer>
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
+      <Flex w="full" border="1px solid red" mx={{ base: 0 }} justify="center">
         {children}
-      </Box>
+      </Flex>
     </Box>
   );
 }
@@ -92,7 +84,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w={{ base: 'full', md: 60 }}
+      w={{ base: 'full', md: '250px' }}
       pos="fixed"
       h="full"
       {...rest}
@@ -114,7 +106,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
-  children: ReactText;
+  children: React.ReactNode;
 }
 const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
   return (
@@ -214,7 +206,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 >
                   <Text fontSize="sm">Justina Clark</Text>
                   <Text fontSize="xs" color="gray.600">
-                    Admin
+                    User
                   </Text>
                 </VStack>
                 <Box display={{ base: 'none', md: 'flex' }}>

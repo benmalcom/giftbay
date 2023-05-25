@@ -2,23 +2,42 @@ import {
   Flex,
   Container,
   Button,
-  IconButton,
   HStack,
   ButtonGroup,
+  useDisclosure,
+  Box,
+  useColorModeValue,
+  CloseButton,
+  BoxProps,
+  FlexProps,
+  Icon,
+  Drawer,
+  DrawerContent,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import React from 'react';
-import { AiOutlinePoweroff } from 'react-icons/ai';
+import { IconType } from 'react-icons';
+import { FiCompass, FiHome, FiSettings, FiTrendingUp } from 'react-icons/fi';
 import { Logo } from 'components/common';
+import MobileNav from 'components/layouts/MobileNav';
 import { logOutUser } from 'services/auth';
 import { User } from 'types/user';
 import { APP_BASE_URL } from 'utils/constants';
 
-const links = [
-  { name: 'History', path: '/history', visible: false },
-  { name: 'Settings', path: '/settings', visible: true },
+interface LinkItemProps {
+  name: string;
+  icon: IconType;
+  path: string;
+  visible: boolean;
+}
+const LinkItems: Array<LinkItemProps> = [
+  { name: 'Home', icon: FiHome, path: '/home', visible: true },
+  { name: 'Trending', icon: FiTrendingUp, path: '/trending', visible: true },
+  { name: 'Explore', icon: FiCompass, path: '/explore', visible: true },
+  { name: 'Settings', icon: FiSettings, path: '/settings', visible: true },
 ];
 
 type NavBarProps = {
@@ -27,10 +46,8 @@ type NavBarProps = {
 
 const NavBar: React.FC<NavBarProps> = ({ user }) => {
   const router = useRouter();
-  const handleLogOut = async () => {
-    signOut({ callbackUrl: APP_BASE_URL });
-    await logOutUser();
-  };
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const isAuthenticated = Boolean(user);
   const isHomepage = router.pathname === '/';
@@ -39,48 +56,61 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
   const containerBorder = isHomepage ? '1px solid #ddd' : 'none';
 
   return (
-    <Flex
-      w="full"
-      minH="70px"
-      maxH="70px"
-      bg={wrapperBg}
-      borderBottom={wrapperBorder}
-      shadow="sm"
-    >
-      <Flex as="nav" w="full" h="full" align="center">
-        <Container
-          py={1.5}
-          maxW="7xl"
-          h="full"
-          alignItems="center"
-          bg="white"
-          border={containerBorder}
-        >
-          <Flex justify="space-between" align="center" h="full">
-            <Link href={isAuthenticated ? '/overview' : '/'} passHref>
-              <a>
-                <Logo />
-              </a>
-            </Link>
-            {isAuthenticated ? (
-              <Flex justify="space-between" flex="1">
-                <ButtonGroup variant="link" spacing="8" mr={5}>
-                  <Link href="/overview" passHref key="/overview">
-                    <Button
-                      as="a"
-                      textDecoration="none"
-                      fontSize="15px"
-                      fontWeight={400}
-                      color="#666"
-                    >
-                      Home
-                    </Button>
-                  </Link>
-                  {links
-                    .filter(item => item.visible)
-                    .map(item => (
+    <>
+      <Drawer
+        autoFocus={false}
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        returnFocusOnClose={false}
+        onOverlayClick={onClose}
+      >
+        <DrawerContent>
+          <SidebarContent onClose={onClose} />
+        </DrawerContent>
+      </Drawer>
+      <Flex
+        w="full"
+        minH="70px"
+        maxH="70px"
+        bg={wrapperBg}
+        borderBottom={wrapperBorder}
+        shadow="sm"
+      >
+        <Flex as="nav" w="full" h="full" align="center">
+          <Container
+            py={1.5}
+            maxW="7xl"
+            h="full"
+            alignItems="center"
+            bg="white"
+            border={containerBorder}
+          >
+            <Flex
+              justify="space-between"
+              align="center"
+              h="full"
+              columnGap={20}
+            >
+              <Box display={{ base: 'none', md: 'block' }}>
+                <Link href={isAuthenticated ? '/overview' : '/'} passHref>
+                  <a>
+                    <Logo />
+                  </a>
+                </Link>
+              </Box>
+              {!isAuthenticated ? (
+                <Flex justify="space-between" flex="1">
+                  <ButtonGroup
+                    variant="link"
+                    spacing="8"
+                    mr={5}
+                    display={{ base: 'none', md: 'flex' }}
+                  >
+                    {LinkItems.filter(item => item.visible).map(item => (
                       <Link href={item.path} passHref key={item.path}>
                         <Button
+                          leftIcon={<item.icon />}
                           as="a"
                           textDecoration="none"
                           fontSize="15px"
@@ -91,42 +121,113 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
                         </Button>
                       </Link>
                     ))}
-                </ButtonGroup>
-                <HStack spacing="3">
-                  <IconButton
+                  </ButtonGroup>
+
+                  <HStack spacing="3" w={{ base: 'full', md: 'fit-content' }}>
+                    <MobileNav onOpen={onOpen} />
+                    {/*<IconButton
                     title="Logout"
                     colorScheme="red"
                     onClick={handleLogOut}
                     variant="ghost"
                     icon={<AiOutlinePoweroff fontSize="1.25rem" />}
                     aria-label="Open Menu"
-                  />
-                </HStack>
-              </Flex>
-            ) : (
-              <Flex justify="end" align="center" columnGap={5}>
-                <Link href="/registry" passHref>
-                  <a>Registry</a>
-                </Link>
-                <ButtonGroup variant="link" spacing="8">
-                  <Link href="/login" passHref>
-                    <Button
-                      as="a"
-                      variant="solid"
-                      textDecoration="none"
-                      borderRadius="30px"
-                    >
-                      Sign In
-                    </Button>
+                  />*/}
+                  </HStack>
+                </Flex>
+              ) : (
+                <Flex justify="end" align="center" columnGap={5}>
+                  <Link href="/registry" passHref>
+                    <a>Registry</a>
                   </Link>
-                </ButtonGroup>
-              </Flex>
-            )}
-          </Flex>
-        </Container>
+                  <ButtonGroup variant="link" spacing="8">
+                    <Link href="/login" passHref>
+                      <Button
+                        as="a"
+                        variant="solid"
+                        textDecoration="none"
+                        borderRadius="30px"
+                      >
+                        Sign In
+                      </Button>
+                    </Link>
+                  </ButtonGroup>
+                </Flex>
+              )}
+            </Flex>
+          </Container>
+        </Flex>
       </Flex>
-    </Flex>
+    </>
   );
 };
 
 export default NavBar;
+
+interface SidebarProps extends BoxProps {
+  onClose: () => void;
+}
+const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  return (
+    <Box
+      transition="3s ease"
+      bg={useColorModeValue('white', 'gray.900')}
+      borderRight="1px"
+      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+      w={{ base: 'full', md: '250px' }}
+      pos="fixed"
+      h="full"
+      {...rest}
+    >
+      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+        <Logo />
+        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+      </Flex>
+      {LinkItems.map(link => (
+        <Link key={link.name} href={link.path} passHref>
+          <NavItem icon={link.icon}>{link.name}</NavItem>
+        </Link>
+      ))}
+    </Box>
+  );
+};
+
+interface NavItemProps extends FlexProps {
+  icon: IconType;
+  children: React.ReactNode;
+}
+const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+  return (
+    <ChakraLink
+      href="#"
+      style={{ textDecoration: 'none' }}
+      _focus={{ boxShadow: 'none' }}
+    >
+      <Flex
+        align="center"
+        p="4"
+        mx="4"
+        borderRadius="lg"
+        role="group"
+        cursor="pointer"
+        _hover={{
+          bg: 'cyan.400',
+          color: 'white',
+        }}
+        {...rest}
+      >
+        {icon && (
+          <Icon
+            mr="4"
+            fontSize="16"
+            _groupHover={{
+              color: 'white',
+            }}
+            as={icon}
+          />
+        )}
+        {children}
+      </Flex>
+    </ChakraLink>
+  );
+};

@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { MdOutlineKeyboardBackspace } from 'react-icons/md';
 import { FlexColumn } from 'components/common/MotionContainers';
 import { EventsGridLayout } from 'components/events';
+import PrivateLayout from 'components/layouts/PrivateLayout';
 import events from 'data/events.json';
 import { EventFormPayload } from 'types/event';
 
