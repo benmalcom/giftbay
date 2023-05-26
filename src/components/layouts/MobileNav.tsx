@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
   Avatar,
   Box,
@@ -14,8 +15,10 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import React from 'react';
+import { AiOutlinePlus } from 'react-icons/ai';
 import { FiChevronDown, FiMenu } from 'react-icons/fi';
 import { Logo } from 'components/common';
 import { logOutUser } from 'services/auth';
@@ -78,17 +81,24 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                     User
                   </Text>
                 </VStack>
-                <Box display={{ base: 'none', md: 'flex' }}>
-                  <FiChevronDown />
-                </Box>
+                <IconButton
+                  size="xs"
+                  icon={<ChevronDownIcon fontSize="lg" />}
+                  display={{ base: 'none', md: 'flex' }}
+                  aria-label="dropdown-icon"
+                />
               </HStack>
             </MenuButton>
             <MenuList
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}
             >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
+              <Link href="/profile" passHref>
+                <MenuItem>Profile</MenuItem>
+              </Link>
+              <Link href="/settings" passHref>
+                <MenuItem>Settings</MenuItem>
+              </Link>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
               <MenuItem onClick={handleLogOut}>Sign out</MenuItem>

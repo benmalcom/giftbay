@@ -6,3 +6,7 @@ export type CurrencyType = {
   symbol: string;
   code: string;
 };
+
+export type UploadedFile = File & {
+  preview: string;
+};

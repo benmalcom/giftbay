@@ -1,4 +1,4 @@
-import { UserDetailsFormData } from 'components/forms/settings/UserDetailsForm';
+import { UserDetailsFormData } from 'components/forms/profile/UpdateBioForm';
 import { createRequest } from './http';
 
 export const updateUser = async (

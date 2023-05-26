@@ -23,7 +23,7 @@ const Events = () => {
     <Container py={1.5} maxW="7xl" h="full" alignItems="center" mt="25px">
       <FlexColumn w="full" rowGap={8} mt={10}>
         <Box>
-          <Link href="/overview" passHref>
+          <Link href="/" passHref>
             <Button
               leftIcon={<MdOutlineKeyboardBackspace />}
               as="a"
@@ -33,7 +33,7 @@ const Events = () => {
               color="subtle"
               variant="link"
             >
-              Go to overview
+              Go Home
             </Button>
           </Link>
         </Box>
@@ -47,7 +47,7 @@ const Events = () => {
           alignItems="flex-start"
           w="full"
         >
-          <AlertTitle mb={1} fontSize="lg">
+          <AlertTitle mb={1} fontSize="md">
             Your Celebrations, Your Events: Welcome to your personalized event
             list.
           </AlertTitle>
