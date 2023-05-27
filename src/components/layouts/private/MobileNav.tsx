@@ -21,8 +21,8 @@ import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { FiChevronDown, FiMenu } from 'react-icons/fi';
 import { Logo } from 'components/common';
-import { logOutUser } from 'services/auth';
 import { APP_BASE_URL } from 'utils/constants';
+import { logOutUser } from '../../../services/auth';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -93,10 +93,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}
             >
-              <Link href="/profile" passHref>
+              <Link href="/src/pages/profile" passHref>
                 <MenuItem>Profile</MenuItem>
               </Link>
-              <Link href="/settings" passHref>
+              <Link href="/src/pages/settings" passHref>
                 <MenuItem>Settings</MenuItem>
               </Link>
               <MenuItem>Billing</MenuItem>

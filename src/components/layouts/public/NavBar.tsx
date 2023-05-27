@@ -22,10 +22,10 @@ import React from 'react';
 import { IconType } from 'react-icons';
 import { FiCompass, FiHome, FiSettings, FiTrendingUp } from 'react-icons/fi';
 import { Logo } from 'components/common';
-import MobileNav from 'components/layouts/MobileNav';
-import { logOutUser } from 'services/auth';
+import MobileNav from 'components/layouts/private/MobileNav';
 import { User } from 'types/user';
 import { APP_BASE_URL } from 'utils/constants';
+import { logOutUser } from '../../../services/auth';
 
 interface LinkItemProps {
   name: string;
@@ -125,14 +125,6 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
 
                   <HStack spacing="3" w={{ base: 'full', md: 'fit-content' }}>
                     <MobileNav onOpen={onOpen} />
-                    {/*<IconButton
-                    title="Logout"
-                    colorScheme="red"
-                    onClick={handleLogOut}
-                    variant="ghost"
-                    icon={<AiOutlinePoweroff fontSize="1.25rem" />}
-                    aria-label="Open Menu"
-                  />*/}
                   </HStack>
                 </Flex>
               ) : (
@@ -141,7 +133,7 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
                     <a>Registry</a>
                   </Link>
                   <ButtonGroup variant="link" spacing="8">
-                    <Link href="/login" passHref>
+                    <Link href="/src/pages/login" passHref>
                       <Button
                         as="a"
                         variant="solid"

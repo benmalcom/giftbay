@@ -7,7 +7,7 @@ import { SessionProvider } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { PageSpinner } from 'components/common';
-import { MainLayout } from 'components/layouts';
+import { MainLayout, PrivateLayout } from 'components/layouts';
 import RefreshTokenHandler from 'components/RefreshTokenHandler';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [clientLoaded, setClientLoaded] = useState(false);
   const [isGsspLoading, setIsGsspLoading] = useState(false);
 
-  const Layout = Component.Layout ?? MainLayout;
+  const Layout = Component.Layout ?? PrivateLayout;
   useEffect(() => {
     setClientLoaded(true);
   }, []);

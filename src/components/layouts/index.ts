@@ -1,3 +1,2 @@
-export { default as MainLayout } from './MainLayout';
-export { default as NavBar } from './NavBar';
-export { default as Footer } from './Footer';
+export { default as MainLayout } from './public/Layout';
+export { default as PrivateLayout } from './private/Layout';
