@@ -40,10 +40,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       transition="3s ease"
       bg="gray.50"
       borderRight="1px double"
-      borderColor="gray.200"
+      borderColor="rgba(0, 0, 0, .1)"
       w={{ base: 'full', xl: '260px' }}
       h="full"
-      shadow="md"
+      shadow="sm"
       {...rest}
     >
       <Flex

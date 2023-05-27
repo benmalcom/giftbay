@@ -3,6 +3,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Heading,
   Input,
   Stack,
 } from '@chakra-ui/react';
@@ -87,7 +88,18 @@ const PayoutSettingsForm: React.FC<FormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing="6">
+      <Stack
+        spacing="6"
+        w={{ base: '95%', sm: '350px', lg: '450px', xl: '550px' }}
+        bg="white"
+        p={8}
+        shadow="base"
+        borderRadius="md"
+        mx="auto"
+      >
+        <Heading as="h4" size="md" fontWeight={500}>
+          Payout Settings
+        </Heading>
         <Stack spacing="5">
           <FormControl isInvalid={Boolean(errors.bankName)}>
             <FormLabel htmlFor="bankName">Select Bank Name</FormLabel>
@@ -130,6 +142,7 @@ const PayoutSettingsForm: React.FC<FormProps> = ({
               {...register('accountName')}
               placeholder="Enter account name"
               errorBorderColor="red.300"
+              isDisabled={!formValues.bankName}
             />
             <FormErrorMessage>
               {errors?.accountName?.message &&
@@ -145,6 +158,7 @@ const PayoutSettingsForm: React.FC<FormProps> = ({
               {...register('accountNumber')}
               placeholder="Enter account number"
               errorBorderColor="red.300"
+              isDisabled={!formValues.bankName}
             />
             <FormErrorMessage>
               {errors?.accountNumber?.message &&
@@ -152,7 +166,7 @@ const PayoutSettingsForm: React.FC<FormProps> = ({
             </FormErrorMessage>
           </FormControl>
 
-          <Stack spacing="1" direction="row" justifyContent="end">
+          <Stack spacing="1" direction="row">
             <Button type="submit" colorScheme="purple" isLoading={loading}>
               Submit
             </Button>

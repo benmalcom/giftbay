@@ -1,4 +1,10 @@
-import { Button, Checkbox, FormControl, Stack } from '@chakra-ui/react';
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  Heading,
+  Stack,
+} from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -33,7 +39,18 @@ const NotificationsForm: React.FC<FormProps> = ({ onSave, loading }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing="6">
+      <Stack
+        spacing="6"
+        w={{ base: '95%', sm: '350px', lg: '450px', xl: '550px' }}
+        bg="white"
+        p={8}
+        shadow="base"
+        borderRadius="md"
+        mx="auto"
+      >
+        <Heading as="h4" size="md" fontWeight={500}>
+          Notification Settings
+        </Heading>
         <Stack spacing="5">
           <FormControl>
             <Controller
@@ -68,7 +85,7 @@ const NotificationsForm: React.FC<FormProps> = ({ onSave, loading }) => {
             />
           </FormControl>
         </Stack>
-        <Stack spacing="1" direction="row" justifyContent="end">
+        <Stack spacing="1" direction="row">
           <Button type="submit" colorScheme="purple" isLoading={loading}>
             Save
           </Button>

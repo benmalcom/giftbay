@@ -3,6 +3,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Heading,
   Stack,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -54,7 +55,18 @@ const ChangePasswordForm: React.FC<FormProps> = ({ onSave, loading }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing="6">
+      <Stack
+        spacing="6"
+        w={{ base: '95%', sm: '350px', lg: '450px', xl: '550px' }}
+        bg="white"
+        p={8}
+        shadow="base"
+        borderRadius="md"
+        mx="auto"
+      >
+        <Heading as="h4" size="md" fontWeight={500}>
+          Change Password
+        </Heading>
         <Stack spacing="5">
           <FormControl isInvalid={Boolean(errors.oldPassword)}>
             <FormLabel htmlFor="oldPassword">Current Password</FormLabel>
@@ -98,7 +110,7 @@ const ChangePasswordForm: React.FC<FormProps> = ({ onSave, loading }) => {
             </FormErrorMessage>
           </FormControl>
         </Stack>
-        <Stack spacing="1" direction="row" justifyContent="end">
+        <Stack spacing="1" direction="row">
           <Button type="submit" colorScheme="purple" isLoading={loading}>
             Submit
           </Button>

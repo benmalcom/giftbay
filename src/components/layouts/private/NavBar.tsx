@@ -68,12 +68,13 @@ const NavBar: React.FC<NavBarProps> = ({ user, onClose, isOpen, onOpen }) => {
         w="full"
         minH="70px"
         maxH="70px"
-        shadow="sm"
         borderBottom="1px solid"
-        borderBottomColor="gray.200"
+        borderBottomColor="rgba(0, 0, 0, .1)"
         as="nav"
         align="center"
         px={5}
+        bg="gray.50"
+        shadow="sm"
       >
         <Flex
           as="nav"

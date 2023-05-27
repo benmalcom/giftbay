@@ -5,7 +5,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
+  Heading,
   Icon,
   Input,
   Stack,
@@ -109,14 +109,25 @@ const UpdateBioForm: React.FC<FormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing="6">
+      <Stack
+        spacing="6"
+        w={{ base: '95%', sm: '350px', lg: '450px', xl: '550px' }}
+        bg="white"
+        p={8}
+        shadow="base"
+        borderRadius="md"
+        mx="auto"
+      >
+        <Heading as="h4" size="md" fontWeight={500}>
+          Update Bio/Avatar
+        </Heading>
         <Flex
           w="full"
-          flexDirection={{ base: 'column', md: 'row' }}
+          flexDirection={{ base: 'column', lg: 'row' }}
           alignItems={{ base: 'center', sm: 'flex-start' }}
           columnGap={5}
         >
-          <VStack spacing={3} w={{ base: 'full', md: '30%' }} mb={10}>
+          <VStack spacing={3} w={{ base: 'full', lg: '30%' }} mb={10}>
             {isUploadView ? (
               <>
                 <DropzoneInPlace
@@ -158,7 +169,7 @@ const UpdateBioForm: React.FC<FormProps> = ({
             )}
           </VStack>
 
-          <Stack flex={1} w={{ base: 'full', sm: '70%' }} spacing="5">
+          <Stack flex={1} w={{ base: 'full', lg: '70%' }} spacing="5">
             <FormControl isInvalid={Boolean(errors.firstName)}>
               <FormLabel htmlFor="firstName">First Name</FormLabel>
               <Input
@@ -205,7 +216,7 @@ const UpdateBioForm: React.FC<FormProps> = ({
           </Stack>
         </Flex>
 
-        <Stack spacing="1" direction="row" justifyContent="end">
+        <Stack spacing="1" direction="row">
           <Button type="submit" colorScheme="purple" isLoading={loading}>
             Submit
           </Button>

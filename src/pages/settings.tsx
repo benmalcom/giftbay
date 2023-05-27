@@ -1,13 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-  Flex,
-  Tabs,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tab,
-  Alert,
-} from '@chakra-ui/react';
+import { Flex, Alert, Stack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { PageSpinner } from 'components/common';
 import {
@@ -33,41 +25,22 @@ const Settings = () => {
   // if (inGetUserFlight || error) return <PageSpinner />;
 
   return (
-    <Flex w="full" justify="center" mt="100px">
-      <Flex w={{ base: '95%', sm: '550px' }} h="fit-content" flexDir="column">
-        <Alert colorScheme="purple" variant="left-accent">
-          Update your payout and notifications here.
-        </Alert>
-        <Tabs
-          mt="50px"
-          bg="white"
-          py={8}
-          mx="auto"
-          boxShadow="base"
-          borderRadius="xl"
-          w="full"
-          colorScheme="purple"
-        >
-          <TabList>
-            <Tab>Payout Settings</Tab>
-            <Tab>Notifications</Tab>
-          </TabList>
-
-          <TabPanels px={5}>
-            <TabPanel>
-              <PayoutSettingsForm
-                onSave={onSubmitPayout}
-                loading={inPayoutFlight}
-              />
-            </TabPanel>
-            <TabPanel>
-              <NotificationsForm
-                onSave={onSubmitNotifications}
-                loading={inNotificationsFlight}
-              />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+    <Flex w="full" justify="center">
+      <Flex
+        mt={{ base: '50px', md: '70px', xl: '100px' }}
+        mx="auto"
+        w="full"
+        columnGap={6}
+        flexDir={{ base: 'column', md: 'row' }}
+        rowGap={8}
+        h="fit-content"
+        justify="center"
+      >
+        <PayoutSettingsForm onSave={onSubmitPayout} loading={inPayoutFlight} />
+        <NotificationsForm
+          onSave={onSubmitNotifications}
+          loading={inNotificationsFlight}
+        />
       </Flex>
     </Flex>
   );

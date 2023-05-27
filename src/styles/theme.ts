@@ -49,6 +49,11 @@ export const theme = extendTheme({
         field: {},
       },
     },
+    FormLabel: {
+      baseStyle: {
+        fontWeight: 400, // Normally, it is "semibold"
+      },
+    },
   },
 });
 
