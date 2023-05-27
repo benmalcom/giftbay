@@ -50,7 +50,7 @@ const Profile = () => {
   return (
     <Flex w="full" justify="center" mt="100px">
       <Flex w={{ base: '95%', sm: '550px' }} h="fit-content" flexDir="column">
-        <Alert status="warning" variant="subtle">
+        <Alert variant="left-accent" colorScheme="purple">
           Update your bio details and change your password here.
         </Alert>
         <Tabs

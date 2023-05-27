@@ -21,8 +21,8 @@ const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({
       gridTemplateColumns={{
         base: '90%',
         sm: '95%',
-        md: 'repeat(2, 40%)',
-        lg: 'repeat(3, 1fr)',
+        md: 'repeat(2, 300px)',
+        lg: 'repeat(3, 300px)',
         xl: 'repeat(4, 1fr)',
       }}
       gridGap="6"

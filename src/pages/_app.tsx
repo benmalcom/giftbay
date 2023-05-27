@@ -7,7 +7,7 @@ import { SessionProvider } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { PageSpinner } from 'components/common';
-import { MainLayout, PrivateLayout } from 'components/layouts';
+import { PublicLayout, PrivateLayout } from 'components/layouts';
 import RefreshTokenHandler from 'components/RefreshTokenHandler';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
@@ -59,7 +59,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       />
 
       <SessionProvider session={pageProps.session}>
-        <Layout user={pageProps?.user as unknown as User}>
+        <Layout>
           <Component {...pageProps} />
           <RefreshTokenHandler />
         </Layout>

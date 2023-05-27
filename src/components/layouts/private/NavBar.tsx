@@ -29,19 +29,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import React from 'react';
-import { IconType } from 'react-icons';
-import {
-  FiCompass,
-  FiHome,
-  FiMenu,
-  FiSettings,
-  FiTrendingUp,
-} from 'react-icons/fi';
+import { FiMenu } from 'react-icons/fi';
 import { Logo } from 'components/common';
 import { logOutUser } from 'services/auth';
 import { User } from 'types/user';
 import { APP_BASE_URL } from 'utils/constants';
-import SidebarContent from './Sidebar';
+import SidebarContent from './SidebarContent';
 
 type NavBarProps = {
   user?: User;
@@ -76,23 +69,26 @@ const NavBar: React.FC<NavBarProps> = ({ user, onClose, isOpen, onOpen }) => {
         minH="70px"
         maxH="70px"
         shadow="sm"
+        borderBottom="1px solid"
+        borderBottomColor="gray.200"
         as="nav"
         align="center"
         px={5}
       >
         <Flex
           as="nav"
-          justify={{ base: 'space-between', lg: 'end' }}
+          justify={{ base: 'space-between', xl: 'end' }}
           align="center"
           w="full"
           h="full"
           columnGap={5}
         >
+          {/* Display mobile menu button until large devices*/}
           <Flex
             align="center"
             h="full"
             columnGap={3}
-            display={{ base: 'flex', lg: 'none' }}
+            display={{ base: 'flex', xl: 'none' }}
           >
             <IconButton
               onClick={onOpen}

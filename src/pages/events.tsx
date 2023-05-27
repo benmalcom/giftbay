@@ -41,7 +41,7 @@ const Events = () => {
           My special moments
         </Heading>
         <Alert
-          status="warning"
+          colorScheme="purple"
           variant="left-accent"
           flexDirection="column"
           alignItems="flex-start"

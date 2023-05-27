@@ -34,8 +34,8 @@ const Settings = () => {
 
   return (
     <Flex w="full" justify="center" mt="100px">
-      <Flex width="550px" h="fit-content" flexDir="column">
-        <Alert status="warning" variant="subtle">
+      <Flex w={{ base: '95%', sm: '550px' }} h="fit-content" flexDir="column">
+        <Alert colorScheme="purple" variant="left-accent">
           Update your payout and notifications here.
         </Alert>
         <Tabs
