@@ -36,8 +36,8 @@ const styles = {
 };
 
 const fonts = {
-  heading: `'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
-  body: `'Montseratt', 'Helvetica Neue', Helvetica, Arial, sans-serif`,
+  heading: `Mulish, "Helvetica Neue", Helvetica, Arial, sans-serif`,
+  body: `Mulish, "Helvetica Neue", Helvetica, Arial, sans-serif`,
 };
 
 export const theme = extendTheme({
@@ -45,8 +45,25 @@ export const theme = extendTheme({
   styles,
   components: {
     Input: {
-      baseStyle: {
-        field: {},
+      baseStyle: {},
+      // Credit: https://stackoverflow.com/questions/70809036/how-can-i-overwrite-styles-of-an-autofilled-input-when-using-chakra-ui
+      variants: {
+        backgroundFix: {
+          field: {
+            bg: 'gray.50',
+            _hover: {
+              border: '1px solid',
+              borderColor: 'gray.300',
+            },
+            _focus: {
+              border: '1px solid',
+              borderColor: 'gray.300',
+            },
+          },
+        },
+      },
+      defaultProps: {
+        variant: 'backgroundFix',
       },
     },
     FormLabel: {
