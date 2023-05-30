@@ -24,11 +24,12 @@ import {
   FormHelperText,
   Box,
   Checkbox,
+  usePrevious,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState } from 'react';
+import { isEqual } from 'lodash';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import { BsImage } from 'react-icons/bs';
 import { DropzoneInPlace } from 'components/common';
 import {
@@ -39,9 +40,10 @@ import {
   getWishlistFormSchema,
   parseWishlistFormValues,
 } from 'components/events/utils';
-import { uploadImage } from 'services/media';
+import useFileUpload from 'hooks/useFileUpload';
 import { WishlistFormPayload, WishlistFormValues } from 'types/wishlist';
 import { GIFT_FORMAT } from 'utils/constants';
+import { removePreviewFromUploadedFiles } from 'utils/functions';
 
 type FormProps = {
   onSave(values: WishlistFormPayload): void;
@@ -61,7 +63,13 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
   preferredCurrency,
 }) => {
   const [isImageLoaded, setImageLoaded] = useState(false);
-  const [inUploadFlight, setInUploadFlight] = useState(false);
+
+  const {
+    loading: inUploadFlight,
+    url: imageUrl,
+    error: uploadError,
+    uploadFile,
+  } = useFileUpload();
 
   const defaultValues = {
     allowPartialPayments: false,
@@ -98,27 +106,19 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
     onClose();
   };
 
-  const handleImageUpload = async (files: File[]) => {
-    if (!files.length) {
-      setValue('imageUrl', undefined);
-      return;
+  const prevImageUrl = usePrevious(imageUrl);
+  useEffect(() => {
+    if (imageUrl && !isEqual(prevImageUrl, imageUrl)) {
+      setValue('imageUrl', imageUrl);
     }
-    setInUploadFlight(true);
-    const file = files[0];
-    const payload = new FormData();
-    payload.append('type', 'banner');
-    payload.append('file', file);
-    try {
-      const { data } = await uploadImage(payload);
-      setValue('imageUrl', data?.file?.url);
-      toast.success('Image uploaded');
-    } catch (e: any) {
-      toast.error(e.message ?? 'Unable to upload image');
-    } finally {
-      setValue('imageUrl', undefined);
-      setInUploadFlight(false);
-    }
-  };
+  }, [setValue, imageUrl, prevImageUrl]);
+
+  useEffect(() => {
+    if (uploadError) console.log('Upload error ', uploadError);
+  }, [uploadError]);
+
+  const handleImageUpload = async (files: File[]) =>
+    uploadFile(removePreviewFromUploadedFiles(files)[0]);
 
   return (
     <Modal
@@ -227,7 +227,17 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
                 </Stack>
                 <Flex w={{ base: '100%', md: '40%' }} h="100%">
                   {formValues.imageUrl ? (
-                    <Box w="100" h="150px" pos="relative">
+                    <Box
+                      w="100"
+                      h="150px"
+                      pos="relative"
+                      bg="white"
+                      p="1px"
+                      shadow="md"
+                      borderRadius="4px"
+                      border="1px solid"
+                      borderColor="gray.200"
+                    >
                       {isImageLoaded && (
                         <CloseIcon
                           pos="absolute"
@@ -251,7 +261,9 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
                     <DropzoneInPlace
                       loading={inUploadFlight}
                       showPreview
-                      onUpload={handleImageUpload}
+                      onUpload={files =>
+                        files.length > 0 && handleImageUpload(files)
+                      }
                       flexWrapperProps={{
                         w: '100%',
                         h: '150px',

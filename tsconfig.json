@@ -9,7 +9,9 @@
       "stories/*": ["stories/*"],
       "types/*": ["types/*"],
       "data/*": ["data/*"],
-      "hooks/*": ["hooks/*"]
+      "hooks/*": ["hooks/*"],
+      "contexts/*": ["contexts/*"],
+      "services/*": ["services/*"]
     },
     "typeRoots": ["src/vendor/@types", "node_modules/@types"],
     "target": "es5",

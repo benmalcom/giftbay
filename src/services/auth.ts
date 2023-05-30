@@ -7,11 +7,11 @@ export const loginOrRegister = async <C>(
   credentials: Record<keyof C, string> | undefined
 ) => {
   const isRegister = !!credentials && 'isRegister' in credentials;
-  const inputFields = ['email', 'password', 'verifyRedirectUrl'];
+  const inputFields = ['email', 'password'];
   if (isRegister) inputFields.push('name');
   const payload = pick(credentials, inputFields);
   return await createRequest({
-    url: isRegister ? '/auth/register' : '/auth/login',
+    url: isRegister ? '/auth/signup' : '/auth/login',
     payload,
     method: 'post',
   });
@@ -48,6 +48,34 @@ export const verifyEmail = async (token: string) => {
   return await createRequest({
     url: '/auth/verify-email',
     params: { token },
+    method: 'post',
+  });
+};
+
+export const sendPasswordResetEmail = async (
+  payload: Record<string, string>
+) => {
+  return await createRequest({
+    url: '/auth/send-forgot-password-email',
+    payload,
+    method: 'post',
+  });
+};
+
+export const resetPassword = async (payload: Record<string, string>) => {
+  return await createRequest({
+    url: '/auth/reset-password',
+    payload,
+    method: 'post',
+  });
+};
+
+export const resendVerificationLink = async (
+  payload: Record<string, string>
+) => {
+  return await createRequest({
+    url: '/auth/resend-verification-link',
+    payload,
     method: 'post',
   });
 };

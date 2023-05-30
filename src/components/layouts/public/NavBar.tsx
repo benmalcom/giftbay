@@ -2,7 +2,6 @@ import {
   Flex,
   Container,
   Button,
-  HStack,
   ButtonGroup,
   useDisclosure,
   Box,
@@ -17,15 +16,10 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { signOut } from 'next-auth/react';
 import React from 'react';
 import { IconType } from 'react-icons';
-import { FiCompass, FiHome, FiSettings, FiTrendingUp } from 'react-icons/fi';
+import { FiHome, FiTrendingUp } from 'react-icons/fi';
 import { Logo } from 'components/common';
-import MobileNav from 'components/layouts/private/MobileNav';
-import { User } from 'types/user';
-import { APP_BASE_URL } from 'utils/constants';
-import { logOutUser } from '../../../services/auth';
 
 interface LinkItemProps {
   name: string;
@@ -35,21 +29,14 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome, path: '/home', visible: true },
-  { name: 'Insights', icon: FiTrendingUp, path: '/insights', visible: true },
-  { name: 'Explore', icon: FiCompass, path: '/events', visible: true },
-  { name: 'Settings', icon: FiSettings, path: '/settings', visible: true },
+  { name: 'Registry', icon: FiTrendingUp, path: '/registry', visible: true },
 ];
 
-type NavBarProps = {
-  user?: User;
-};
-
-const NavBar: React.FC<NavBarProps> = ({ user }) => {
+const NavBar = () => {
   const router = useRouter();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onClose } = useDisclosure();
 
-  const isAuthenticated = Boolean(user);
   const isHomepage = router.pathname === '/';
   const wrapperBg = isHomepage ? 'purple.50' : 'white';
   const wrapperBorder = isHomepage ? 'none' : '1px solid #ddd';
@@ -93,59 +80,30 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
               columnGap={20}
             >
               <Box display={{ base: 'none', md: 'block' }}>
-                <Link href={isAuthenticated ? '/overview' : '/'} passHref>
+                <Link href="/" passHref>
                   <a>
                     <Logo />
                   </a>
                 </Link>
               </Box>
-              {!isAuthenticated ? (
-                <Flex justify="space-between" flex="1">
-                  <ButtonGroup
-                    variant="link"
-                    spacing="8"
-                    mr={5}
-                    display={{ base: 'none', md: 'flex' }}
-                  >
-                    {LinkItems.filter(item => item.visible).map(item => (
-                      <Link href={item.path} passHref key={item.path}>
-                        <Button
-                          leftIcon={<item.icon />}
-                          as="a"
-                          textDecoration="none"
-                          fontSize="15px"
-                          fontWeight={400}
-                          color="#666"
-                        >
-                          {item.name}
-                        </Button>
-                      </Link>
-                    ))}
-                  </ButtonGroup>
 
-                  <HStack spacing="3" w={{ base: 'full', md: 'fit-content' }}>
-                    <MobileNav onOpen={onOpen} />
-                  </HStack>
-                </Flex>
-              ) : (
-                <Flex justify="end" align="center" columnGap={5}>
-                  <Link href="/registry" passHref>
-                    <a>Registry</a>
+              <Flex justify="end" align="center" columnGap={5}>
+                <Link href="/registry" passHref>
+                  <a>Registry</a>
+                </Link>
+                <ButtonGroup variant="link" spacing="8">
+                  <Link href="/login" passHref>
+                    <Button
+                      as="a"
+                      variant="solid"
+                      textDecoration="none"
+                      borderRadius="30px"
+                    >
+                      Sign In
+                    </Button>
                   </Link>
-                  <ButtonGroup variant="link" spacing="8">
-                    <Link href="/src/pages/login" passHref>
-                      <Button
-                        as="a"
-                        variant="solid"
-                        textDecoration="none"
-                        borderRadius="30px"
-                      >
-                        Sign In
-                      </Button>
-                    </Link>
-                  </ButtonGroup>
-                </Flex>
-              )}
+                </ButtonGroup>
+              </Flex>
             </Flex>
           </Container>
         </Flex>

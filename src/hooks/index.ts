@@ -1,2 +1,2 @@
 export { default as useFileUpload } from './useFileUpload';
-export { default as useCurrentUser } from './useCurrentUser';
+export { default as useCurrentUser } from './useLoggedInUser';

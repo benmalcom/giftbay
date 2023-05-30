@@ -24,24 +24,28 @@ import {
   Flex,
   Image,
   Icon,
+  VStack,
+  Text,
+  usePrevious,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AxiosError } from 'axios';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
+import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { BsImage } from 'react-icons/bs';
 import { FaTimesCircle } from 'react-icons/fa';
+import { DropzoneInPlace } from 'components/common';
 import { CustomModalCloseButton } from 'components/common/Button';
 import { Select } from 'components/common/Select';
 import {
   parseEventFormValues,
   useEventFormSchema,
 } from 'components/events/utils';
-import { uploadImage } from 'services/media';
+import { useFileUpload } from 'hooks/index';
 import { EventFormPayload, EventFormValues } from 'types/event';
 import { CURRENCIES, EVENT_CATEGORIES } from 'utils/constants';
-import EventDropZone from './MyDropZone';
+import { removePreviewFromUploadedFiles } from 'utils/functions';
 
 type FormProps = {
   onSave(values: EventFormPayload): void;
@@ -63,7 +67,12 @@ const AddEventModal: React.FC<FormProps> = ({
   const schema = useEventFormSchema({ step: currentStep });
   const [progress, setProgress] = useState(0);
   const [isBannerLoaded, setBannerLoaded] = useState(false);
-  const [inUploadFlight, setInUploadFlight] = useState(false);
+  const {
+    loading: inUploadFlight,
+    url: coverPhotoUrl,
+    error: uploadError,
+    uploadFile,
+  } = useFileUpload();
 
   const LAST_STEP = STEPS;
   const FIRST_STEP = 1;
@@ -109,28 +118,19 @@ const AddEventModal: React.FC<FormProps> = ({
   });
   const formValues = watch();
 
-  const handleCoverPhotoUpload = async (files: File[]) => {
-    if (!files.length) {
-      setValue('coverPhoto', undefined);
-      return;
+  const handleCoverPhotoUpload = async (files: File[]) =>
+    uploadFile(removePreviewFromUploadedFiles(files)[0]);
+
+  const prevCoverPhotoUrl = usePrevious(coverPhotoUrl);
+  useEffect(() => {
+    if (coverPhotoUrl && !isEqual(prevCoverPhotoUrl, coverPhotoUrl)) {
+      setValue('coverPhoto', coverPhotoUrl);
     }
-    setInUploadFlight(true);
-    const file = files[0];
-    const payload = new FormData();
-    payload.append('type', 'banner');
-    payload.append('file', file);
-    try {
-      const { data } = await uploadImage(payload);
-      setValue('coverPhoto', data?.file?.url);
-      toast.success('Cover photo uploaded');
-    } catch (err: unknown) {
-      toast.error(
-        (err as AxiosError).message ?? 'Unable to upload cover photo'
-      );
-    } finally {
-      setInUploadFlight(false);
-    }
-  };
+  }, [coverPhotoUrl, prevCoverPhotoUrl, setValue]);
+
+  useEffect(() => {
+    if (uploadError) console.log('Upload error ', uploadError);
+  }, [uploadError]);
 
   const handleClose = () => {
     reset();
@@ -335,9 +335,11 @@ const AddEventModal: React.FC<FormProps> = ({
                             pos="relative"
                             bg="white"
                             rounded="md"
-                            border="1px solid"
-                            borderColor="gray.300"
                             p="1px"
+                            shadow="md"
+                            borderRadius="4px"
+                            border="1px solid"
+                            borderColor="gray.200"
                           >
                             <Image
                               w="full"
@@ -367,11 +369,28 @@ const AddEventModal: React.FC<FormProps> = ({
                               Upload a cover photo for your registry page, if
                               none we'll use our default.
                             </FormHelperText>
-                            <EventDropZone
-                              showPreview
-                              onUpload={handleCoverPhotoUpload}
-                              maxFiles={1}
+                            <DropzoneInPlace
                               loading={inUploadFlight}
+                              onUpload={files =>
+                                files.length > 0 &&
+                                handleCoverPhotoUpload(files)
+                              }
+                              flexWrapperProps={{
+                                w: '100%',
+                                h: '130px',
+                              }}
+                              dropPlaceholder={
+                                <VStack>
+                                  <Icon
+                                    as={BsImage}
+                                    boxSize="2em"
+                                    color="purple.500"
+                                  />
+                                  <Text textAlign="center" fontSize="sm">
+                                    Select photo or Drag file here
+                                  </Text>
+                                </VStack>
+                              }
                             />
                           </>
                         )}

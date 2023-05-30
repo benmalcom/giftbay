@@ -1,10 +1,12 @@
-import { ReactNode, useReducer, createContext } from 'react';
+import { ReactNode, useReducer, createContext, Dispatch } from 'react';
 import { User } from 'types/user';
 
-type DispatchUserContextT = unknown;
+const initialState = null;
 
-export const DispatchUserContext = createContext<DispatchUserContextT | null>(
-  null
+type DispatchUserContextT = Dispatch<DispatchActionType>;
+
+export const DispatchUserContext = createContext<DispatchUserContextT>(
+  () => null
 );
 export const UserContext = createContext<User | null>(null);
 
@@ -27,8 +29,8 @@ const reducer = (
   }
 };
 
-const UserProvider = ({ children }: { children: ReactNode }): ReactNode => {
-  const [state, dispatch] = useReducer(reducer, null);
+const UserProvider = ({ children }: { children: ReactNode }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <DispatchUserContext.Provider value={dispatch}>

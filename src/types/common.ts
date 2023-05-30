@@ -10,3 +10,7 @@ export type CurrencyType = {
 export type UploadedFile = File & {
   preview: string;
 };
+
+export type AppConfig = {
+  layoutOrientation: 'vertical' | 'horizontal';
+};

@@ -1,16 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-  Flex,
-  Tabs,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tab,
-  Alert,
-} from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { Flex } from '@chakra-ui/react';
+import { AxiosResponse } from 'axios';
+import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
-import { PageSpinner } from 'components/common';
 import {
   UpdateBioFormValues,
   UpdateBioForm,
@@ -18,21 +10,23 @@ import {
   ChangePasswordFormValues,
 } from 'components/forms/profile';
 
-import useCurrentUser from 'hooks/useCurrentUser';
-import { updateUser } from '../services/user';
+import { PrivateLayout } from 'components/layouts';
+import { DispatchUserContext, UserContext } from 'contexts/UserProvider';
+import { updateLoggedInUser, changeLoggedInUserPassword } from 'services/user';
+import { User } from 'types/user';
+import { withAuthServerSideProps } from 'utils/serverSideProps';
 
 const Profile = () => {
   const [inUpdateUserFlight, setInUpdateUserFlight] = useState(false);
-  const [inChangePasswordFlight /*setInChangePasswordFlight*/] =
-    useState(false);
-  // const { loading: inGetUserFlight, user, error } = useCurrentUser();
+  const [inChangePasswordFlight, setInChangePasswordFlight] = useState(false);
+  const user = useContext(UserContext);
+  const dispatchUser = useContext(DispatchUserContext);
 
-  const onSubmitUserDetails = (values: UpdateBioFormValues) => {
+  const onSubmitUserBio = (values: UpdateBioFormValues) => {
     setInUpdateUserFlight(true);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    updateUser(user!.id, values)
-      .then(() => {
+    updateLoggedInUser(values)
+      .then((response: AxiosResponse<{ user: User }>) => {
+        dispatchUser({ type: 'update', payload: response.data.user });
         toast.success('Success!');
       })
       .catch(error => {
@@ -42,10 +36,14 @@ const Profile = () => {
   };
 
   const onSubmitPasswordChange = (values: ChangePasswordFormValues) => {
-    console.log('values ', values);
+    setInChangePasswordFlight(true);
+    changeLoggedInUserPassword(values)
+      .then(() => toast.success('Success!'))
+      .catch(error => {
+        toast.error(error.message);
+      })
+      .finally(() => setInChangePasswordFlight(false));
   };
-
-  // if (inGetUserFlight || error) return <PageSpinner />;
 
   return (
     <Flex w="full" justify="center">
@@ -60,8 +58,9 @@ const Profile = () => {
         justify="center"
       >
         <UpdateBioForm
-          onSave={onSubmitUserDetails}
+          onSave={onSubmitUserBio}
           loading={inUpdateUserFlight}
+          initialValues={user ?? undefined}
         />
 
         <ChangePasswordForm
@@ -72,11 +71,12 @@ const Profile = () => {
     </Flex>
   );
 };
+Profile.Layout = PrivateLayout;
 export default Profile;
-/*export const getServerSideProps = withAuthServerSideProps(() => {
+export const getServerSideProps = withAuthServerSideProps(() => {
   return {
     props: {
-      pageTitle: 'Settings',
+      pageTitle: 'Profile',
     },
   };
-});*/
+});

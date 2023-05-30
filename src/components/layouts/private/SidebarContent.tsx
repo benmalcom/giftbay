@@ -2,41 +2,31 @@ import {
   BoxProps,
   CloseButton,
   Flex,
-  FlexProps,
   Icon,
-  Stack,
   Link as ChakraLink,
   StyleProps,
   LinkProps as ChakraLinkProps,
+  Avatar,
+  VStack,
+  Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import React from 'react';
 import { IconType } from 'react-icons';
-import { FiCompass, FiHome, FiSettings, FiTrendingUp } from 'react-icons/fi';
 import { Logo } from 'components/common';
 import { FlexColumn } from 'components/common/MotionContainers';
-
-interface LinkItemProps {
-  name: string;
-  icon: IconType;
-  path: string;
-  visible: boolean;
-}
-const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome, path: '/home', visible: true },
-  { name: 'Insights', icon: FiTrendingUp, path: '/insights', visible: true },
-  { name: 'Explore', icon: FiCompass, path: '/events', visible: true },
-  { name: 'Settings', icon: FiSettings, path: '/settings', visible: true },
-];
+import { AppLinkItems, UserLinkItems } from 'components/layouts/utils';
+import { User } from 'types/user';
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
+  user: User;
 }
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
   return (
-    <Flex
-      flexDir="column"
+    <FlexColumn
+      boxSizing="border-box"
       transition="3s ease"
       bg="gray.50"
       borderRight="1px double"
@@ -53,20 +43,67 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         borderBottom="1px solid"
         borderColor="gray.200"
         mx={{ base: 8, xl: 'none' }}
+        boxSizing="border-box"
       >
         <Logo />
         <CloseButton display={{ base: 'flex', xl: 'none' }} onClick={onClose} />
       </Flex>
-      <FlexColumn mt={5} rowGap={1}>
-        {LinkItems.map(link => (
-          <Link href={link.path} key={link.name}>
-            <NavItem icon={link.icon} fontWeight={500}>
-              {link.name}
-            </NavItem>
-          </Link>
-        ))}
+      <FlexColumn mt={5} flex={1}>
+        <FlexColumn w="full" rowGap={1} mt={5}>
+          {AppLinkItems.map(link => (
+            <Link href={link.path} key={link.name}>
+              <NavItem icon={link.icon} fontWeight={500}>
+                {link.name}
+              </NavItem>
+            </Link>
+          ))}
+        </FlexColumn>
+
+        <FlexColumn
+          w="full"
+          rowGap={1}
+          borderTop="1px solid"
+          borderColor="gray.200"
+          boxSizing="border-box"
+          mt={5}
+          pt={5}
+        >
+          {UserLinkItems.map(link => (
+            <Link href={link.path} key={link.name}>
+              <NavItem icon={link.icon} fontWeight={500}>
+                {link.name}
+              </NavItem>
+            </Link>
+          ))}
+        </FlexColumn>
       </FlexColumn>
-    </Flex>
+      <FlexColumn
+        h="70px"
+        alignItems="center"
+        borderTop="1px solid"
+        borderColor="gray.200"
+        boxSizing="border-box"
+        p={4}
+        bg="gray.100"
+      >
+        <Flex>
+          <Avatar size={'sm'} name={user.name} src={user.avatarUrl} />
+          <VStack
+            alignItems="flex-start"
+            spacing="1px"
+            ml="2"
+            alignSelf="flex-start"
+          >
+            <Text fontSize="sm" fontWeight={500} mt="-4px" noOfLines={1}>
+              {user.name}
+            </Text>
+            <Text fontSize="xs" color="gray.600" noOfLines={1}>
+              {user.email}{' '}
+            </Text>
+          </VStack>
+        </Flex>
+      </FlexColumn>
+    </FlexColumn>
   );
 };
 

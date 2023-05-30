@@ -18,14 +18,11 @@ const styles = {
         marginBottom: '-1px',
       },
     },
-    input: {
-      border: '2px solid gray.800',
-    },
     '#__next': {
       height: '100%',
     },
     '*::placeholder': {
-      color: mode('gray.500', 'whiteAlpha.400')(props),
+      color: mode('gray.600', 'whiteAlpha.400')(props),
       fontSize: '14px',
     },
     '*, *::before, &::after': {
@@ -50,6 +47,8 @@ export const theme = extendTheme({
       variants: {
         backgroundFix: {
           field: {
+            border: '1px solid',
+            borderColor: 'gray.100',
             bg: 'gray.50',
             _hover: {
               border: '1px solid',

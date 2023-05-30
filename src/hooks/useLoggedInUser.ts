@@ -1,10 +1,10 @@
 import { AxiosResponse } from 'axios';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import { getUser } from 'services/user';
+import { getLoggedInUser } from 'services/user';
 import { User } from 'types/user';
 
-const useCurrentUser = () => {
+const useLoggedInUser = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,8 +14,10 @@ const useCurrentUser = () => {
     if (status === 'unauthenticated' || !session?.user) return;
     const controller = new AbortController();
     const signal = controller.signal;
-    getUser(session.user.id, signal)
-      .then((response: AxiosResponse<User>) => setUser(response.data))
+    getLoggedInUser(signal)
+      .then((response: AxiosResponse<{ user: User }>) =>
+        setUser(response.data.user)
+      )
       .catch(error => setError(error.message))
       .finally(() => setLoading(false));
 
@@ -27,4 +29,4 @@ const useCurrentUser = () => {
   return { user, loading, error };
 };
 
-export default useCurrentUser;
+export default useLoggedInUser;

@@ -1,7 +1,7 @@
 import { DynamicObject } from 'types/common';
 
 export type ApiResponseError = {
-  code: number;
+  status: number;
   message: string;
 };
 export type ApiResponseMeta = {

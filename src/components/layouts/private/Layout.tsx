@@ -1,26 +1,49 @@
-import { Box, Flex, useDisclosure } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
-import NavBar from './NavBar';
-import SidebarContent from './SidebarContent';
+/*eslint-disable react/no-children-prop */
+import { AxiosResponse } from 'axios';
+import { useSession } from 'next-auth/react';
+import React, { useContext, useEffect, useState } from 'react';
+import { PageSpinner } from 'components/common';
+import { AppConfigContext } from 'contexts/AppConfigProvider';
+import { DispatchUserContext } from 'contexts/UserProvider';
+import { getLoggedInUser } from 'services/user';
+import { User } from 'types/user';
+import HorizontalLayout from './HorizontalLayout';
+import VerticalLayout from './VerticalLayout';
 
-export default function PrivateLayout({ children }: { children: ReactNode }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  return (
-    <Flex h="100vh" w="full">
-      <SidebarContent
-        onClose={onClose}
-        display={{ base: 'none', xl: 'flex' }}
-      />
-      <Flex h="full" w="f" flex={1} flexDir="column">
-        <NavBar onClose={onClose} isOpen={isOpen} onOpen={onOpen} />
-        <Box
-          p={{ base: '25px 5px', md: '20px' }}
-          flex={1}
-          boxSizing="border-box"
-        >
-          {children}
-        </Box>
-      </Flex>
-    </Flex>
+type LayoutProps = {
+  children: React.ReactNode;
+};
+
+const Layout: React.FC<LayoutProps> = ({ children, ...props }: LayoutProps) => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const dispatchUser = useContext(DispatchUserContext);
+  const { layoutOrientation } = useContext(AppConfigContext);
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === 'unauthenticated' || !session?.user) return;
+    const controller = new AbortController();
+    const signal = controller.signal;
+    getLoggedInUser(signal)
+      .then((response: AxiosResponse<{ user: User }>) =>
+        dispatchUser({ type: 'set', payload: response.data.user })
+      )
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
+
+    return () => {
+      controller.abort();
+    };
+  }, [dispatchUser, session?.user, status]);
+
+  if (loading || error) return <PageSpinner />;
+
+  return layoutOrientation === 'vertical' ? (
+    <VerticalLayout {...props}>{children}</VerticalLayout>
+  ) : (
+    <HorizontalLayout {...props}>{children}</HorizontalLayout>
   );
-}
+};
+
+export default Layout;

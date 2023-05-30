@@ -9,7 +9,6 @@ import {
   Input,
   Stack,
   Text,
-  useBreakpointValue,
   Link as ChakraLink,
   FormErrorMessage,
 } from '@chakra-ui/react';
@@ -55,12 +54,13 @@ export const Login = () => {
     signIn('credentials', {
       ...values,
       callbackUrl:
-        (dest as string) || `${process.env.NEXT_PUBLIC_APP_BASE_URL}/overview`,
+        (dest as string) || `${process.env.NEXT_PUBLIC_APP_BASE_URL}/events`,
       redirect: false,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     }) // @ts-ignore
-      .then(async ({ url, error }) => {
+      .then(async ({ url, error, ...rest }) => {
         if (error) throw error;
+        console.log('rest ', rest);
         if (url) await router.push(url);
       })
       .catch(error => {
@@ -87,29 +87,6 @@ export const Login = () => {
         px={{ base: '0', sm: '8' }}
       >
         <Stack spacing="8">
-          <Stack spacing="6">
-            <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-              <Heading
-                color="#0d0d0d"
-                size={useBreakpointValue({ base: 'xs', md: 'sm', lg: 'lg' })}
-              >
-                Log in to your account
-              </Heading>
-              <HStack spacing="1" justify="center">
-                <Text color="muted">Don't have an account?</Text>
-                <Link href="/register" passHref>
-                  <ChakraLink
-                    color="purple.500"
-                    size="lg"
-                    textDecoration="none"
-                    cursor="pointer"
-                  >
-                    Register
-                  </ChakraLink>
-                </Link>
-              </HStack>
-            </Stack>
-          </Stack>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box
               py={{ base: '7', sm: '8' }}
@@ -121,6 +98,9 @@ export const Login = () => {
               borderRadius="xl"
             >
               <Stack spacing="6">
+                <Heading fontSize="2xl" fontWeight={600}>
+                  Log in to your account
+                </Heading>
                 <Stack spacing="5">
                   <FormControl isInvalid={Boolean(errors.email)}>
                     <FormLabel htmlFor="email">Email</FormLabel>
@@ -180,6 +160,19 @@ export const Login = () => {
                   </Button>
                 </Stack>
               </Stack>
+              <HStack spacing="1" justify="center" mt={5}>
+                <Text color="muted">Don't have an account?</Text>
+                <Link href="/register" passHref>
+                  <ChakraLink
+                    color="purple.500"
+                    size="lg"
+                    textDecoration="none"
+                    cursor="pointer"
+                  >
+                    Register
+                  </ChakraLink>
+                </Link>
+              </HStack>
             </Box>
           </form>
         </Stack>

@@ -1,4 +1,9 @@
-import { User } from 'types/user';
+import { UploadedFile } from 'components/common/DropzoneInPlace';
 
-export const getUserFullName = (user: User) =>
-  `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
+export const removePreviewFromUploadedFiles = (
+  items: UploadedFile[]
+): File[] => {
+  const files = Array.from(items);
+  files.forEach(file => delete file.preview);
+  return files;
+};

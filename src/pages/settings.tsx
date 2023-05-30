@@ -1,28 +1,24 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Flex, Alert, Stack } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { PageSpinner } from 'components/common';
 import {
   PayoutFormValues,
   NotificationsForm,
   PayoutSettingsForm,
 } from 'components/forms/settings';
+import { PrivateLayout } from 'components/layouts';
+import { updateUserSettings } from 'services/user';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
 
 const Settings = () => {
-  const [inPayoutFlight, setPayoutFlight] = useState(false);
-  const [inNotificationsFlight, setNotificationsFlight] = useState(false);
-  // const { loading: inGetUserFlight, user, error } = useCurrentUser();
+  const [inPayoutFlight /*, setPayoutFlight*/] = useState(false);
+  const [inNotificationsFlight /*, setNotificationsFlight*/] = useState(false);
 
-  const onSubmitPayout = (values: PayoutFormValues) => {
-    console.log('values ', values);
-  };
+  const onSubmitPayout = (values: PayoutFormValues) =>
+    updateUserSettings(values);
 
-  const onSubmitNotifications = (values: Record<string, boolean>) => {
-    console.log('values ', values);
-  };
-
-  // if (inGetUserFlight || error) return <PageSpinner />;
+  const onSubmitNotifications = (values: Record<string, boolean>) =>
+    updateUserSettings(values);
 
   return (
     <Flex w="full" justify="center">
@@ -45,11 +41,12 @@ const Settings = () => {
     </Flex>
   );
 };
+Settings.Layout = PrivateLayout;
 export default Settings;
-/*export const getServerSideProps = withAuthServerSideProps(() => {
+export const getServerSideProps = withAuthServerSideProps(() => {
   return {
     props: {
       pageTitle: 'Settings',
     },
   };
-});*/
+});

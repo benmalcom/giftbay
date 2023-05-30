@@ -8,7 +8,6 @@ import {
   IconButton,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
   Text,
@@ -18,16 +17,18 @@ import {
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import React from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { FiChevronDown, FiMenu } from 'react-icons/fi';
+import { FiMenu } from 'react-icons/fi';
 import { Logo } from 'components/common';
+import { UserLinkItems } from 'components/layouts/utils';
+import { logOutUser } from 'services/auth';
+import { User } from 'types/user';
 import { APP_BASE_URL } from 'utils/constants';
-import { logOutUser } from '../../../services/auth';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
+  user: User;
 }
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
   const handleLogOut = async () => {
     signOut({ callbackUrl: APP_BASE_URL });
     await logOutUser();
@@ -60,13 +61,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               transition="all 0.3s"
               _focus={{ boxShadow: 'none' }}
             >
-              <HStack align="flex-start">
-                <Avatar
-                  size={'sm'}
-                  src={
-                    'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                  }
-                />
+              <HStack align="flex-start" maxW="200px">
+                <Avatar size={'sm'} src={user.avatarUrl} name={user.name} />
                 <VStack
                   display={{ base: 'none', md: 'flex' }}
                   alignItems="flex-start"
@@ -74,11 +70,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   ml="2"
                   alignSelf="flex-start"
                 >
-                  <Text fontSize="sm" fontWeight={500} mt="-4px">
-                    Justina Clark
+                  <Text fontSize="sm" fontWeight={500} mt="-4px" noOfLines={1}>
+                    {user.name}
                   </Text>
-                  <Text fontSize="xs" color="gray.600">
-                    User
+                  <Text fontSize="xs" color="gray.600" noOfLines={1}>
+                    {user.email}
                   </Text>
                 </VStack>
                 <IconButton
@@ -93,14 +89,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}
             >
-              <Link href="/src/pages/profile" passHref>
-                <MenuItem>Profile</MenuItem>
-              </Link>
-              <Link href="/src/pages/settings" passHref>
-                <MenuItem>Settings</MenuItem>
-              </Link>
-              <MenuItem>Billing</MenuItem>
-              <MenuDivider />
+              {UserLinkItems.map((link, index) => (
+                <Link key={index} href={link.path} passHref>
+                  <MenuItem>{link.name}</MenuItem>
+                </Link>
+              ))}
               <MenuItem onClick={handleLogOut}>Sign out</MenuItem>
             </MenuList>
           </Menu>

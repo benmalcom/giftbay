@@ -7,6 +7,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { omit } from 'lodash';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -50,7 +51,7 @@ const ChangePasswordForm: React.FC<FormProps> = ({ onSave, loading }) => {
   });
 
   const onSubmit = (values: Record<string, unknown>) => {
-    onSave(values as ChangePasswordFormValues);
+    onSave(omit(values, 'retypePassword') as ChangePasswordFormValues);
   };
 
   return (
@@ -91,8 +92,7 @@ const ChangePasswordForm: React.FC<FormProps> = ({ onSave, loading }) => {
               errorBorderColor="red.300"
             />
             <FormErrorMessage>
-              {errors?.oldPassword?.message &&
-                errors.oldPassword.message.toString()}
+              {errors?.password?.message && errors.password.message.toString()}
             </FormErrorMessage>
           </FormControl>
 

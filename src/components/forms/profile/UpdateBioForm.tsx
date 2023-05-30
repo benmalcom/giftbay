@@ -14,43 +14,44 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { pick } from 'lodash';
+import { isEqual, pick } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BsImage } from 'react-icons/bs';
 import * as yup from 'yup';
 import { DropzoneInPlace } from 'components/common';
 import { useFileUpload } from 'hooks';
+import { UploadedFile } from 'types/common';
 import { User } from 'types/user';
-import { getUserFullName } from 'utils/functions';
+import { removePreviewFromUploadedFiles } from 'utils/functions';
 
 export type UpdateBioFormValues = {
-  firstName: string;
-  lastName: string;
+  name: string;
   mobile?: string;
+  avatarUrl?: string;
 };
 
 type FormProps = {
   onSave(values: UpdateBioFormValues): void;
-  initialValues?: User;
+  initialValues?: Partial<User>;
   loading?: boolean;
 };
 
 const schema = yup
   .object({
-    firstName: yup
+    name: yup
       .string()
       .typeError('This is required')
-      .required('First name is required'),
-    lastName: yup
-      .string()
-      .typeError('This is required')
-      .required('First name is required'),
+      .required('Full name is required'),
     mobile: yup
       .string()
+      .matches(
+        /^(?:(?:(?:\+?234(?:h1)?|01)h*)?(?:\(\d{3}\)|\d{3})|\d{4})(?:\W*\d{3})?\W*\d{4}$/,
+        'Phone number format not correct'
+      )
       .typeError('This is required')
-      .required('Your mobile number is required'),
-    avatarUrl: yup.string().notRequired(),
+      .required('This is required'),
+    avatarUrl: yup.string().notRequired().nullable(),
   })
   .required();
 
@@ -82,30 +83,27 @@ const UpdateBioForm: React.FC<FormProps> = ({
 
   const prevAvatarUrl = usePrevious(avatarUrl);
   useEffect(() => {
-    if (
-      (!prevAvatarUrl && avatarUrl) ||
-      (prevAvatarUrl && avatarUrl && prevAvatarUrl !== avatarUrl)
-    ) {
+    if (avatarUrl && !isEqual(prevAvatarUrl, avatarUrl)) {
       setValue('avatarUrl', avatarUrl);
       setUploadView(false);
     }
   }, [avatarUrl, prevAvatarUrl, setValue]);
 
-  const onSubmit = (values: Record<string, unknown>) => {
+  useEffect(() => {
+    if (uploadError) console.log('Upload error ', uploadError);
+  }, [uploadError]);
+
+  const onSubmit = (values: Record<string, unknown>) =>
     onSave(values as UpdateBioFormValues);
-  };
 
   useEffect(() => {
-    reset(
-      pick(initialValues, [
-        'firstName',
-        'lastName',
-        'mobile',
-        'avatarUrl',
-        'id',
-      ])
-    );
+    reset(pick(initialValues, ['name', 'mobile', 'avatarUrl', 'id']));
   }, [initialValues, reset]);
+
+  const handleFileUpload = (items: UploadedFile[]) => {
+    const files = removePreviewFromUploadedFiles(items);
+    uploadFile(files[0]);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -132,17 +130,19 @@ const UpdateBioForm: React.FC<FormProps> = ({
               <>
                 <DropzoneInPlace
                   loading={inUploadFlight}
-                  showPreview
-                  onUpload={files => files.length > 0 && uploadFile(files[0])}
+                  onUpload={files =>
+                    files.length > 0 && handleFileUpload(files)
+                  }
                   flexWrapperProps={{
                     w: '130px',
-                    h: '120px',
+                    h: '130px',
+                    borderRadius: '100%',
                   }}
                   dropPlaceholder={
                     <VStack>
                       <Icon as={BsImage} boxSize="2em" color="purple.500" />
                       <Text textAlign="center" fontSize="sm">
-                        Select photo here
+                        Select photo
                       </Text>
                     </VStack>
                   }
@@ -159,7 +159,7 @@ const UpdateBioForm: React.FC<FormProps> = ({
               <>
                 <Avatar
                   size="2xl"
-                  name={getUserFullName(formValues)}
+                  name={formValues.name}
                   src={formValues.avatarUrl}
                 />
                 <Button size="sm" onClick={() => setUploadView(true)}>
@@ -170,40 +170,24 @@ const UpdateBioForm: React.FC<FormProps> = ({
           </VStack>
 
           <Stack flex={1} w={{ base: 'full', lg: '70%' }} spacing="5">
-            <FormControl isInvalid={Boolean(errors.firstName)}>
-              <FormLabel htmlFor="firstName">First Name</FormLabel>
+            <FormControl isInvalid={Boolean(errors.name)}>
+              <FormLabel htmlFor="firstName">Full Name</FormLabel>
               <Input
-                id="firstName"
+                id="name"
                 type="text"
-                {...register('firstName')}
-                placeholder="Enter first name"
+                {...register('name')}
+                placeholder="Enter full name"
                 errorBorderColor="red.300"
               />
               <FormErrorMessage>
-                {errors?.firstName?.message &&
-                  errors.firstName.message.toString()}
-              </FormErrorMessage>
-            </FormControl>
-
-            <FormControl isInvalid={Boolean(errors.lastName)}>
-              <FormLabel htmlFor="lastName">Last name</FormLabel>
-              <Input
-                id="lastName"
-                type="text"
-                {...register('lastName')}
-                placeholder="Last name"
-                errorBorderColor="red.300"
-              />
-              <FormErrorMessage>
-                {errors?.lastName?.message &&
-                  errors.lastName.message.toString()}
+                {errors?.name?.message && errors.name.message.toString()}
               </FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={Boolean(errors.mobile)}>
-              <FormLabel htmlFor="github">Mobile</FormLabel>
+              <FormLabel htmlFor="mobile">Mobile</FormLabel>
               <Input
-                id="github"
+                id="mobile"
                 type="text"
                 {...register('mobile')}
                 placeholder="Mobile number"

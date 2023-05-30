@@ -1,3 +1,5 @@
+import jwtDecode from 'jwt-decode';
+import { pick } from 'lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -12,18 +14,23 @@ const providers = [
       try {
         const { data } = await loginOrRegister(credentials);
         const {
-          user: { email, id, isEmailVerified, name },
-          tokens: {
-            access: { token: accessToken, expires: accessTokenExpiry },
-            refresh: { token: refreshToken },
-          }, // eslint-disable-next-line
+          user: { email, id, isVerified, name },
+          refreshToken,
+          accessToken, // eslint-disable-next-line
         } = data as Record<string, any>;
+
+        const { exp } = jwtDecode(accessToken) as {
+          exp: number;
+        };
+
+        const accessTokenExpiry = exp * 1000;
         const user = {
-          data: { email, id, isEmailVerified, name },
+          data: { email, id, isVerified, name },
           accessToken,
           refreshToken,
           accessTokenExpiry,
         };
+
         if (user) return user;
         return null;
       } catch (e) {
@@ -43,9 +50,7 @@ const callbacks = {
     Subsequent invocations will only contain the token parameter. */
     if (user) {
       return {
-        accessToken: user.accessToken,
-        refreshToken: user.refreshToken,
-        accessTokenExpiry: new Date(user.accessTokenExpiry).getTime(),
+        ...pick(user, ['accessToken', 'refreshToken', 'accessTokenExpiry']),
         user: user.data,
       };
     }
@@ -62,12 +67,16 @@ const callbacks = {
   // @ts-ignore
   async session({ session, token }) {
     // Here we pass accessToken to the client to be used in authentication with your API
-    session.accessToken = token.accessToken;
-    session.refreshToken = token.refreshToken;
-    session.user = token.user;
-    session.accessTokenExpiry = token.accessTokenExpiry;
-    session.error = token.error;
-
+    Object.assign(
+      session,
+      pick(token, [
+        'accessToken',
+        'refreshToken',
+        'user',
+        'accessTokenExpiry',
+        'error',
+      ])
+    );
     return Promise.resolve(session);
   },
 };

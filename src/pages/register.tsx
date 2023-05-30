@@ -8,11 +8,12 @@ import {
   Input,
   Stack,
   Text,
-  useBreakpointValue,
   Link as ChakraLink,
   FormErrorMessage,
   Alert,
-  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Icon,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -22,6 +23,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { BsCheckCircle } from 'react-icons/bs';
 import * as yup from 'yup';
 import { HeaderTags } from 'components/common';
 import { Button } from 'components/common/Button';
@@ -40,7 +42,7 @@ const schema = yup
         /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/,
         `Password must be at least 8 characters, \n With at least 1 letter and 1 number`
       ),
-    confirmPassword: yup
+    passwordConfirmation: yup
       .string()
       .required('Enter password confirmation')
       .oneOf([yup.ref('password')], 'Passwords must match'),
@@ -52,7 +54,7 @@ const schema = yup
   .required();
 export const Register = () => {
   const [inFlight, setInFlight] = useState(false);
-  const [showVerifyMessage, setShowVerifyMessage] = useState(false);
+  const [regCompleted, setRegCompleted] = useState(false);
 
   const {
     register,
@@ -66,7 +68,7 @@ export const Register = () => {
 
   const onSubmit = (values: SignInOptions | undefined) => {
     setInFlight(true);
-    setShowVerifyMessage(false);
+    setRegCompleted(false);
     signIn('credentials', {
       ...values,
       redirect: false,
@@ -76,16 +78,18 @@ export const Register = () => {
       .then(async ({ error }) => {
         if (error) throw error;
         reset();
-        setShowVerifyMessage(true);
+        setRegCompleted(true);
       })
       .catch(error => {
         toast.error(error);
-        setShowVerifyMessage(false);
+        setRegCompleted(false);
       })
       .finally(() => {
         setInFlight(false);
       });
   };
+
+  const userEmail = getValues()?.email;
 
   return (
     <>
@@ -96,111 +100,136 @@ export const Register = () => {
         px={{ base: '0', sm: '8' }}
       >
         <Stack spacing="8">
-          {showVerifyMessage && (
-            <Alert status="success">
-              <AlertIcon />
-              Success! A verification email has been sent to{' '}
-              {getValues()?.email || 'you'}. Please check your inbox.
-            </Alert>
-          )}
-          <Stack spacing="6">
-            <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-              <Heading
-                size={useBreakpointValue({ base: 'xs', md: 'sm', lg: 'lg' })}
-              >
-                Sign up for an account
-              </Heading>
-              <HStack spacing="1" justify="center">
-                <Text color="muted">Already have an account?</Text>
-                <Link href="/login" passHref>
-                  <ChakraLink
-                    color="purple.500"
-                    size="lg"
-                    textDecoration="none"
-                    cursor="pointer"
-                  >
-                    Sign in
-                  </ChakraLink>
-                </Link>
-              </HStack>
-            </Stack>
-          </Stack>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Box
-              py={{ base: '7', sm: '8' }}
-              px={{ base: '5', sm: '10' }}
+          {regCompleted ? (
+            <Alert
+              variant="subtle"
+              flexDirection="column"
+              justifyContent="center"
+              textAlign="center"
+              height="250px"
               w={{ base: '95%', sm: 'auto' }}
               mx="auto"
-              bg="white"
-              boxShadow="md"
-              borderRadius="xl"
+              bg="gray.50"
             >
-              <Stack spacing="6">
-                <Stack spacing="5">
-                  <FormControl isInvalid={Boolean(errors.email)}>
-                    <FormLabel htmlFor="email">Email</FormLabel>
-                    <Input
-                      id="email"
-                      type="email"
-                      {...register('email')}
-                      placeholder="Email address"
-                      errorBorderColor="red.300"
-                    />
-                    <FormErrorMessage>
-                      {errors?.email?.message &&
-                        errors.email.message.toString()}
-                    </FormErrorMessage>
-                  </FormControl>
-                  <FormControl isInvalid={Boolean(errors.password)}>
-                    <FormLabel htmlFor="password">Password</FormLabel>
-                    <PasswordInput
-                      id="password"
-                      errorBorderColor="red.300"
-                      {...register('password')}
-                      placeholder="Password"
-                    />
-                    <FormErrorMessage>
-                      {errors?.password?.message &&
-                        errors.password.message.toString()}
-                    </FormErrorMessage>
-                  </FormControl>{' '}
-                  <FormControl isInvalid={Boolean(errors.confirmPassword)}>
-                    <FormLabel htmlFor="passwordConfirm">
-                      Confirm Password
-                    </FormLabel>
-                    <PasswordInput
-                      id="passwordConfirm"
-                      errorBorderColor="red.300"
-                      {...register('confirmPassword')}
-                      placeholder="Confirm Password"
-                    />
-                    <FormErrorMessage>
-                      {errors?.confirmPassword?.message &&
-                        errors.confirmPassword.message.toString()}
-                    </FormErrorMessage>
-                  </FormControl>
-                  <FormControl isInvalid={Boolean(errors.name)}>
-                    <FormLabel htmlFor="name">Name</FormLabel>
-                    <Input
-                      id="name"
-                      type="text"
-                      {...register('name')}
-                      placeholder="Your name"
-                      errorBorderColor="red.300"
-                    />
-                    <FormErrorMessage>
-                      {errors?.name?.message && errors.name.message.toString()}
-                    </FormErrorMessage>
-                  </FormControl>
-                </Stack>
+              <Icon
+                as={BsCheckCircle}
+                boxSize="40px"
+                mr={0}
+                color="purple.400"
+              />
+              <AlertTitle mt={4} mb={1} fontSize="lg">
+                Success!
+              </AlertTitle>
+              <AlertDescription maxWidth="sm">
+                You have registered for your account.
+              </AlertDescription>
+              <AlertDescription maxWidth="sm">
+                A verification email has been sent to{' '}
+                {userEmail ? <strong>{userEmail}</strong> : 'you'}. Please check
+                your email.
+              </AlertDescription>
+            </Alert>
+          ) : (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Box
+                py={{ base: '7', sm: '8' }}
+                px={{ base: '5', sm: '10' }}
+                w={{ base: '95%', sm: 'auto' }}
+                mx="auto"
+                bg="white"
+                boxShadow="md"
+                borderRadius="xl"
+              >
                 <Stack spacing="6">
-                  <Button type="submit" variant="primary" isLoading={inFlight}>
-                    Sign up
-                  </Button>
+                  <Heading fontSize="2xl" fontWeight={600}>
+                    Log in to your account
+                  </Heading>
+                  <Stack spacing="5">
+                    <FormControl isInvalid={Boolean(errors.email)}>
+                      <FormLabel htmlFor="email">Email</FormLabel>
+                      <Input
+                        id="email"
+                        type="email"
+                        {...register('email')}
+                        placeholder="Email address"
+                        errorBorderColor="red.300"
+                      />
+                      <FormErrorMessage>
+                        {errors?.email?.message &&
+                          errors.email.message.toString()}
+                      </FormErrorMessage>
+                    </FormControl>
+                    <FormControl isInvalid={Boolean(errors.password)}>
+                      <FormLabel htmlFor="password">Password</FormLabel>
+                      <PasswordInput
+                        id="password"
+                        errorBorderColor="red.300"
+                        {...register('password')}
+                        placeholder="Password"
+                      />
+                      <FormErrorMessage>
+                        {errors?.password?.message &&
+                          errors.password.message.toString()}
+                      </FormErrorMessage>
+                    </FormControl>{' '}
+                    <FormControl
+                      isInvalid={Boolean(errors.passwordConfirmation)}
+                    >
+                      <FormLabel htmlFor="passwordConfirmation">
+                        Confirm Password
+                      </FormLabel>
+                      <PasswordInput
+                        id="passwordConfirmation"
+                        errorBorderColor="red.300"
+                        {...register('passwordConfirmation')}
+                        placeholder="Confirm Password"
+                      />
+                      <FormErrorMessage>
+                        {errors?.confirmPassword?.message &&
+                          errors.confirmPassword.message.toString()}
+                      </FormErrorMessage>
+                    </FormControl>
+                    <FormControl isInvalid={Boolean(errors.name)}>
+                      <FormLabel htmlFor="name">Name</FormLabel>
+                      <Input
+                        id="name"
+                        type="text"
+                        {...register('name')}
+                        placeholder="Your name"
+                        errorBorderColor="red.300"
+                      />
+                      <FormErrorMessage>
+                        {errors?.name?.message &&
+                          errors.name.message.toString()}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Stack>
+                  <Stack spacing="6">
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      isLoading={inFlight}
+                    >
+                      Sign up
+                    </Button>
+                  </Stack>
+                  <HStack mt={5} spacing="1" justify="center">
+                    <Text color="muted">Already have an account?</Text>
+                    <Link href="/login" passHref>
+                      <ChakraLink
+                        color="purple.500"
+                        size="lg"
+                        textDecoration="none"
+                        cursor="pointer"
+                      >
+                        Sign in
+                      </ChakraLink>
+                    </Link>
+                  </HStack>
                 </Stack>
-              </Stack>
-            </Box>
-          </form>
+              </Box>
+            </form>
+          )}
         </Stack>
       </Container>
     </>

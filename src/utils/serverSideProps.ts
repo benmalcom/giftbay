@@ -11,15 +11,6 @@ export function withAuthServerSideProps(
   return async (context: GetServerSidePropsContext) => {
     const session = await getSession(context);
     const { resolvedUrl } = context;
-    const url = new URL(resolvedUrl, process.env.NEXT_PUBLIC_APP_BASE_URL);
-
-    const isPDFRequest =
-      /^\/builder\/[a-zA-Z0-9]{24}$/.test(url.pathname) &&
-      url.searchParams.has('generatePDF');
-
-    if (isPDFRequest) {
-      return { props: {} };
-    }
 
     const redirect = {
       permanent: false,

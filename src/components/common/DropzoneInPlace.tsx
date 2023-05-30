@@ -11,18 +11,17 @@ import {
 import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { UploadedFile } from 'types/common';
 
-export interface UploadedFile extends File {
-  preview: string;
-}
 type MyDropzoneProps = {
-  onUpload(files: File[]): void;
+  onUpload(files: UploadedFile[]): void;
   showPreview?: boolean;
   loading?: boolean;
   maxFiles?: number;
   dropPlaceholder?: React.ReactNode;
   flexWrapperProps?: FlexProps;
 };
+
 const DropzoneInPlace: React.FC<MyDropzoneProps> = ({
   onUpload,
   showPreview,
@@ -38,7 +37,7 @@ const DropzoneInPlace: React.FC<MyDropzoneProps> = ({
     if (!isEqual(prevFiles, files)) onUpload(files);
     return () => {
       // Make sure to revoke the data uris to avoid memory leaks
-      files.forEach(file => URL.revokeObjectURL(file.preview));
+      files.forEach(file => file.preview && URL.revokeObjectURL(file.preview));
     };
   }, [files, onUpload, prevFiles]);
 
@@ -66,7 +65,7 @@ const DropzoneInPlace: React.FC<MyDropzoneProps> = ({
       justify="center"
       color="gray.700"
       cursor="pointer"
-      borderRadius="3px"
+      borderRadius={flexWrapperProps?.borderRadius ?? '3px'}
       p="5px"
       pos="relative"
       bg="gray.50"
@@ -76,7 +75,7 @@ const DropzoneInPlace: React.FC<MyDropzoneProps> = ({
       {...getRootProps()}
     >
       {loading ? (
-        <Skeleton h="full" w="full" />
+        <Skeleton h="full" w="full" borderRadius="inherit" />
       ) : files?.length > 0 ? (
         <Box
           w="full"
@@ -84,10 +83,12 @@ const DropzoneInPlace: React.FC<MyDropzoneProps> = ({
           border="1px solid"
           borderColor="gray.100"
           pos="relative"
+          borderRadius="inherit"
+          onClick={e => e.stopPropagation()}
         >
           <CloseIcon
             pos="absolute"
-            top={-2}
+            top={-4}
             right={-5}
             color="red.400"
             boxSize="0.7em"
@@ -99,6 +100,7 @@ const DropzoneInPlace: React.FC<MyDropzoneProps> = ({
             h="full"
             src={files[0].preview}
             alt={`Image preview`}
+            borderRadius="inherit"
           />
         </Box>
       ) : (

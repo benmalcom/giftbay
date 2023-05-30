@@ -7,11 +7,12 @@ import { SessionProvider } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { PageSpinner } from 'components/common';
-import { PublicLayout, PrivateLayout } from 'components/layouts';
+import { PublicLayout } from 'components/layouts';
 import RefreshTokenHandler from 'components/RefreshTokenHandler';
+import AppConfigProvider from 'contexts/AppConfigProvider';
+import UserProvider from 'contexts/UserProvider';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
-import { User } from 'types/user';
 import 'components/events/EventCardDropdownMenu.css';
 
 type NextPageWithLayout = NextPage & {
@@ -26,7 +27,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [clientLoaded, setClientLoaded] = useState(false);
   const [isGsspLoading, setIsGsspLoading] = useState(false);
 
-  const Layout = Component.Layout ?? PrivateLayout;
+  const Layout = Component.Layout ?? PublicLayout;
   useEffect(() => {
     setClientLoaded(true);
   }, []);
@@ -59,10 +60,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       />
 
       <SessionProvider session={pageProps.session}>
-        <Layout>
-          <Component {...pageProps} />
-          <RefreshTokenHandler />
-        </Layout>
+        <UserProvider>
+          <AppConfigProvider>
+            <Layout>
+              <Component {...pageProps} />
+              <RefreshTokenHandler />
+            </Layout>
+          </AppConfigProvider>
+        </UserProvider>
       </SessionProvider>
     </ChakraProvider>
   );

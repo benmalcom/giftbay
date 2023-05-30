@@ -11,16 +11,17 @@ import Link from 'next/link';
 import { MdOutlineKeyboardBackspace } from 'react-icons/md';
 import { FlexColumn } from 'components/common/MotionContainers';
 import { EventsGridLayout } from 'components/events';
-import PrivateLayout from 'components/layouts/private/Layout';
+import { PrivateLayout } from 'components/layouts';
 import events from 'data/events.json';
 import { EventFormPayload } from 'types/event';
+import { withAuthServerSideProps } from 'utils/serverSideProps';
 
 const Events = () => {
   const onSaveEvent = (event: EventFormPayload) => {
     console.log('event ', event);
   };
   return (
-    <Container py={1.5} maxW="7xl" h="full" alignItems="center" mt="25px">
+    <Container py={1.5} maxW="7xl" h="full" alignItems="center">
       <FlexColumn w="full" rowGap={8} mt={10}>
         <Box>
           <Link href="/" passHref>
@@ -41,11 +42,12 @@ const Events = () => {
           My special moments
         </Heading>
         <Alert
-          colorScheme="purple"
+          colorScheme="gray"
           variant="left-accent"
           flexDirection="column"
           alignItems="flex-start"
           w="full"
+          bg="white"
         >
           <AlertTitle mb={1} fontSize="md">
             Your Celebrations, Your Events: Welcome to your personalized event
@@ -66,4 +68,13 @@ const Events = () => {
   );
 };
 
+Events.Layout = PrivateLayout;
 export default Events;
+
+export const getServerSideProps = withAuthServerSideProps(() => {
+  return {
+    props: {
+      pageTitle: 'Events',
+    },
+  };
+});

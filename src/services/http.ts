@@ -6,6 +6,7 @@ import { getSession } from 'next-auth/react';
 const defaultOptions: AxiosRequestConfig = {
   baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}`,
   headers: {
+    Accept: 'application/json',
     'Content-Type': 'application/json',
     'Cache-Control': 'no-cache',
     Pragma: 'no-cache',
@@ -32,7 +33,7 @@ instance.interceptors.request.use(
 );
 // Add a response interceptor
 instance.interceptors.response.use(
-  response => response,
+  response => response.data,
   error => {
     if (error.response) {
       if (error.code === 'ECONNABORTED')
