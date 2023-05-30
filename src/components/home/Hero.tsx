@@ -91,7 +91,7 @@ const Hero = () => (
       mx="auto"
     >
       <Heading
-        fontSize={{ base: '2xl', md: '3xl', xl: '5xl' }}
+        fontSize={{ base: '3xl', xl: '5xl' }}
         color="#2f2f2f"
         lineHeight={{ sm: 1.3, md: '120%', '2xl': '125%' }}
         fontWeight={500}
