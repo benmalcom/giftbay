@@ -20,7 +20,7 @@ import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { BiErrorCircle } from 'react-icons/bi';
-import { BsCheckCircle, BsEmojiSmileUpsideDown } from 'react-icons/bs';
+import { BsCheckCircle } from 'react-icons/bs';
 import { verifyEmail } from 'services/auth';
 
 export const VerifyEmail = () => {
