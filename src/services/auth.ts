@@ -3,13 +3,16 @@ import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
 import { createRequest } from './http';
 
-export const loginOrRegister = async <C>(
-  credentials: Record<keyof C, string> | undefined
+export const loginOrRegister = async (
+  credentials: Record<string, string> | undefined
 ) => {
   const isRegister = !!credentials && 'isRegister' in credentials;
   const inputFields = ['email', 'password'];
   if (isRegister) inputFields.push('name', 'redirectUrl');
   const payload = pick(credentials, inputFields);
+  // Add redirectUrl here because it is reserved for next-auth
+  /* if (isRegister) {
+    payload.redirectUrl = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/${process.env.NEXT_PUBLIC_VERIFY_REDIRECT}`;*/
   return await createRequest({
     url: isRegister ? '/auth/signup' : '/auth/login',
     payload,

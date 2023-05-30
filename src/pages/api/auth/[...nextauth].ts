@@ -34,6 +34,7 @@ const providers = [
         if (user) return user;
         return null;
       } catch (e) {
+        console.log('e ', e);
         throw new Error((e as ApiResponseError)?.message || 'Operation failed');
       }
     },
