@@ -53,6 +53,9 @@ const heroColorStyles: HeroColorStyle[] = [
     hero: {
       borderBottom: '1px solid',
       borderBottomColor: 'gray.200',
+      // bg: 'gray.50',
+      // bg: 'pink.50',
+      // bg: 'purple.50',
       bg: 'linear-gradient(0deg, #FBFAFF, #FBFAFF), linear-gradient(104.44deg, #FFFFFF 48.29%, #FAFAFA 58.91%)',
     },
     carouselContainer: {
