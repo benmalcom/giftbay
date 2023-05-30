@@ -20,7 +20,7 @@ import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { BiErrorCircle } from 'react-icons/bi';
-import { BsCheckCircle } from 'react-icons/bs';
+import { FaRegThumbsUp } from 'react-icons/fa';
 import { verifyEmail } from 'services/auth';
 
 export const VerifyEmail = () => {
@@ -126,7 +126,7 @@ export const VerifyEmail = () => {
           bg="gray.50"
           shadow="sm"
         >
-          <Icon as={BsCheckCircle} boxSize="40px" mr={0} color="purple.400" />
+          <Icon as={FaRegThumbsUp} boxSize="40px" mr={0} color="purple.400" />
           <AlertTitle mt={4} mb={1} fontSize="lg">
             Verification successful!
           </AlertTitle>

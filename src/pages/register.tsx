@@ -123,12 +123,8 @@ export const Register = () => {
                 Check your email
               </AlertTitle>
               <AlertDescription maxWidth="sm">
-                You have registered for an account with us.
-              </AlertDescription>
-              <AlertDescription maxWidth="sm">
-                A verification email has been sent to{' '}
-                {userEmail ? <strong>{userEmail}</strong> : 'you'}. Please check
-                your email.
+                To confirm your email address, tap the button in the email we
+                sent to you.
               </AlertDescription>
             </Alert>
           ) : (
