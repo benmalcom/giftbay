@@ -49,7 +49,7 @@ export const refreshAccessToken = async (tokenObject: {
 
 export const verifyEmail = async (token: string) => {
   return await createRequest({
-    url: '/auth/verify-email',
+    url: '/verify-email',
     payload: { token },
     method: 'post',
   });

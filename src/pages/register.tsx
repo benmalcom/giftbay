@@ -23,7 +23,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { BsCheckCircle } from 'react-icons/bs';
+import { SiMinutemailer } from 'react-icons/si';
 import * as yup from 'yup';
 import { HeaderTags } from 'components/common';
 import { Button } from 'components/common/Button';
@@ -111,18 +111,19 @@ export const Register = () => {
               w={{ base: '95%', sm: 'auto' }}
               mx="auto"
               bg="gray.50"
+              shadow="sm"
             >
               <Icon
-                as={BsCheckCircle}
-                boxSize="40px"
+                as={SiMinutemailer}
+                boxSize="45px"
                 mr={0}
                 color="purple.400"
               />
               <AlertTitle mt={4} mb={1} fontSize="lg">
-                Success!
+                Check your email
               </AlertTitle>
               <AlertDescription maxWidth="sm">
-                You have registered for your account.
+                You have registered for an account with us.
               </AlertDescription>
               <AlertDescription maxWidth="sm">
                 A verification email has been sent to{' '}
