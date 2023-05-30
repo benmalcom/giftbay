@@ -53,7 +53,7 @@ const heroColorStyles: HeroColorStyle[] = [
     hero: {
       borderBottom: '1px solid',
       borderBottomColor: 'gray.200',
-      bg: 'gray.50',
+      bg: 'linear-gradient(0deg, #FBFAFF, #FBFAFF), linear-gradient(104.44deg, #FFFFFF 48.29%, #FAFAFA 58.91%)',
     },
     carouselContainer: {
       borderRadius: '5%',
@@ -86,7 +86,7 @@ const Hero = () => (
     <Flex
       gap={4}
       flexDir="column"
-      p={{ base: '60px 25px 45px 25px', md: 50, '2xl': 100 }}
+      p={{ base: '60px 15px 45px 25px', md: 50, '2xl': 100 }}
       w={{ base: '100%', lg: '50%', xl: '50%' }}
       mx="auto"
     >
@@ -103,14 +103,10 @@ const Hero = () => (
             color: 'purple.500',
           }}
         >
-          Your perfect gift registry
+          Your personalized gift registry in minutes.
         </Highlight>
       </Heading>
-      <Text
-        lineHeight="150%"
-        fontSize={{ base: 'md', xl: 'lg' }}
-        color="#394455"
-      >
+      <Text lineHeight="150%" color="#222222" fontSize="md" fontWeight={400}>
         Create a personalized gift registry for your special occasions and get
         the perfect presents every time. Your special occasions should be all
         about you, we're here to make that happen.
@@ -122,7 +118,7 @@ const Hero = () => (
             <Text
               fontWeight={{ base: 600, lg: 700 }}
               textTransform="uppercase"
-              fontSize={{ base: 'xs', md: 'sm' }}
+              fontSize="14px"
             >
               {feature}
             </Text>
@@ -161,7 +157,7 @@ const Hero = () => (
         align="center"
         justify="center"
         // transform="skew(-0.06turn, 0deg)"
-        boxShadow="sm"
+        boxShadow="md"
         // background={`url(/images/wl5.jpg) no-repeat center center fixed`}
         // backgroundSize="cover"
         {...heroColorStyle.carouselContainer}

@@ -35,7 +35,7 @@ const Testimonials = () => {
         </VStack>
         <Stack
           py={8}
-          px={8}
+          px={4}
           spacing={{ base: 8, md: 10 }}
           align={'center'}
           direction={'column'}
