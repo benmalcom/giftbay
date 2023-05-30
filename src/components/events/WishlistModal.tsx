@@ -20,6 +20,7 @@ import {
 import React, { useState } from 'react';
 import { BsCardImage } from 'react-icons/bs';
 import { CiCirclePlus } from 'react-icons/ci';
+import { FaHandPointDown } from 'react-icons/fa';
 import { FiChevronRight, FiChevronDown } from 'react-icons/fi';
 import { GoKebabVertical } from 'react-icons/go';
 import {
@@ -61,7 +62,7 @@ const WishlistModal: React.FC<WishlistProps> = ({
           My Wishlist
         </ModalHeader>
         <CustomModalCloseButton />
-        <ModalBody pb={5}>
+        <ModalBody pb={5} px={4}>
           <Stack spacing={loading ? 2 : 0}>
             {loading
               ? Array(4)
@@ -171,7 +172,9 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
             <Text fontSize={{ base: 'xs', md: 'md' }} noOfLines={1}>
               {wishlistItem.name}
             </Text>
-            <Text fontSize="xs">{nf.format(wishlistItem.amount)}</Text>
+            <Text fontSize="xs" fontWeight={600}>
+              {nf.format(wishlistItem.amount)}
+            </Text>
           </Flex>
         </Flex>
         <Icon as={GoKebabVertical} cursor="pointer" />
@@ -204,27 +207,29 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
             )}
           </Box>
           <Flex flexDir="column" w="full" flexWrap="wrap" px={1} rowGap={2}>
-            <Heading as="h6" size="xs">
+            <Heading as="h6" size="sm">
               {wishlistItem.name}
             </Heading>
             {wishlistItem.externalUrl && (
               <Stack spacing={0}>
-                <Text fontSize="xs" noOfLines={1} fontWeight={500}>
-                  Link to item
-                </Text>
+                <Flex align="center" columnGap={1} mt={2} mb={1}>
+                  <Text fontSize="sm" noOfLines={1} fontWeight={600}>
+                    Link to item
+                  </Text>
+                  <Icon color="purple.500" as={FaHandPointDown} />
+                </Flex>
+
                 <ChakraLink
-                  fontSize="xs"
+                  fontSize="sm"
                   href={wishlistItem.externalUrl}
                   isExternal
                   color="blue.500"
                 >
-                  <Text fontSize="xs" noOfLines={1}>
-                    {wishlistItem.externalUrl}
-                  </Text>
+                  <Text fontSize="sm">{wishlistItem.externalUrl}</Text>
                 </ChakraLink>
               </Stack>
             )}
-            <Text fontSize="xs">{wishlistItem.description}</Text>
+            <Text fontSize="sm">{wishlistItem.description}</Text>
           </Flex>
         </Flex>
       )}

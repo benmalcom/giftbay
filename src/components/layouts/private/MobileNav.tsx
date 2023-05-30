@@ -61,7 +61,7 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
               transition="all 0.3s"
               _focus={{ boxShadow: 'none' }}
             >
-              <HStack align="flex-start" maxW="200px">
+              <HStack align={{ base: 'center', md: 'flex-start' }} maxW="200px">
                 <Avatar size={'sm'} src={user.avatarUrl} name={user.name} />
                 <VStack
                   display={{ base: 'none', md: 'flex' }}
@@ -80,7 +80,6 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
                 <IconButton
                   size="xs"
                   icon={<ChevronDownIcon fontSize="lg" />}
-                  display={{ base: 'none', md: 'flex' }}
                   aria-label="dropdown-icon"
                 />
               </HStack>

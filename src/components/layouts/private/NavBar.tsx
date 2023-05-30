@@ -89,7 +89,7 @@ const HorizontalNavbar: React.FC<HorizontalNavbarProps> = ({
     borderBottomColor="rgba(0, 0, 0, .1)"
     as="nav"
     align="center"
-    px={5}
+    px={{ base: 0, md: 5 }}
     bg="gray.50"
     shadow="sm"
   >
@@ -149,7 +149,7 @@ const VerticalNavbar: React.FC<VerticalNavbarProps> = ({
     borderBottomColor="rgba(0, 0, 0, .1)"
     as="nav"
     align="center"
-    px={5}
+    px={{ base: 4, md: 5 }}
     bg="gray.50"
     shadow="sm"
   >

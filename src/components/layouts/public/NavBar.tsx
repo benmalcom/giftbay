@@ -3,19 +3,15 @@ import {
   Container,
   Button,
   ButtonGroup,
-  useDisclosure,
   Box,
   useColorModeValue,
   CloseButton,
   BoxProps,
   FlexProps,
   Icon,
-  Drawer,
-  DrawerContent,
   Link as ChakraLink,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { IconType } from 'react-icons';
 import { FiHome, FiTrendingUp } from 'react-icons/fi';
@@ -33,35 +29,15 @@ const LinkItems: Array<LinkItemProps> = [
 ];
 
 const NavBar = () => {
-  const router = useRouter();
-
-  const { isOpen, onClose } = useDisclosure();
-
-  const isHomepage = router.pathname === '/';
-  const wrapperBg = isHomepage ? 'purple.50' : 'white';
-  const wrapperBorder = isHomepage ? 'none' : '1px solid #ddd';
-  const containerBorder = isHomepage ? '1px solid #ddd' : 'none';
-
   return (
     <>
-      <Drawer
-        autoFocus={false}
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-      >
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
       <Flex
         w="full"
         minH="70px"
         maxH="70px"
-        bg={wrapperBg}
-        borderBottom={wrapperBorder}
+        bg="white"
+        borderBottom="1px solid"
+        borderBottomColor="gray.200"
         shadow="sm"
       >
         <Flex as="nav" w="full" h="full" align="center">
@@ -71,7 +47,6 @@ const NavBar = () => {
             h="full"
             alignItems="center"
             bg="white"
-            border={containerBorder}
           >
             <Flex
               justify="space-between"
@@ -79,7 +54,7 @@ const NavBar = () => {
               h="full"
               columnGap={20}
             >
-              <Box display={{ base: 'none', md: 'block' }}>
+              <Box>
                 <Link href="/" passHref>
                   <a>
                     <Logo />

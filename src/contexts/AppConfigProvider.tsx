@@ -1,7 +1,7 @@
 import { ReactNode, useReducer, createContext } from 'react';
 import { AppConfig } from 'types/common';
 
-const initialState: AppConfig = { layoutOrientation: 'horizontal' };
+const initialState: AppConfig = { layoutOrientation: 'vertical' };
 
 type DispatchUserContextT = unknown;
 
