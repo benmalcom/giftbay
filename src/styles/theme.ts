@@ -33,7 +33,7 @@ const styles = {
 };
 
 const fonts = {
-  heading: `Mulish, "Helvetica Neue", Helvetica, Arial, sans-serif`,
+  heading: `Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif`,
   body: `Mulish, "Helvetica Neue", Helvetica, Arial, sans-serif`,
 };
 
