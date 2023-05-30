@@ -50,8 +50,7 @@ const Events = () => {
           bg="white"
         >
           <AlertTitle mb={1} fontSize="md">
-            Your Celebrations, Your Events: Welcome to your personalized event
-            list.
+            Welcome to your personalized event list.
           </AlertTitle>
           <AlertDescription>
             Here's a quick look at the events you've created in the past.
