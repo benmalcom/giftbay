@@ -54,7 +54,7 @@ const NavBar: React.FC<NavBarProps> = ({
         onOverlayClick={onClose}
       >
         <DrawerContent bg="gray.50">
-          <SidebarContent onClose={onClose} bg="transparent" />
+          <SidebarContent onClose={onClose} bg="transparent" user={user} />
         </DrawerContent>
       </Drawer>
       {layoutOrientation === 'vertical' ? (
