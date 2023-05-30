@@ -143,7 +143,7 @@ export const Login = () => {
                     )}
                     name="remember_me"
                   />
-                  <Link href="/register" passHref>
+                  <Link href="/send-password-reset" passHref>
                     <ChakraLink
                       color="purple.500"
                       size="lg"

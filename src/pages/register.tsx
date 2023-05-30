@@ -90,8 +90,6 @@ export const Register = () => {
       });
   };
 
-  const userEmail = getValues()?.email;
-
   return (
     <>
       <HeaderTags title={`${process.env.NEXT_PUBLIC_APP_NAME} - Register`} />

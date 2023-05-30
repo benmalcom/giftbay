@@ -18,13 +18,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { BiErrorCircle } from 'react-icons/bi';
 import { FaRegThumbsUp } from 'react-icons/fa';
+import { PageSpinner } from 'components/common';
 import { verifyEmail } from 'services/auth';
 
 export const VerifyEmail = () => {
   const [inFlight, setInFlight] = useState(true);
+  const [isEmailSent, setIsEmailSent] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
   const headingSize = useBreakpointValue({ base: 'xs', md: 'md' });
@@ -32,12 +33,13 @@ export const VerifyEmail = () => {
   const { token } = router.query;
 
   const handleEmailVerification = useCallback(() => {
+    setIsEmailSent(false);
     setInFlight(true);
     verifyEmail(token as string)
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      .then(() => {})
+      .then(() => setIsEmailSent(true))
       .catch(error => {
-        toast.error(error.message);
+        setIsEmailSent(false);
         setError(error);
       })
       .finally(() => {
@@ -69,6 +71,45 @@ export const VerifyEmail = () => {
             </Text>
           </Flex>
         </Stack>
+      );
+    }
+
+    if (isEmailSent) {
+      return (
+        <VStack spacing={6}>
+          <Alert
+            variant="subtle"
+            flexDirection="column"
+            justifyContent="center"
+            textAlign="center"
+            height="250px"
+            w={{ base: '95%', sm: '400px' }}
+            mx="auto"
+            bg="gray.50"
+            shadow="sm"
+          >
+            <Icon as={FaRegThumbsUp} boxSize="40px" mr={0} color="purple.400" />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              Verification successful!
+            </AlertTitle>
+            <AlertDescription maxWidth="sm">
+              You can now sign into your account.
+            </AlertDescription>
+            <Link href="/login" passHref>
+              <Button
+                w="80%"
+                as="a"
+                size="md"
+                textDecoration="none"
+                cursor="pointer"
+                mt={5}
+                colorScheme="purple"
+              >
+                Sign in
+              </Button>
+            </Link>
+          </Alert>
+        </VStack>
       );
     }
 
@@ -113,42 +154,7 @@ export const VerifyEmail = () => {
       );
     }
 
-    return (
-      <VStack spacing={6}>
-        <Alert
-          variant="subtle"
-          flexDirection="column"
-          justifyContent="center"
-          textAlign="center"
-          height="250px"
-          w={{ base: '95%', sm: '400px' }}
-          mx="auto"
-          bg="gray.50"
-          shadow="sm"
-        >
-          <Icon as={FaRegThumbsUp} boxSize="40px" mr={0} color="purple.400" />
-          <AlertTitle mt={4} mb={1} fontSize="lg">
-            Verification successful!
-          </AlertTitle>
-          <AlertDescription maxWidth="sm">
-            You can now sign in with your account.
-          </AlertDescription>
-          <Link href="/login" passHref>
-            <Button
-              w="80%"
-              as="a"
-              size="md"
-              textDecoration="none"
-              cursor="pointer"
-              mt={5}
-              colorScheme="purple"
-            >
-              Sign in
-            </Button>
-          </Link>
-        </Alert>
-      </VStack>
-    );
+    return <PageSpinner />;
   };
 
   return (

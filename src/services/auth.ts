@@ -59,7 +59,7 @@ export const sendPasswordResetEmail = async (
   payload: Record<string, string>
 ) => {
   return await createRequest({
-    url: '/auth/send-forgot-password-email',
+    url: '/send-forgot-password-email',
     payload,
     method: 'post',
   });
@@ -69,7 +69,7 @@ export const resetPassword = async (payload: Record<string, string>) => {
   return await createRequest({
     url: '/auth/reset-password',
     payload,
-    method: 'post',
+    method: 'put',
   });
 };
 
