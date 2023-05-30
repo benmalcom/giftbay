@@ -108,7 +108,7 @@ const Hero = () => (
       </Heading>
       <Text
         lineHeight="150%"
-        fontSize={{ base: 'sm', lg: 'md', xl: 'lg' }}
+        fontSize={{ base: 'md', xl: 'lg' }}
         color="#394455"
       >
         Create a personalized gift registry for your special occasions and get
