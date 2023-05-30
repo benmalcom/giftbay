@@ -59,7 +59,6 @@ export const Register = () => {
   const {
     register,
     handleSubmit,
-    getValues,
     reset,
     formState: { errors = {} },
   } = useForm({

@@ -3,12 +3,15 @@ import {
   Container,
   Button,
   ButtonGroup,
+  useDisclosure,
   Box,
   useColorModeValue,
   CloseButton,
   BoxProps,
   FlexProps,
   Icon,
+  Drawer,
+  DrawerContent,
   Link as ChakraLink,
 } from '@chakra-ui/react';
 import Link from 'next/link';
@@ -29,8 +32,22 @@ const LinkItems: Array<LinkItemProps> = [
 ];
 
 const NavBar = () => {
+  const { isOpen, onClose } = useDisclosure();
+
   return (
     <>
+      <Drawer
+        autoFocus={false}
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        returnFocusOnClose={false}
+        onOverlayClick={onClose}
+      >
+        <DrawerContent>
+          <SidebarContent onClose={onClose} />
+        </DrawerContent>
+      </Drawer>
       <Flex
         w="full"
         minH="70px"
@@ -54,7 +71,7 @@ const NavBar = () => {
               h="full"
               columnGap={20}
             >
-              <Box>
+              <Box display={{ base: 'block', md: 'block' }}>
                 <Link href="/" passHref>
                   <a>
                     <Logo />

@@ -131,12 +131,12 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
       <ModalOverlay />
       <ModalContent w={{ base: '98%', md: 'full' }} pos="relative">
         <form onSubmit={handleSubmit(onSubmitForm)}>
-          <ModalHeader fontSize="xl" color="gray.500">
+          <ModalHeader fontSize="xl" color="gray.500" px={5}>
             Wishlist Item
           </ModalHeader>
           <CustomModalCloseButton />
 
-          <ModalBody pb={5}>
+          <ModalBody pb={5} px={5}>
             <Stack spacing={5}>
               <FormControl isInvalid={Boolean(errors.name)}>
                 <FormLabel htmlFor="name" fontWeight={400}>
@@ -188,12 +188,13 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
                     <FormLabel htmlFor="amount" fontWeight={400}>
                       Amount
                     </FormLabel>
-                    <FormHelperText mb={1}>
+                    <FormHelperText fontSize={{ base: 'xs' }} mb={1}>
                       Or the cost equivalent of the item
                     </FormHelperText>
                     <InputGroup>
-                      {/* eslint-disable-next-line react/no-children-prop */}
-                      <InputLeftAddon children={preferredCurrency} />
+                      <InputLeftAddon border="1px solid" borderColor="gray.200">
+                        {preferredCurrency}
+                      </InputLeftAddon>
                       <Input
                         id="amount"
                         type="number"

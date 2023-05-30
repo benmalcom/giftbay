@@ -169,7 +169,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
         />
         <Flex flex={1} flexDir="column">
           <Flex w="full" justify="space-between" columnGap={4}>
-            <Text fontSize={{ base: 'xs', md: 'md' }} noOfLines={1}>
+            <Text fontSize={{ base: 'sm', md: 'md' }} noOfLines={1}>
               {wishlistItem.name}
             </Text>
             <Text fontSize="xs" fontWeight={600}>
