@@ -38,7 +38,10 @@ export const SendPasswordReset = () => {
 
   const onSubmit = (values: Record<string, string>) => {
     setInFlight(true);
-    sendPasswordResetEmail(values as { email: string })
+    sendPasswordResetEmail({
+      ...values,
+      redirectUrl: process.env.NEXT_PUBLIC_RESET_PASSWORD_REDIRECT,
+    } as { email: string; redirectUrl: string })
       .then(response => toast.success(response.data.message))
       .catch(error => {
         toast.error(error);

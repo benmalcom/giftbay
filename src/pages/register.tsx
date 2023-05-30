@@ -71,6 +71,7 @@ export const Register = () => {
     setRegCompleted(false);
     signIn('credentials', {
       ...values,
+      redirectUrl: process.env.NEXT_PUBLIC_VERIFY_REDIRECT,
       redirect: false,
       isRegister: true,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

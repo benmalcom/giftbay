@@ -1,4 +1,4 @@
-import { UploadedFile } from 'components/common/DropzoneInPlace';
+import { UploadedFile } from 'types/common';
 
 export const removePreviewFromUploadedFiles = (
   items: UploadedFile[]

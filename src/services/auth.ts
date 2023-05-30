@@ -8,7 +8,7 @@ export const loginOrRegister = async <C>(
 ) => {
   const isRegister = !!credentials && 'isRegister' in credentials;
   const inputFields = ['email', 'password'];
-  if (isRegister) inputFields.push('name');
+  if (isRegister) inputFields.push('name', 'redirectUrl');
   const payload = pick(credentials, inputFields);
   return await createRequest({
     url: isRegister ? '/auth/signup' : '/auth/login',
@@ -47,7 +47,7 @@ export const refreshAccessToken = async (tokenObject: {
 export const verifyEmail = async (token: string) => {
   return await createRequest({
     url: '/auth/verify-email',
-    params: { token },
+    payload: { token },
     method: 'post',
   });
 };

@@ -8,7 +8,7 @@ export type CurrencyType = {
 };
 
 export type UploadedFile = File & {
-  preview: string;
+  preview?: string;
 };
 
 export type AppConfig = {
