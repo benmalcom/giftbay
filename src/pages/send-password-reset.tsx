@@ -24,6 +24,7 @@ import * as yup from 'yup';
 import { HeaderTags } from 'components/common';
 import { Button } from 'components/common/Button';
 import { sendPasswordResetEmail } from 'services/auth';
+import { APP_BASE_URL } from 'utils/constants';
 
 const schema = yup
   .object({
@@ -47,7 +48,7 @@ export const SendPasswordReset = () => {
     setInFlight(true);
     sendPasswordResetEmail({
       ...values,
-      redirectUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/${process.env.NEXT_PUBLIC_RESET_PASSWORD_REDIRECT}`,
+      redirectUrl: `${APP_BASE_URL}/${process.env.NEXT_PUBLIC_RESET_PASSWORD_REDIRECT}`,
     } as { email: string; redirectUrl: string })
       .then(() => setIsEmailSent(true))
       .catch(error => {

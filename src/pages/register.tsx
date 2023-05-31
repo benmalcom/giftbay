@@ -28,6 +28,7 @@ import * as yup from 'yup';
 import { HeaderTags } from 'components/common';
 import { Button } from 'components/common/Button';
 import { PasswordInput } from 'components/forms';
+import { APP_BASE_URL } from 'utils/constants';
 
 const schema = yup
   .object({
@@ -70,7 +71,7 @@ export const Register = () => {
     setRegCompleted(false);
     signIn('credentials', {
       ...values,
-      redirectUrl: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/${process.env.NEXT_PUBLIC_VERIFY_REDIRECT}`,
+      redirectUrl: `${APP_BASE_URL}/${process.env.NEXT_PUBLIC_VERIFY_REDIRECT}`,
       redirect: false,
       isRegister: true,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
