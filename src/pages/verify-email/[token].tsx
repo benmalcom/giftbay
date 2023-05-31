@@ -2,9 +2,6 @@ import {
   Container,
   Heading,
   VStack,
-  Text,
-  useBreakpointValue,
-  Spinner,
   Stack,
   Alert,
   Icon,
@@ -12,6 +9,8 @@ import {
   AlertDescription,
   Button,
   Flex,
+  Progress,
+  Text,
 } from '@chakra-ui/react';
 
 import Link from 'next/link';
@@ -28,7 +27,6 @@ export const VerifyEmail = () => {
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
-  const headingSize = useBreakpointValue({ base: 'xs', md: 'md' });
 
   const { token } = router.query;
 
@@ -54,21 +52,16 @@ export const VerifyEmail = () => {
   }, [handleEmailVerification, router.isReady, token]);
 
   const getUIState = () => {
-    if (inFlight) {
+    if (!inFlight) {
       return (
         <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-          <Heading size={headingSize} fontSize="3xl" fontWeight={500} mb={3}>
+          <Heading fontSize="3xl" fontWeight={500} mb={2}>
             Hey there,
           </Heading>
 
-          <Heading size={headingSize} fontWeight={400}>
-            We're verifying your email
-          </Heading>
+          <Text fontSize="lg">We're verifying your email. Please wait...</Text>
           <Flex justify="center" columnGap={2}>
-            <Spinner size="md" color="purple.500" />
-            <Text color="muted" mb={4}>
-              Please wait
-            </Text>
+            <Progress size="sm" isIndeterminate colorScheme="purple" w="full" />
           </Flex>
         </Stack>
       );
