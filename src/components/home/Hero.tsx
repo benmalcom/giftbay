@@ -71,7 +71,6 @@ const heroColorStyle = heroColorStyles[1];
 
 const miniFeatures = [
   'Customize your wishlist to reflect your style and interests',
-  'Manage your registry with ease and make changes as needed',
   'Allow friends and family to contribute together towards larger gifts',
   'Easily track and express gratitude for gifts received',
 ];
