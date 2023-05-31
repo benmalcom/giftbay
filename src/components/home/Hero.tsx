@@ -89,15 +89,17 @@ const Hero = () => (
     <Flex
       gap={4}
       flexDir="column"
-      p={{ base: '60px 15px 45px 25px', md: 50, '2xl': 100 }}
+      p={{ base: '40px 15px 45px 25px', md: 50, '2xl': 100 }}
       w={{ base: '100%', lg: '50%', xl: '50%' }}
       mx="auto"
+      align={{ base: 'center', md: 'flex-start' }}
     >
       <Heading
         fontSize={{ base: '3xl', xl: '5xl' }}
         color="#2f2f2f"
         lineHeight={{ sm: 1.3, md: '120%', '2xl': '125%' }}
         fontWeight={500}
+        textAlign={{ base: 'center', md: 'left' }}
       >
         <Highlight
           query="gift registry"
@@ -106,22 +108,28 @@ const Hero = () => (
             color: 'purple.500',
           }}
         >
-          Your personalized gift registry in minutes.
+          Create your personalized gift registry in minutes.
         </Highlight>
       </Heading>
-      <Text lineHeight="150%" color="#222222" fontSize="md" fontWeight={400}>
-        Create a personalized gift registry for your special occasions and get
-        the perfect presents every time. Your special occasions should be all
-        about you, we're here to make that happen.
+      <Text
+        lineHeight="150%"
+        color="#222222"
+        fontSize={{ base: '14px', md: 'md' }}
+        textAlign={{ base: 'center', md: 'left' }}
+        fontWeight={400}
+      >
+        Discover how our gift registry makes celebrations effortless, curate
+        your wishlist for your special occasions and get the perfect gifts every
+        time.
       </Text>
       <FlexColumn rowGap={3} mt={3}>
         {miniFeatures.map((feature, index) => (
           <Flex w="full" key={index} align="center" columnGap={2}>
             <Icon as={AiFillCheckCircle} color="#805AD5" />
             <Text
-              fontWeight={{ base: 600, lg: 700 }}
+              fontWeight={700}
               textTransform="uppercase"
-              fontSize="14px"
+              fontSize={{ base: 'xs', md: '14px' }}
             >
               {feature}
             </Text>

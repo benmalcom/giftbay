@@ -25,19 +25,29 @@ const Attractions = () => (
     </VStack>
     <VStack
       bgGradient="linear(to-r, purple.500, purple.400)"
-      py={{ base: '40px', xl: '20px' }}
-      px={{ base: '30px', xl: '80px' }}
+      py={{ base: '60px', xl: '20px' }}
+      px={{ base: '25px', xl: '80px' }}
       h="full"
       justifyContent="center"
-      alignItems="flex-start"
+      alignItems={{ xl: 'flex-start', base: 'center' }}
       w={{ base: '100%', xl: '45%' }}
       spacing={10}
     >
       <VStack spacing={5} alignItems={{ base: 'flex-start', xl: 'center' }}>
-        <Heading as="h2" size="xl" color="white">
+        <Heading
+          as="h2"
+          size="xl"
+          color="white"
+          textAlign={{ base: 'center', md: 'left' }}
+        >
           Fastest way to host and share your wishlist with loved ones.
         </Heading>
-        <Text fontSize="md" fontWeight={500} color="white">
+        <Text
+          fontSize="md"
+          fontWeight={500}
+          color="white"
+          textAlign={{ base: 'center', md: 'left' }}
+        >
           Experience the ease, simplicity, and seamless approach to creating a
           gift registry with {process.env.NEXT_PUBLIC_APP_NAME}. Be up and
           running in minutes with a few basic details and watch as your wishlist
