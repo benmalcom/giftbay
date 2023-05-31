@@ -102,13 +102,13 @@ const Hero = () => (
         textAlign={{ base: 'center', md: 'left' }}
       >
         <Highlight
-          query="gift registry"
+          query=""
           styles={{
             rounded: 'full',
             color: 'purple.500',
           }}
         >
-          Create your personalized gift registry in minutes.
+          Create your personalized gift registry in minutes
         </Highlight>
       </Heading>
       <Text
