@@ -41,7 +41,7 @@ instance.interceptors.response.use(
       else if (error.code === 'ERR_CANCELED') {
         return;
       }
-      throw error.response.data;
+      throw error.response.data as Error;
     }
     // Do nothing for canceled requests
     else if (error.request) {

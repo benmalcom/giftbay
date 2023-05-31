@@ -25,7 +25,7 @@ import { verifyEmail } from 'services/auth';
 export const VerifyEmail = () => {
   const [inFlight, setInFlight] = useState(true);
   const [isEmailSent, setIsEmailSent] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
   const router = useRouter();
 
   const { token } = router.query;
@@ -52,7 +52,7 @@ export const VerifyEmail = () => {
   }, [handleEmailVerification, router.isReady, token]);
 
   const getUIState = () => {
-    if (!inFlight) {
+    if (inFlight) {
       return (
         <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
           <Heading fontSize="3xl" fontWeight={500} mb={2}>
@@ -125,7 +125,9 @@ export const VerifyEmail = () => {
               Verification error!
             </AlertTitle>
             <AlertDescription maxWidth="sm">
-              There was an error with the verification process.
+              {error?.message
+                ? error.message
+                : 'There was an error with the verification process'}
             </AlertDescription>
             <Link href="/login" passHref>
               <Button
