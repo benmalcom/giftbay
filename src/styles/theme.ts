@@ -29,6 +29,10 @@ const styles = {
       borderColor: mode('gray.200', 'whiteAlpha.300')(props),
       wordWrap: 'break-word',
     },
+    '#nprogress .bar': {
+      bg: 'purple.500',
+      height: '3px',
+    },
   }),
 };
 

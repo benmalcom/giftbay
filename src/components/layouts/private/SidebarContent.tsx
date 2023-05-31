@@ -11,6 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { IconType } from 'react-icons';
 import { Logo } from 'components/common';
@@ -24,6 +25,7 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
+  const router = useRouter();
   return (
     <FlexColumn
       boxSizing="border-box"
@@ -52,7 +54,11 @@ const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
         <FlexColumn w="full" rowGap={1} mt={5}>
           {AppLinkItems.map(link => (
             <Link href={link.path} key={link.name}>
-              <NavItem icon={link.icon} fontWeight={500}>
+              <NavItem
+                icon={link.icon}
+                fontWeight={500}
+                isActive={router.asPath === link.path}
+              >
                 {link.name}
               </NavItem>
             </Link>
@@ -70,7 +76,11 @@ const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
         >
           {UserLinkItems.map(link => (
             <Link href={link.path} key={link.name}>
-              <NavItem icon={link.icon} fontWeight={500}>
+              <NavItem
+                icon={link.icon}
+                fontWeight={500}
+                isActive={router.asPath === link.path}
+              >
                 {link.name}
               </NavItem>
             </Link>
@@ -112,8 +122,9 @@ export default SidebarContent;
 interface NavItemProps extends ChakraLinkProps {
   icon: IconType;
   children: React.ReactNode;
+  isActive: boolean;
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, isActive, ...rest }: NavItemProps) => {
   const activeHoverStyles: StyleProps = {
     bg: 'purple.100',
     color: 'purple.600',
@@ -131,6 +142,7 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
       role="group"
       cursor="pointer"
       _hover={activeHoverStyles}
+      sx={isActive ? activeHoverStyles : undefined}
       {...rest}
     >
       {icon && (

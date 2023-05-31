@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { PageSpinner } from 'components/common';
 import { AppConfigContext } from 'contexts/AppConfigProvider';
-import { DispatchUserContext } from 'contexts/UserProvider';
+import { DispatchUserContext, UserContext } from 'contexts/UserProvider';
 import { getLoggedInUser } from 'services/user';
 import { User } from 'types/user';
 import HorizontalLayout from './HorizontalLayout';
@@ -18,11 +18,13 @@ const Layout: React.FC<LayoutProps> = ({ children, ...props }: LayoutProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const dispatchUser = useContext(DispatchUserContext);
+  const currentUser = useContext(UserContext);
   const { layoutOrientation } = useContext(AppConfigContext);
   const { data: session, status } = useSession();
 
   useEffect(() => {
     if (status === 'unauthenticated' || !session?.user) return;
+    if (currentUser) return;
     const controller = new AbortController();
     const signal = controller.signal;
     getLoggedInUser(signal)
@@ -35,7 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ children, ...props }: LayoutProps) => {
     return () => {
       controller.abort();
     };
-  }, [dispatchUser, session?.user, status]);
+  }, [currentUser, dispatchUser, session?.user, status]);
 
   if (loading || error) return <PageSpinner />;
 

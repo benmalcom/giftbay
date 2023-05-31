@@ -18,7 +18,6 @@ import { FiMenu } from 'react-icons/fi';
 import { Logo } from 'components/common';
 import MobileNav from 'components/layouts/private/MobileNav';
 import { AppLinkItems } from 'components/layouts/utils';
-import { logOutUser } from 'services/auth';
 import { User } from 'types/user';
 import { APP_BASE_URL } from 'utils/constants';
 import SidebarContent from './SidebarContent';
@@ -40,7 +39,7 @@ const NavBar: React.FC<NavBarProps> = ({
 }) => {
   const handleLogOut = async () => {
     signOut({ callbackUrl: APP_BASE_URL });
-    await logOutUser();
+    // await logOutUser();
   };
 
   return (

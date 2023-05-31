@@ -4,9 +4,10 @@ import type { AppProps } from 'next/app';
 import { Router } from 'next/router';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { PageSpinner } from 'components/common';
 import { PublicLayout } from 'components/layouts';
 import RefreshTokenHandler from 'components/RefreshTokenHandler';
 import AppConfigProvider from 'contexts/AppConfigProvider';
@@ -14,6 +15,8 @@ import UserProvider from 'contexts/UserProvider';
 import theme from 'styles/theme';
 import { toastOptions } from 'styles/toaster';
 import 'components/events/EventCardDropdownMenu.css';
+
+NProgress.configure({ showSpinner: false });
 
 type NextPageWithLayout = NextPage & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,7 +52,12 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     };
   }, []);
 
-  if (!clientLoaded || isGsspLoading) return <PageSpinner />;
+  useEffect(() => {
+    const loading = !clientLoaded || isGsspLoading;
+    if (loading) NProgress.start();
+    else NProgress.done();
+  }, [clientLoaded, isGsspLoading]);
+
   return (
     <ChakraProvider theme={theme}>
       <Toaster

@@ -72,14 +72,14 @@ const HowItWorks = () => (
                 <item.Icon {...HIW_ICON_PROPS} />
               </Flex>
               <Text
-                fontSize={{ base: 'xl', md: 'md', lg: 'xl' }}
-                fontWeight={600}
+                fontSize="16px"
+                fontWeight={700}
                 textAlign="center"
                 color="gray.600"
               >
                 {item.heading}
               </Text>
-              <Text fontSize="sm" textAlign="center">
+              <Text fontSize="15px" textAlign="center">
                 {item.body}
               </Text>
             </VStack>

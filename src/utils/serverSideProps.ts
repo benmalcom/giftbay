@@ -32,10 +32,10 @@ export function withAuthServerSideProps(
       const componentSSFnResponse = await getServerSidePropsFn(context, user);
 
       return {
-        props: { user, ...(componentSSFnResponse.props as object) },
+        props: { session, ...(componentSSFnResponse.props as object) },
       };
     }
 
-    return { props: { user } };
+    return { props: { session } };
   };
 }
