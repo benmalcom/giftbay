@@ -137,9 +137,6 @@ const AddEventModal: React.FC<FormProps> = ({
     onClose();
   };
 
-  console.log('errors ', errors);
-  console.log('values ', watch());
-
   return (
     <>
       <Modal isOpen={isOpen} onClose={handleClose} size="lg">
@@ -185,10 +182,20 @@ const AddEventModal: React.FC<FormProps> = ({
                           placeholder="E.g my special birthday wishlist"
                           errorBorderColor="red.300"
                         />
-                        <FormErrorMessage>
-                          {errors?.name?.message &&
-                            errors.name.message.toString()}
-                        </FormErrorMessage>
+                        <Flex
+                          align="flex-start"
+                          justify={
+                            errors?.name?.message ? 'space-between' : 'end'
+                          }
+                        >
+                          <FormErrorMessage>
+                            {errors?.name?.message &&
+                              errors.name.message.toString()}
+                          </FormErrorMessage>
+                          <Text textAlign="right" fontSize="sm">
+                            {formValues?.name?.length || 0}/40
+                          </Text>
+                        </Flex>
                       </FormControl>
 
                       <FormControl

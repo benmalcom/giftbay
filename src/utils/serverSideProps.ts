@@ -22,7 +22,6 @@ export function withAuthServerSideProps(
       !session.user ||
       (session.accessTokenExpiry && Date.now() > session.accessTokenExpiry)
     ) {
-      console.log('Redirecting');
       return {
         redirect,
         props: {
