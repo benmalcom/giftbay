@@ -108,7 +108,8 @@ const PayoutSettingsForm: React.FC<FormProps> = ({
               render={({ field: { onChange, onBlur, value } }) => (
                 <Select
                   placeholder="Select bank..."
-                  name="category"
+                  instanceId="bankName"
+                  name="bankName"
                   isClearable
                   onChange={onChange}
                   onBlur={onBlur}

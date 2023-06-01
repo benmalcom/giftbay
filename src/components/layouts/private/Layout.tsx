@@ -38,8 +38,8 @@ const Layout: React.FC<LayoutProps> = ({ children, ...props }: LayoutProps) => {
       .catch(error => {
         if (error.code !== 'ERR_CANCELED') {
           dispatchUser({ type: 'set', payload: null });
+          console.log('User fetch error ', error);
         }
-        console.log('User fetch error ', error);
       })
       .finally(() => setLoading(false));
 

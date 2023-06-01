@@ -137,6 +137,9 @@ const AddEventModal: React.FC<FormProps> = ({
     onClose();
   };
 
+  console.log('errors ', errors);
+  console.log('formValues ', formValues);
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={handleClose} size="lg">
@@ -209,15 +212,33 @@ const AddEventModal: React.FC<FormProps> = ({
                         </FormHelperText>
                         <Controller
                           control={control}
-                          render={({ field: { onChange, onBlur, value } }) => (
+                          render={({ field }) => (
                             <Select
+                              {...field}
+                              instanceId="category"
                               placeholder="Select category..."
-                              name="category"
                               isClearable
-                              onChange={onChange}
-                              onBlur={onBlur}
                               options={EVENT_CATEGORIES}
-                              value={value}
+                              styles={{
+                                control: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  height: '40px',
+                                  width: '100%',
+                                  borderRadius: '7px',
+                                  borderWidth: '2px',
+                                  boxShadow:
+                                    state.isFocused || state.menuIsOpen
+                                      ? 'none'
+                                      : undefined,
+                                  borderColor: errors?.currency
+                                    ? 'red'
+                                    : undefined,
+                                }),
+                                placeholder: baseStyles => ({
+                                  ...baseStyles,
+                                  fontSize: '16px',
+                                }),
+                              }}
                             />
                           )}
                           name="category"
@@ -302,15 +323,14 @@ const AddEventModal: React.FC<FormProps> = ({
                         </FormHelperText>
                         <Controller
                           control={control}
-                          render={({ field: { onChange, onBlur, value } }) => (
+                          render={({ field }) => (
                             <Select
+                              {...field}
+                              instanceId="currency"
                               placeholder="Select..."
                               name="currency"
                               isClearable
-                              onChange={onChange}
-                              onBlur={onBlur}
                               options={CURRENCIES}
-                              value={value}
                               styles={{
                                 control: (baseStyles, state) => ({
                                   ...baseStyles,

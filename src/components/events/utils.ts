@@ -25,6 +25,7 @@ const getEventSchemaByStep = (step: number) => {
             value: yup.string(),
           })
           .required('This is required')
+          .nullable() // for handling null value when clearing options via clicking "x"
           .typeError('This is required'),
         date: yup.date().required('Event start date is required'),
       });
