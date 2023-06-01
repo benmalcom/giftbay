@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { isEmpty } from 'lodash';
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
@@ -12,7 +12,7 @@ const defaultOptions: AxiosRequestConfig = {
     Pragma: 'no-cache',
     Expires: '0',
   },
-  // timeout: 10000,
+  timeout: 10000,
 };
 
 // Create instance
@@ -41,7 +41,7 @@ instance.interceptors.response.use(
       else if (error.code === 'ERR_CANCELED') {
         return;
       }
-      throw error.response.data as Error;
+      throw error.response.data as AxiosError;
     }
     // Do nothing for canceled requests
     else if (error.request) {

@@ -12,7 +12,7 @@ export const UserContext = createContext<User | null>(null);
 
 type DispatchActionType = {
   type: 'set' | 'update';
-  payload: User;
+  payload: User | null;
 };
 
 const reducer = (

@@ -17,7 +17,7 @@ const VerticalLayout: React.FC<{
         onClose={onClose}
         display={{ base: 'none', xl: 'flex' }}
       />
-      <Flex h="full" w="f" flex={1} flexDir="column">
+      <Flex h="full" w="full" flex={1} flexDir="column">
         <NavBar
           onClose={onClose}
           isOpen={isOpen}
@@ -29,6 +29,7 @@ const VerticalLayout: React.FC<{
           p={{ base: '25px 5px', md: '20px' }}
           flex={1}
           boxSizing="border-box"
+          w="full"
         >
           {children}
         </Box>

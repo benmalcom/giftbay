@@ -4,6 +4,8 @@ import {
   Button as ChakraButton,
   Image,
   Box,
+  AspectRatio,
+  Badge,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -16,7 +18,7 @@ import {
 import wishlist from 'data/wishlist.json';
 import { EventFormPayload, EventType } from 'types/event';
 import { WishlistFormPayload } from 'types/wishlist';
-import { CURRENCIES } from 'utils/constants';
+import { CURRENCIES, EVENT_CATEGORIES } from 'utils/constants';
 import EventCardDropdownMenu from './EventCardDropdownMenu';
 import { ModalManager as WishlistModalManager } from './WishlistModal';
 
@@ -36,18 +38,23 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
   const preferredCurrency = CURRENCIES.find(
     item => item.value === event.currency
   );
+  const eventCategory = EVENT_CATEGORIES.find(
+    item => item.value === event.category
+  );
   return (
     <MotionFlexColumn
       bg={event.backgroundColor}
       rounded="xl"
       shadow="lg"
       h="300px"
+      minW="0px"
       zIndex={2}
       whileHover={{
         y: -1,
         scale: 1.01,
       }}
       pos="relative"
+      mx="auto"
     >
       {isMenuOpen && (
         <Box
@@ -60,17 +67,35 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
           borderRadius="inherit"
         />
       )}
-      <FlexColumn p="3" gridGap="2" h="full" w="full">
-        <Flex justify="space-between" w="full" h="50%">
-          <FlexColumn rowGap={5} w="full">
+      <FlexColumn p="3" gridGap="1" h="full" w="full">
+        <Flex justify="space-between" w="full" h="65%">
+          <FlexColumn rowGap={4} w="full" justify="space-between">
             <Flex w="full" justify="space-between">
-              <Text
-                fontSize="xl"
-                color={event.foregroundColor}
-                fontWeight={600}
-              >
-                {event.name}
-              </Text>
+              <FlexColumn rowGap={1}>
+                <Badge
+                  w="fit-content"
+                  bg={event.foregroundColor}
+                  color={event.backgroundColor}
+                  boxShadow="sm"
+                  textTransform="capitalize"
+                  fontSize="sm"
+                  display="flex"
+                  alignItems="center"
+                  columnGap={1}
+                  opacity={0.8}
+                >
+                  {eventCategory!.label}
+                </Badge>
+                <Text
+                  fontSize="2xl"
+                  color={event.foregroundColor}
+                  fontWeight={500}
+                  lineHeight="110%"
+                >
+                  {event.name}
+                </Text>
+              </FlexColumn>
+
               <EventCardDropdownMenu
                 onCloseMenu={() => setMenuOpen(false)}
                 onOpenMenu={() => setMenuOpen(true)}
@@ -90,6 +115,7 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
                   rounded="3xl"
                   width="fit-content"
                   fontWeight={400}
+                  size="sm"
                 >
                   {preferredCurrency?.symbol}250,000
                 </Button>
@@ -98,7 +124,7 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
             />
           </FlexColumn>
         </Flex>
-        <Flex align="center" gridGap="4" h="50%" w="full">
+        <Flex align="center" gridGap="4" h="35%" w="full">
           <Flex h="full" width="40%" alignItems="flex-end">
             <Link href="/overview" passHref>
               <ChakraButton
@@ -117,12 +143,17 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
           </Flex>
           <Flex
             flex={1}
-            mr={-1}
-            mb={-1}
             justifyContent="flex-end"
             alignItems="flex-end"
+            h="full"
           >
-            <Image src={event.lastGiftImageUrl} alt="Gift item" mr={0} mb={0} />
+            <AspectRatio w="110px" ratio={4 / 3}>
+              <Image
+                src={event.lastGiftImageUrl}
+                alt="Gift item"
+                objectFit="cover"
+              />
+            </AspectRatio>
           </Flex>
         </Flex>
       </FlexColumn>

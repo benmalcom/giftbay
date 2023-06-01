@@ -61,7 +61,7 @@ export const VerifyEmail = () => {
 
           <Text fontSize="lg">We're verifying your email. Please wait...</Text>
           <Flex justify="center" columnGap={2}>
-            <Progress size="sm" isIndeterminate colorScheme="purple" w="full" />
+            <Progress size="xs" isIndeterminate colorScheme="purple" w="full" />
           </Flex>
         </Stack>
       );

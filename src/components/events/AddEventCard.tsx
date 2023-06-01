@@ -16,11 +16,12 @@ const AddEventCard: React.FC<AddEventCardProps> = ({ onSave }) => {
         <MotionFlexColumn
           bg="gray.50"
           rounded="xl"
-          shadow="md"
+          shadow="sm"
           h="300px"
+          minW="0px"
           cursor="pointer"
           position="relative"
-          border="1px dashed"
+          border="1.5px dashed"
           borderColor="purple.500"
           onClick={() => trigger()}
           alignItems="center"
@@ -29,7 +30,7 @@ const AddEventCard: React.FC<AddEventCardProps> = ({ onSave }) => {
         >
           <Icon boxSize="3em" as={CiCirclePlus} size={50} color="purple.500" />
           <Text fontSize="md" color="subtle">
-            New event
+            New Item
           </Text>
         </MotionFlexColumn>
       )}

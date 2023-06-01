@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { PageSpinner } from 'components/common';
 import { AppConfigContext } from 'contexts/AppConfigProvider';
 import { DispatchUserContext, UserContext } from 'contexts/UserProvider';
+import useRedirectIfNotLoggedIn from 'hooks/useRedirectIfNotLoggedIn';
 import { getLoggedInUser } from 'services/user';
 import { User } from 'types/user';
 import HorizontalLayout from './HorizontalLayout';
@@ -16,14 +17,17 @@ type LayoutProps = {
 
 const Layout: React.FC<LayoutProps> = ({ children, ...props }: LayoutProps) => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const dispatchUser = useContext(DispatchUserContext);
   const currentUser = useContext(UserContext);
   const { layoutOrientation } = useContext(AppConfigContext);
-  const { data: session, status } = useSession();
+  const { status: authStatus } = useSession();
+  const redirectToLogin = useRedirectIfNotLoggedIn();
 
   useEffect(() => {
-    if (status === 'unauthenticated' || !session?.user) return;
+    if (authStatus === 'unauthenticated') {
+      redirectToLogin();
+      return;
+    }
     if (currentUser) return;
     const controller = new AbortController();
     const signal = controller.signal;
@@ -31,15 +35,20 @@ const Layout: React.FC<LayoutProps> = ({ children, ...props }: LayoutProps) => {
       .then((response: AxiosResponse<{ user: User }>) =>
         dispatchUser({ type: 'set', payload: response.data.user })
       )
-      .catch(error => setError(error.message))
+      .catch(error => {
+        if (error.code !== 'ERR_CANCELED') {
+          dispatchUser({ type: 'set', payload: null });
+        }
+        console.log('User fetch error ', error);
+      })
       .finally(() => setLoading(false));
 
     return () => {
       controller.abort();
     };
-  }, [currentUser, dispatchUser, session?.user, status]);
+  }, [currentUser, dispatchUser, redirectToLogin, authStatus]);
 
-  if (loading || error) return <PageSpinner />;
+  if (loading || !currentUser) return <PageSpinner />;
 
   return layoutOrientation === 'vertical' ? (
     <VerticalLayout {...props}>{children}</VerticalLayout>

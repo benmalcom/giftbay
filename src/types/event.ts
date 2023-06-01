@@ -10,7 +10,7 @@ export type EventType = {
   date: string;
   thankYouNote?: string;
   slug: string;
-  coverPhoto?: string;
+  coverPhotoUrl?: string;
   backgroundColor: string;
   foregroundColor: string;
 };
@@ -22,7 +22,7 @@ export type EventFormValues = Pick<
   | 'description'
   | 'isPublic'
   | 'thankYouNote'
-  | 'coverPhoto'
+  | 'coverPhotoUrl'
   | 'backgroundColor'
   | 'foregroundColor'
 > & {
@@ -38,7 +38,7 @@ export type EventFormPayload = Pick<
   | 'description'
   | 'isPublic'
   | 'thankYouNote'
-  | 'coverPhoto'
+  | 'coverPhotoUrl'
   | 'backgroundColor'
   | 'foregroundColor'
 > & {

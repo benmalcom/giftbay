@@ -23,6 +23,7 @@ export const loginOrRegister = async (
 export const refreshAccessToken = async (tokenObject: {
   refreshToken: string;
 }) => {
+  console.log('Refreshing token...');
   try {
     // Get a new set of tokens with a refreshToken
     const { data } = await createRequest({
@@ -38,6 +39,7 @@ export const refreshAccessToken = async (tokenObject: {
       accessToken: data.access.token,
       accessTokenExpiry: new Date(data.access.expires).getTime(),
       refreshToken: data.refresh.token ?? tokenObject.refreshToken,
+      error: null,
     };
   } catch (error) {
     return {

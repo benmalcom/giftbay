@@ -35,9 +35,9 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BsImage } from 'react-icons/bs';
 import { FaTimesCircle } from 'react-icons/fa';
+import Select from 'react-select';
 import { DropzoneInPlace } from 'components/common';
 import { CustomModalCloseButton } from 'components/common/Button';
-import { Select } from 'components/common/Select';
 import {
   parseEventFormValues,
   useEventFormSchema,
@@ -112,7 +112,7 @@ const AddEventModal: React.FC<FormProps> = ({
     setValue,
     reset,
   } = useForm({
-    mode: 'onSubmit',
+    mode: 'all',
     defaultValues,
     resolver: yupResolver(schema),
   });
@@ -124,7 +124,7 @@ const AddEventModal: React.FC<FormProps> = ({
   const prevCoverPhotoUrl = usePrevious(coverPhotoUrl);
   useEffect(() => {
     if (coverPhotoUrl && !isEqual(prevCoverPhotoUrl, coverPhotoUrl)) {
-      setValue('coverPhoto', coverPhotoUrl);
+      setValue('coverPhotoUrl', coverPhotoUrl);
     }
   }, [coverPhotoUrl, prevCoverPhotoUrl, setValue]);
 
@@ -136,6 +136,9 @@ const AddEventModal: React.FC<FormProps> = ({
     reset();
     onClose();
   };
+
+  console.log('errors ', errors);
+  console.log('values ', watch());
 
   return (
     <>
@@ -243,7 +246,10 @@ const AddEventModal: React.FC<FormProps> = ({
                                   },
                                 }}
                               />
-                              <InputRightAddon>
+                              <InputRightAddon
+                                border="1px solid"
+                                borderColor="gray.200"
+                              >
                                 <CalendarIcon />
                               </InputRightAddon>
                             </InputGroup>
@@ -298,6 +304,26 @@ const AddEventModal: React.FC<FormProps> = ({
                               onBlur={onBlur}
                               options={CURRENCIES}
                               value={value}
+                              styles={{
+                                control: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  height: '40px',
+                                  width: '100%',
+                                  borderRadius: '7px',
+                                  borderWidth: '2px',
+                                  boxShadow:
+                                    state.isFocused || state.menuIsOpen
+                                      ? 'none'
+                                      : undefined,
+                                  borderColor: errors?.currency
+                                    ? 'red'
+                                    : undefined,
+                                }),
+                                placeholder: baseStyles => ({
+                                  ...baseStyles,
+                                  fontSize: '16px',
+                                }),
+                              }}
                             />
                           )}
                           name="currency"
@@ -328,7 +354,7 @@ const AddEventModal: React.FC<FormProps> = ({
                   {currentStep === 3 && (
                     <>
                       <FormControl>
-                        {formValues.coverPhoto ? (
+                        {formValues.coverPhotoUrl ? (
                           <Flex
                             h="90px"
                             w="full"
@@ -348,7 +374,7 @@ const AddEventModal: React.FC<FormProps> = ({
                               borderRadius="inherit"
                               filter="brightness(80%)"
                               alt="Banner image"
-                              src={formValues.coverPhoto}
+                              src={formValues.coverPhotoUrl}
                               onLoad={() => setBannerLoaded(true)}
                             />
                             {isBannerLoaded && (
@@ -358,7 +384,7 @@ const AddEventModal: React.FC<FormProps> = ({
                                 pos="absolute"
                                 top={1}
                                 right={1}
-                                onClick={() => setValue('coverPhoto', '')}
+                                onClick={() => setValue('coverPhotoUrl', '')}
                                 cursor="pointer"
                               />
                             )}
@@ -449,12 +475,14 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
   const { isOpen, onToggle } = useDisclosure();
   return (
     <>
-      <AddEventModal
-        isOpen={isOpen}
-        onClose={onToggle}
-        onSave={onSave}
-        initialValues={initialValues}
-      />
+      {isOpen && (
+        <AddEventModal
+          isOpen={isOpen}
+          onClose={onToggle}
+          onSave={onSave}
+          initialValues={initialValues}
+        />
+      )}
       {triggerFunc({
         trigger: onToggle,
       })}

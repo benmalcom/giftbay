@@ -22,7 +22,7 @@ const Events = () => {
   };
   return (
     <Container py={1.5} maxW="7xl" h="full" alignItems="center">
-      <FlexColumn w="full" rowGap={8} mt={10}>
+      <FlexColumn w="full" rowGap={8} mt={10} flexWrap="wrap">
         <Box>
           <Link href="/" passHref>
             <Button
@@ -48,6 +48,7 @@ const Events = () => {
           alignItems="flex-start"
           w="full"
           bg="white"
+          boxShadow="sm"
         >
           <AlertTitle mb={1} fontSize="md">
             Welcome to your personalized event list.

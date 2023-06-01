@@ -18,15 +18,14 @@ const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({
 }) => {
   return (
     <Grid
+      maxW="full"
       gridTemplateColumns={{
-        base: '90%',
-        sm: '95%',
-        md: 'repeat(2, 300px)',
-        lg: 'repeat(3, 300px)',
+        base: '1fr',
+        md: 'repeat(2, 1fr)',
+        lg: 'repeat(3, 1fr)',
         xl: 'repeat(4, 1fr)',
       }}
       gridGap="6"
-      justifyContent="center"
     >
       <AddEventCard onSave={onSave} />
 

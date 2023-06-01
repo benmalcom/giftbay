@@ -11,8 +11,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { pick } from 'lodash';
 import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import Select from 'react-select';
 import * as yup from 'yup';
-import { Select } from 'components/common/Select';
 import BANKS from 'data/nigerianBanks.json';
 import { Payout } from 'types/user';
 
@@ -112,6 +112,24 @@ const PayoutSettingsForm: React.FC<FormProps> = ({
                   isClearable
                   onChange={onChange}
                   onBlur={onBlur}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      height: '40px',
+                      width: '100%',
+                      borderRadius: '7px',
+                      borderWidth: '2px',
+                      boxShadow:
+                        state.isFocused || state.menuIsOpen
+                          ? 'none'
+                          : undefined,
+                      borderColor: errors?.bankName ? 'red' : undefined,
+                    }),
+                    placeholder: baseStyles => ({
+                      ...baseStyles,
+                      fontSize: '16px',
+                    }),
+                  }}
                   options={BANKS.map(
                     ({
                       bankCode,

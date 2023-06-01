@@ -14,7 +14,10 @@ const getEventSchemaByStep = (step: number) => {
     case 1:
     default:
       return yup.object().shape({
-        name: yup.string().required('This is required'),
+        name: yup
+          .string()
+          .required('This is required')
+          .max(40, 'Maximum of 40 characters.'),
         category: yup
           .object()
           .shape({
@@ -40,7 +43,7 @@ const getEventSchemaByStep = (step: number) => {
       });
     case 3:
       return yup.object().shape({
-        coverPhoto: yup.string(),
+        coverPhotoUrl: yup.string(),
         thankYouNote: yup.string(),
       });
   }

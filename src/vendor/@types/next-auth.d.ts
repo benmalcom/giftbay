@@ -14,7 +14,8 @@ declare module 'next-auth' {
     refreshToken: string;
     accessTokenExpiry: number;
     user: User;
-    error?: string;
+    expires: string;
+    error: string;
   }
 }
 

@@ -1,22 +1,18 @@
 import { useRouter } from 'next/router';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
-import { APP_BASE_URL } from 'utils/constants';
+import useRedirectIfNotLoggedIn from 'hooks/useRedirectIfNotLoggedIn';
 
 const RefreshTokenHandler = () => {
   const { data: session } = useSession();
+  const redirectToLogin = useRedirectIfNotLoggedIn();
   const router = useRouter();
 
   useEffect(() => {
-    let queryString;
-    const currentPath = router.asPath;
-    if (currentPath !== '/login') queryString = `?dest=${currentPath}`;
     if (session?.error === 'RefreshAccessTokenError') {
-      signOut({
-        callbackUrl: `${APP_BASE_URL}/login${queryString ?? ''}`.trim(),
-      });
+      redirectToLogin();
     }
-  }, [router.asPath, session]);
+  }, [redirectToLogin, router.asPath, session]);
 
   return null;
 };

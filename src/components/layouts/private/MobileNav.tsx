@@ -1,10 +1,11 @@
-import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
   Avatar,
   Box,
+  Divider,
   Flex,
   FlexProps,
   HStack,
+  Icon,
   IconButton,
   Menu,
   MenuButton,
@@ -18,6 +19,7 @@ import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import React from 'react';
 import { FiMenu } from 'react-icons/fi';
+import { RxDropdownMenu } from 'react-icons/rx';
 import { Logo } from 'components/common';
 import { UserLinkItems } from 'components/layouts/utils';
 import { logOutUser } from 'services/auth';
@@ -55,39 +57,38 @@ const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
 
       <HStack spacing={{ base: '0', md: '6' }}>
         <Flex alignItems={'center'}>
-          <Menu>
-            <MenuButton
-              py={2}
-              transition="all 0.3s"
-              _focus={{ boxShadow: 'none' }}
-            >
-              <HStack align={{ base: 'center', md: 'flex-start' }} maxW="200px">
+          <Menu placement="bottom-end">
+            <MenuButton transition="all 0.3s" _focus={{ boxShadow: 'none' }}>
+              <Flex align="center" maxW="200px" px={3} columnGap={1}>
                 <Avatar size={'sm'} src={user.avatarUrl} name={user.name} />
-                <VStack
-                  display={{ base: 'none', md: 'flex' }}
-                  alignItems="flex-start"
-                  spacing="1px"
-                  ml="2"
-                  alignSelf="flex-start"
-                >
-                  <Text fontSize="sm" fontWeight={500} mt="-4px" noOfLines={1}>
-                    {user.name}
-                  </Text>
-                  <Text fontSize="xs" color="gray.600" noOfLines={1}>
-                    {user.email}
-                  </Text>
-                </VStack>
-                <IconButton
-                  size="xs"
-                  icon={<ChevronDownIcon fontSize="lg" />}
+                <Icon
+                  boxSize="1.4em"
+                  as={RxDropdownMenu}
                   aria-label="dropdown-icon"
                 />
-              </HStack>
+              </Flex>
             </MenuButton>
             <MenuList
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}
+              mt={3}
             >
+              <VStack
+                display={{ base: 'none', md: 'flex' }}
+                alignItems="flex-start"
+                spacing="1px"
+                px={3}
+                py={3}
+                alignSelf="flex-start"
+              >
+                <Text fontSize="sm" fontWeight={500} mt="-4px" noOfLines={1}>
+                  {user.name}
+                </Text>
+                <Text fontSize="xs" color="gray.600" noOfLines={1}>
+                  {user.email}
+                </Text>
+              </VStack>
+              <Divider />
               {UserLinkItems.map((link, index) => (
                 <Link key={index} href={link.path} passHref>
                   <MenuItem>{link.name}</MenuItem>
