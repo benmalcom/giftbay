@@ -58,7 +58,7 @@ export const Login = () => {
       redirect: false,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     }) // @ts-ignore
-      .then(async ({ url, error, ...rest }) => {
+      .then(async ({ url, error }) => {
         if (error) throw error;
         if (url) await router.push(url);
       })
