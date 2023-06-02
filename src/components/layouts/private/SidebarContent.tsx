@@ -9,15 +9,24 @@ import {
   Avatar,
   VStack,
   Text,
+  MenuButton,
+  MenuList,
+  useColorModeValue,
+  Divider,
+  MenuItem,
+  Menu,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/react';
 import React from 'react';
 import { IconType } from 'react-icons';
+import { BsChevronRight } from 'react-icons/bs';
 import { Logo } from 'components/common';
 import { FlexColumn } from 'components/common/MotionContainers';
 import { AppLinkItems, UserLinkItems } from 'components/layouts/utils';
 import { User } from 'types/user';
+import { APP_BASE_URL } from 'utils/constants';
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
@@ -26,6 +35,9 @@ interface SidebarProps extends BoxProps {
 
 const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
   const router = useRouter();
+  const handleLogOut = async () => {
+    signOut({ callbackUrl: APP_BASE_URL });
+  };
   return (
     <FlexColumn
       boxSizing="border-box"
@@ -87,16 +99,15 @@ const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
           ))}
         </FlexColumn>
       </FlexColumn>
-      <FlexColumn
+      <Flex
         h="70px"
         alignItems="center"
         borderTop="1px solid"
         borderColor="gray.200"
         boxSizing="border-box"
-        p={4}
         bg="gray.100"
       >
-        <Flex>
+        <Flex flex={1} justify="center" py={4}>
           <Avatar size={'sm'} name={user.name} src={user.avatarUrl} />
           <VStack
             alignItems="flex-start"
@@ -112,7 +123,46 @@ const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
             </Text>
           </VStack>
         </Flex>
-      </FlexColumn>
+        <Menu placement="right-start">
+          <MenuButton
+            transition="all 0.3s"
+            _focus={{ boxShadow: 'none' }}
+            height="full"
+            borderLeft="1px solid"
+            borderColor="gray.300"
+          >
+            <Flex
+              h="full"
+              width="25px"
+              align="center"
+              justify="center"
+              cursor="pointer"
+            >
+              <Icon as={BsChevronRight} />
+            </Flex>
+          </MenuButton>
+          <MenuList
+            mb={5}
+            borderColor={useColorModeValue('gray.200', 'gray.700')}
+          >
+            <VStack
+              alignItems="flex-start"
+              spacing="1px"
+              p={3}
+              alignSelf="flex-start"
+            >
+              <Text fontSize="sm" fontWeight={500} mt="-4px" noOfLines={1}>
+                {user.name}
+              </Text>
+              <Text fontSize="xs" color="gray.600" noOfLines={1}>
+                {user.email}
+              </Text>
+            </VStack>
+            <Divider />
+            <MenuItem onClick={handleLogOut}>Sign out</MenuItem>
+          </MenuList>
+        </Menu>
+      </Flex>
     </FlexColumn>
   );
 };

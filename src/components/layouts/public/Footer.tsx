@@ -14,7 +14,8 @@ const Footer = () => (
     minH="70px"
     boxSizing="border-box"
     bg="white"
-    borderTop="1px solid #CBD5E0"
+    borderTop="0.5px solid"
+    borderTopColor="gray.200"
   >
     <Container as="footer" role="contentinfo" maxW="7xl" h="full">
       <Flex

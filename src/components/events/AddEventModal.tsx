@@ -112,7 +112,7 @@ const AddEventModal: React.FC<FormProps> = ({
     setValue,
     reset,
   } = useForm({
-    mode: 'all',
+    mode: 'onSubmit',
     defaultValues,
     resolver: yupResolver(schema),
   });
@@ -136,9 +136,6 @@ const AddEventModal: React.FC<FormProps> = ({
     reset();
     onClose();
   };
-
-  console.log('errors ', errors);
-  console.log('formValues ', formValues);
 
   return (
     <>
@@ -219,26 +216,6 @@ const AddEventModal: React.FC<FormProps> = ({
                               placeholder="Select category..."
                               isClearable
                               options={EVENT_CATEGORIES}
-                              styles={{
-                                control: (baseStyles, state) => ({
-                                  ...baseStyles,
-                                  height: '40px',
-                                  width: '100%',
-                                  borderRadius: '7px',
-                                  borderWidth: '2px',
-                                  boxShadow:
-                                    state.isFocused || state.menuIsOpen
-                                      ? 'none'
-                                      : undefined,
-                                  borderColor: errors?.currency
-                                    ? 'red'
-                                    : undefined,
-                                }),
-                                placeholder: baseStyles => ({
-                                  ...baseStyles,
-                                  fontSize: '16px',
-                                }),
-                              }}
                             />
                           )}
                           name="category"

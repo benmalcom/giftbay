@@ -60,7 +60,6 @@ export const Login = () => {
     }) // @ts-ignore
       .then(async ({ url, error, ...rest }) => {
         if (error) throw error;
-        console.log('rest ', rest);
         if (url) await router.push(url);
       })
       .catch(error => {

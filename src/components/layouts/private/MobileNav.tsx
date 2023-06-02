@@ -22,7 +22,6 @@ import { FiMenu } from 'react-icons/fi';
 import { RxDropdownMenu } from 'react-icons/rx';
 import { Logo } from 'components/common';
 import { UserLinkItems } from 'components/layouts/utils';
-import { logOutUser } from 'services/auth';
 import { User } from 'types/user';
 import { APP_BASE_URL } from 'utils/constants';
 
@@ -33,7 +32,6 @@ interface MobileProps extends FlexProps {
 const MobileNav = ({ onOpen, user, ...rest }: MobileProps) => {
   const handleLogOut = async () => {
     signOut({ callbackUrl: APP_BASE_URL });
-    await logOutUser();
   };
   return (
     <Flex

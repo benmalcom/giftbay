@@ -131,6 +131,7 @@ const PayoutSettingsForm: React.FC<FormProps> = ({
                       fontSize: '16px',
                     }),
                   }}
+                  // @ts-ignore: No reason for error
                   options={BANKS.map(
                     ({
                       bankCode,

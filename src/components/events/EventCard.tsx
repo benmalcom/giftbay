@@ -78,7 +78,7 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
                   color={event.backgroundColor}
                   boxShadow="sm"
                   textTransform="capitalize"
-                  fontSize="sm"
+                  fontSize="xs"
                   display="flex"
                   alignItems="center"
                   columnGap={1}

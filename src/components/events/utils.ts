@@ -18,27 +18,12 @@ const getEventSchemaByStep = (step: number) => {
           .string()
           .required('This is required')
           .max(40, 'Maximum of 40 characters.'),
-        category: yup
-          .object()
-          .shape({
-            label: yup.string(),
-            value: yup.string(),
-          })
-          .required('This is required')
-          .nullable() // for handling null value when clearing options via clicking "x"
-          .typeError('This is required'),
+        category: yup.object().required('This is required'),
         date: yup.date().required('Event start date is required'),
       });
     case 2:
       return yup.object().shape({
-        currency: yup
-          .object()
-          .shape({
-            label: yup.string(),
-            value: yup.string(),
-          })
-          .required('Choose preferred currency')
-          .typeError('Choose preferred currency'),
+        currency: yup.object().required('Choose preferred currency'),
         description: yup.string(),
         isPublic: yup.boolean(),
       });

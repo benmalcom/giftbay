@@ -15,6 +15,7 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { IconType } from 'react-icons';
 import { FiHome, FiTrendingUp } from 'react-icons/fi';
@@ -33,6 +34,8 @@ const LinkItems: Array<LinkItemProps> = [
 
 const NavBar = () => {
   const { isOpen, onClose } = useDisclosure();
+  const router = useRouter();
+  const isHomepage = router.asPath === '/';
 
   return (
     <>
@@ -49,22 +52,21 @@ const NavBar = () => {
         </DrawerContent>
       </Drawer>
       <Flex
+        zIndex={5}
         w="full"
         minH="70px"
         maxH="70px"
-        bg="white"
-        borderBottom="1px solid"
-        borderBottomColor="gray.200"
-        shadow="sm"
+        bg={
+          isHomepage
+            ? 'linear-gradient(0deg, #FBFAFF, #FBFAFF), linear-gradient(104.44deg, #FFFFFF 48.29%, #FAFAFA 58.91%)'
+            : 'white'
+        }
+        borderBottom={'1px solid'}
+        borderBottomColor={'gray.200'}
+        shadow={isHomepage ? undefined : 'sm'}
       >
         <Flex as="nav" w="full" h="full" align="center">
-          <Container
-            py={1.5}
-            maxW="7xl"
-            h="full"
-            alignItems="center"
-            bg="white"
-          >
+          <Container py={1.5} maxW="7xl" h="full" alignItems="center">
             <Flex
               justify="space-between"
               align="center"
@@ -87,9 +89,10 @@ const NavBar = () => {
                   <Link href="/login" passHref>
                     <Button
                       as="a"
-                      variant="solid"
+                      variant="outline"
                       textDecoration="none"
                       borderRadius="30px"
+                      colorScheme="purple"
                     >
                       Sign In
                     </Button>
