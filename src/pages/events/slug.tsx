@@ -1,1 +1,1 @@
-export const EventDetails = () => <>slug</>;
+export const EventDetails = () => <div>slug</div>;
