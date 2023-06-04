@@ -81,7 +81,7 @@ const Events = () => {
       })
       .catch(err => console.log('err ', err))
       .finally(() =>
-        setInFlight(state => ({ ...state, [`update_${id}`]: true }))
+        setInFlight(state => ({ ...state, [`update_${id}`]: false }))
       );
   };
 
@@ -94,7 +94,7 @@ const Events = () => {
       })
       .catch(err => console.log('err ', err))
       .finally(() =>
-        setInFlight(state => ({ ...state, [`delete_${id}`]: true }))
+        setInFlight(state => ({ ...state, [`delete_${id}`]: false }))
       );
   };
 

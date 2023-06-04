@@ -30,7 +30,10 @@ const getRandomImagePath = () => {
   return `/images/${filename}`;
 };
 
-type EventCardProps = Pick<EventComponentProps, 'loading' | 'onCreate'> & {
+type EventCardProps = Pick<
+  EventComponentProps,
+  'loading' | 'onCreate' | 'onDelete'
+> & {
   event: EventType;
   onUpdate(id: string, values: Record<string, unknown>, cb: () => void): void;
 };
@@ -38,6 +41,7 @@ const EventCard: React.FC<EventCardProps> = ({
   event,
   onUpdate,
   onCreate,
+  onDelete,
   loading,
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -112,6 +116,7 @@ const EventCard: React.FC<EventCardProps> = ({
                 onOpenMenu={() => setMenuOpen(true)}
                 event={event}
                 onUpdate={onUpdate}
+                onDelete={onDelete}
                 onCreate={onCreate}
                 loading={loading}
               />

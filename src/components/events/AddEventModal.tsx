@@ -65,7 +65,6 @@ type FormProps = CommonProps & {
 const keys = Object.keys(EVENT_CARD_COLORS);
 const key = sample(keys)!;
 const CARD_COLOR = EVENT_CARD_COLORS[key];
-console.log('CARD_COLOR ', CARD_COLOR);
 
 const STEPS = 3;
 const AddEventModal: React.FC<FormProps> = ({
@@ -132,7 +131,7 @@ const AddEventModal: React.FC<FormProps> = ({
     setValue,
     reset,
   } = useForm({
-    mode: 'onSubmit',
+    mode: 'all',
     defaultValues,
     resolver: yupResolver(schema),
   });
@@ -418,6 +417,7 @@ const AddEventModal: React.FC<FormProps> = ({
                               alt="Banner image"
                               src={formValues.coverPhotoUrl}
                               onLoad={() => setBannerLoaded(true)}
+                              onEnded={() => setBannerLoaded(false)}
                             />
                             {isBannerLoaded && (
                               <Icon

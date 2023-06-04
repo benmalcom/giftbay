@@ -29,7 +29,7 @@ import { ModalManager as EventModalManager } from './AddEventModal';
 
 type ComponentProps = Pick<
   EventComponentProps,
-  'onUpdate' | 'onCreate' | 'loading'
+  'onUpdate' | 'onCreate' | 'loading' | 'onDelete'
 > & {
   event: EventType;
   onOpenMenu(): void;
@@ -41,6 +41,7 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
   onOpenMenu,
   onCreate,
   onUpdate,
+  onDelete,
   loading,
 }) => {
   return (
@@ -104,7 +105,13 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
                   >
                     Settings
                   </Button>
-                  <Button colorScheme="red" size="xs" leftIcon={<DeleteIcon />}>
+                  <Button
+                    colorScheme="red"
+                    size="xs"
+                    leftIcon={<DeleteIcon />}
+                    onClick={() => onDelete(event.id)}
+                    isLoading={loading[`delete_${event.id}`]}
+                  >
                     Delete
                   </Button>
                 </Flex>

@@ -12,10 +12,12 @@ export function withAuthServerSideProps(
     const session = await getSession(context);
     const { resolvedUrl } = context;
 
-    const redirect = {
+    const redirect: { [key: string]: string | boolean } = {
       permanent: false,
-      destination: `/login?dest=${resolvedUrl}`,
     };
+
+    if (resolvedUrl !== '/login')
+      redirect.destination = `/login?dest=${resolvedUrl}`;
 
     if (
       !session ||

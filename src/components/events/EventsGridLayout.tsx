@@ -12,6 +12,7 @@ const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({
   loading,
   onCreate,
   onUpdate,
+  onDelete,
 }) => {
   return (
     <Grid
@@ -43,6 +44,7 @@ const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({
               loading={loading}
               onCreate={onCreate}
               onUpdate={onUpdate}
+              onDelete={onDelete}
             />
           ))}
     </Grid>
