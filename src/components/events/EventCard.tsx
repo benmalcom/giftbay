@@ -16,12 +16,12 @@ import {
   FlexColumn,
   MotionFlexColumn,
 } from 'components/common/MotionContainers';
-import wishlist from 'data/wishlist.json';
+import gifts from 'data/gifts.json';
 import { EventComponentProps, EventType } from 'types/event';
-import { WishlistFormPayload } from 'types/wishlist';
+import { GiftFormPayload } from 'types/gift';
 import { CURRENCIES, EVENT_CATEGORIES } from 'utils/constants';
 import EventCardDropdownMenu from './EventCardDropdownMenu';
-import { ModalManager as WishlistModalManager } from './WishlistModal';
+import { ModalManager as GiftModalManager } from './GiftListModal';
 
 const imgFilenames = ['ear_buds.png', 'camera.png', 'gas_cooker.png'];
 
@@ -46,8 +46,8 @@ const EventCard: React.FC<EventCardProps> = ({
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
-  const handleWishlistSave = (values: Partial<WishlistFormPayload>) =>
-    console.log('Wishlist ', values);
+  const handleGiftSave = (values: Partial<GiftFormPayload>) =>
+    console.log('Gift ', values);
 
   const preferredCurrency = CURRENCIES.find(
     item => item.value === event.currency
@@ -121,8 +121,8 @@ const EventCard: React.FC<EventCardProps> = ({
                 loading={loading}
               />
             </Flex>
-            <WishlistModalManager
-              onSaveWishlist={handleWishlistSave}
+            <GiftModalManager
+              onSaveGift={handleGiftSave}
               preferredCurrency={preferredCurrency!}
               triggerFunc={({ trigger }) => (
                 <Button
@@ -138,7 +138,7 @@ const EventCard: React.FC<EventCardProps> = ({
                   {preferredCurrency?.symbol}250,000
                 </Button>
               )}
-              wishlist={wishlist}
+              gifts={gifts}
             />
           </FlexColumn>
         </Flex>

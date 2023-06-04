@@ -27,26 +27,26 @@ import {
   Button as CustomButton,
   CustomModalCloseButton,
 } from 'components/common/Button';
-import { ModalManager as WishlistItemModalManager } from 'components/events/AddWishlistItemModal';
+import { ModalManager as GiftItemModalManager } from 'components/events/AddGiftItemModal';
 import { CurrencyType } from 'types/common';
-import { WishlistFormPayload, WishlistType } from 'types/wishlist';
+import { GiftFormPayload, GiftType } from 'types/gift';
 
-type WishlistProps = {
-  wishlist: WishlistType[];
+type GiftProps = {
+  gifts: GiftType[];
   isOpen: boolean;
   onClose(): void;
   loading?: boolean;
   preferredCurrency: CurrencyType;
-  onSaveWishlist(values: WishlistFormPayload): void;
+  onSaveGift(values: GiftFormPayload): void;
 };
 
-const WishlistModal: React.FC<WishlistProps> = ({
-  wishlist,
+const GiftListModal: React.FC<GiftProps> = ({
+  gifts,
   isOpen,
   onClose,
   loading,
   preferredCurrency,
-  onSaveWishlist,
+  onSaveGift,
 }) => {
   return (
     <Modal
@@ -59,7 +59,7 @@ const WishlistModal: React.FC<WishlistProps> = ({
       <ModalOverlay />
       <ModalContent w={{ base: '99%', md: 'full' }} pos="relative">
         <ModalHeader fontSize="xl" color="gray.500">
-          My Wishlist
+          My Gift
         </ModalHeader>
         <CustomModalCloseButton />
         <ModalBody pb={5} px={4}>
@@ -67,20 +67,20 @@ const WishlistModal: React.FC<WishlistProps> = ({
             {loading
               ? Array(4)
                   .fill(0)
-                  .map((_, i) => <WishlistItemSkeleton key={i} />)
-              : wishlist.map(item => (
-                  <WishlistItem
+                  .map((_, i) => <GiftItemSkeleton key={i} />)
+              : gifts.map(item => (
+                  <GiftItem
                     key={item.id}
-                    wishlistItem={item}
+                    gift={item}
                     preferredCurrency={preferredCurrency}
                   />
                 ))}
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <WishlistItemModalManager
+          <GiftItemModalManager
             preferredCurrency={preferredCurrency!.symbol}
-            onSave={onSaveWishlist}
+            onSave={onSaveGift}
             triggerFunc={({ trigger }) => (
               <CustomButton
                 onClick={() => trigger()}
@@ -105,9 +105,9 @@ const WishlistModal: React.FC<WishlistProps> = ({
 
 type ModalManagerProps = {
   triggerFunc({ trigger }: { trigger(): void }): React.ReactNode;
-  wishlist: WishlistType[];
+  gifts: GiftType[];
   preferredCurrency: CurrencyType;
-  onSaveWishlist(values: WishlistFormPayload): void;
+  onSaveGift(values: GiftFormPayload): void;
 };
 
 export const ModalManager: React.FC<ModalManagerProps> = ({
@@ -117,7 +117,7 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
   const { isOpen, onToggle } = useDisclosure();
   return (
     <>
-      <WishlistModal isOpen={isOpen} onClose={onToggle} {...props} />
+      <GiftListModal isOpen={isOpen} onClose={onToggle} {...props} />
       {triggerFunc({
         trigger: onToggle,
       })}
@@ -125,14 +125,11 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
   );
 };
 
-type WishlistItemProps = {
-  wishlistItem: WishlistType;
+type GiftItemProps = {
+  gift: GiftType;
   preferredCurrency: CurrencyType;
 };
-const WishlistItem: React.FC<WishlistItemProps> = ({
-  wishlistItem,
-  preferredCurrency,
-}) => {
+const GiftItem: React.FC<GiftItemProps> = ({ gift, preferredCurrency }) => {
   const [showExtra, setShowExtra] = useState(false);
   const nf = new Intl.NumberFormat(navigator.language, {
     style: 'currency',
@@ -170,10 +167,10 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
         <Flex flex={1} flexDir="column">
           <Flex w="full" justify="space-between" columnGap={4}>
             <Text fontSize={{ base: 'sm', md: 'md' }} noOfLines={1}>
-              {wishlistItem.name}
+              {gift.name}
             </Text>
             <Text fontSize="xs" fontWeight={600}>
-              {nf.format(wishlistItem.amount)}
+              {nf.format(gift.amount)}
             </Text>
           </Flex>
         </Flex>
@@ -188,12 +185,12 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
             borderColor="gray.300"
             p="1px"
           >
-            {wishlistItem.imageUrl ? (
+            {gift.imageUrl ? (
               <Image
                 w="full"
                 h="full"
-                src={wishlistItem.imageUrl}
-                alt="wishlist-item"
+                src={gift.imageUrl}
+                alt="gift-item"
                 objectFit="cover"
               />
             ) : (
@@ -208,9 +205,9 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
           </Box>
           <Flex flexDir="column" w="full" flexWrap="wrap" px={1} rowGap={2}>
             <Heading as="h6" size="sm">
-              {wishlistItem.name}
+              {gift.name}
             </Heading>
-            {wishlistItem.externalUrl && (
+            {gift.externalUrl && (
               <Stack spacing={0}>
                 <Flex align="center" columnGap={1} mt={2} mb={1}>
                   <Text fontSize="sm" noOfLines={1} fontWeight={600}>
@@ -221,15 +218,15 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
 
                 <ChakraLink
                   fontSize="sm"
-                  href={wishlistItem.externalUrl}
+                  href={gift.externalUrl}
                   isExternal
                   color="blue.500"
                 >
-                  <Text fontSize="sm">{wishlistItem.externalUrl}</Text>
+                  <Text fontSize="sm">{gift.externalUrl}</Text>
                 </ChakraLink>
               </Stack>
             )}
-            <Text fontSize="sm">{wishlistItem.description}</Text>
+            <Text fontSize="sm">{gift.description}</Text>
           </Flex>
         </Flex>
       )}
@@ -237,7 +234,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
   );
 };
 
-const WishlistItemSkeleton = () => (
+const GiftItemSkeleton = () => (
   <Flex
     align="center"
     h="60px"

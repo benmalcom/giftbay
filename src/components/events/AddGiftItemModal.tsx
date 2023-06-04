@@ -41,7 +41,7 @@ import {
   parseWishlistFormValues,
 } from 'components/events/utils';
 import useFileUpload from 'hooks/useFileUpload';
-import { WishlistFormPayload, WishlistFormValues } from 'types/wishlist';
+import { WishlistFormPayload, WishlistFormValues } from 'types/gift';
 import { GIFT_FORMAT } from 'utils/constants';
 import { removePreviewFromUploadedFiles } from 'utils/functions';
 
@@ -54,7 +54,7 @@ type FormProps = {
   preferredCurrency: string;
 };
 
-const AddWishlistItemModal: React.FC<FormProps> = ({
+const AddGiftItemModal: React.FC<FormProps> = ({
   initialValues,
   onSave,
   isOpen,
@@ -73,7 +73,7 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
 
   const defaultValues = {
     allowPartialPayments: false,
-    giftFormat: 'cash',
+    giftType: 'cash',
     quantity: 1,
     ...initialValues,
   };
@@ -153,9 +153,9 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
                   {errors?.name?.message && errors.name.message.toString()}
                 </FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={Boolean(errors.giftFormat)} w="full">
+              <FormControl isInvalid={Boolean(errors.giftType)} w="full">
                 <FormLabel htmlFor="giftFormat" fontWeight={400}>
-                  Mode of receipt
+                  Type
                 </FormLabel>
                 <ButtonGroup
                   size={{ base: 'xs', md: 'sm' }}
@@ -165,10 +165,10 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
                   {GIFT_FORMAT.map((item, index) => (
                     <Button
                       colorScheme="gray"
-                      onClick={() => setValue('giftFormat', item.value)}
+                      onClick={() => setValue('giftType', item.value)}
                       key={index}
                       variant={
-                        formValues.giftFormat === item.value
+                        formValues.giftType === item.value
                           ? undefined
                           : 'outline'
                       }
@@ -178,8 +178,8 @@ const AddWishlistItemModal: React.FC<FormProps> = ({
                   ))}
                 </ButtonGroup>
                 <FormErrorMessage>
-                  {errors?.giftFormat?.message &&
-                    errors.giftFormat.message.toString()}
+                  {errors?.giftType?.message &&
+                    errors.giftType.message.toString()}
                 </FormErrorMessage>
               </FormControl>
               <Flex w="full" columnGap={3} align="center">
@@ -336,7 +336,7 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
   const { isOpen, onToggle } = useDisclosure();
   return (
     <>
-      <AddWishlistItemModal isOpen={isOpen} onClose={onToggle} {...props} />
+      <AddGiftItemModal isOpen={isOpen} onClose={onToggle} {...props} />
       {triggerFunc({
         trigger: onToggle,
       })}

@@ -1,9 +1,9 @@
-export type WishlistType = {
+export type GiftType = {
   id: string;
-  event: string;
+  eventId: string;
   name: string;
   description?: string;
-  giftFormat: string;
+  giftType: string;
   imageUrl?: string;
   externalUrl?: string;
   amount: number;
@@ -12,7 +12,7 @@ export type WishlistType = {
 };
 
 // Values from wishlist form
-export type WishlistFormValues = Omit<WishlistType, 'event' | 'id'>;
+export type GiftFormValues = Omit<GiftType, 'eventId' | 'id'>;
 
 // Values to wishlist form
-export type WishlistFormPayload = Omit<WishlistType, 'event' | 'id'>;
+export type GiftFormPayload = Omit<GiftType, 'eventId' | 'id'>;

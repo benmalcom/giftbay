@@ -1,10 +1,10 @@
 [
   {
     "id": "abcd1234",
-    "event": "abcd1234",
+    "eventId": "abcd1234",
     "name": "Brocol Gas dispenser and deep fryer",
     "description": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    "giftFormat": "product_services",
+    "giftType": "product_services",
     "imageUrl": "/images/gas_cooker.png",
     "externalUrl": "https://www.jumia.com.ng/haier-thermocool-my-lady-3-gas1-electric-cooker-ovengrill-503g1e-og4531-92746521.html",
     "amount": 137200,
@@ -12,20 +12,20 @@
   },
   {
     "id": "abcd12343",
-    "event": "abcd1234",
+    "eventId": "abcd1234",
     "name": "Paid honeymoon expense",
     "description": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    "giftFormat": "cash",
+    "giftType": "cash",
     "amount": 1500000,
     "quantity": 1,
     "allowPartialPayments": true
   },
   {
     "id": "abcd1232",
-    "event": "abcd1234",
+    "eventId": "abcd1234",
     "name": "All paid SPA makeover and more",
     "description": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    "giftFormat": "product_services",
+    "giftType": "product_services",
     "externalUrl": "https://www.fresha.com/a/shugarushhh-aesthetics-and-wellness-lagos-3d-doctor-adewale-oshin-street-osvfiaqc/booking",
     "amount": 137200,
     "quantity": 1

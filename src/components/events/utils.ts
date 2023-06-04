@@ -6,7 +6,7 @@ import {
   WishlistFormPayload,
   WishlistFormValues,
   WishlistType,
-} from 'types/wishlist';
+} from 'types/gift';
 import { CURRENCIES, EVENT_CATEGORIES } from 'utils/constants';
 
 const getEventSchemaByStep = (step: number) => {
@@ -46,10 +46,11 @@ export const getWishlistFormSchema = () => {
   return yup.object().shape({
     amount: yup.number().typeError('Valid amount required').required(),
     quantity: yup.number().required(),
-    giftFormat: yup.string().required(),
+    giftType: yup.string().required(),
     name: yup.string().required('This is required'),
     imageUrl: yup.string(),
     externalUrl: yup.string(),
+    description: yup.string(),
     allowPartialPayments: yup.boolean(),
   });
 };
