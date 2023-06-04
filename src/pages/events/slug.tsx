@@ -1,1 +1,2 @@
-export const EventDetails = () => <div>slug</div>;
+const EventBySlug = () => <div>slug</div>;
+export default EventBySlug;
