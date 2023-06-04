@@ -22,6 +22,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { ModalManager as ConfirmationModalManager } from 'components/common/ConfirmationModal';
 import { transformEventToFormValues } from 'components/events/utils';
 import { EventComponentProps, EventType } from 'types/event';
 import { EVENT_CARD_COLORS } from 'utils/constants';
@@ -105,15 +106,21 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
                   >
                     Settings
                   </Button>
-                  <Button
-                    colorScheme="red"
-                    size="xs"
-                    leftIcon={<DeleteIcon />}
-                    onClick={() => onDelete(event.id)}
-                    isLoading={loading[`delete_${event.id}`]}
-                  >
-                    Delete
-                  </Button>
+                  <ConfirmationModalManager
+                    isProcessing={loading[`delete_${event.id}`]}
+                    onProceed={() => onDelete(event.id)}
+                    message="Proceed to delete this event?"
+                    triggerFunc={({ trigger }) => (
+                      <Button
+                        colorScheme="red"
+                        size="xs"
+                        leftIcon={<DeleteIcon />}
+                        onClick={() => trigger()}
+                      >
+                        Delete
+                      </Button>
+                    )}
+                  />
                 </Flex>
               </Stack>
               <Stack spacing={2}>

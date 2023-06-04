@@ -62,9 +62,11 @@ type FormProps = CommonProps & {
   onClose(): void;
 };
 
-const keys = Object.keys(EVENT_CARD_COLORS);
-const key = sample(keys)!;
-const CARD_COLOR = EVENT_CARD_COLORS[key];
+const getRandomColorObject = () => {
+  const keys = Object.keys(EVENT_CARD_COLORS);
+  const key = sample(keys)!;
+  return EVENT_CARD_COLORS[key];
+};
 
 const STEPS = 3;
 const AddEventModal: React.FC<FormProps> = ({
@@ -92,6 +94,7 @@ const AddEventModal: React.FC<FormProps> = ({
   const isLastStep = currentStep === LAST_STEP;
   const isFirstStep = currentStep === FIRST_STEP;
 
+  const CARD_COLOR = getRandomColorObject();
   const defaultValues: Partial<EventFormValues> = {
     isPublic: true,
     date: new Date(),

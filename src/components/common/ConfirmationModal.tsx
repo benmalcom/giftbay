@@ -36,21 +36,21 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   const prevIsProcessing = usePrevious(isProcessing);
 
   useEffect(() => {
-    if (prevIsProcessing && isProcessing) {
+    if (prevIsProcessing && !isProcessing) {
       if (closeAfterProcessing) onClose();
     }
   }, [closeAfterProcessing, isProcessing, onClose, prevIsProcessing]);
 
   const handleProceed = () => {
     onProceed();
-    if (!closeAfterProcessing) onClose();
+    if (closeAfterProcessing && !isProcessing) onClose();
   };
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Confirm</ModalHeader>
+          <ModalHeader pb={0}>Confirm</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Text mb="1rem">
@@ -61,7 +61,11 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             <Button colorScheme="red" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button onClick={handleProceed} {...proceedButtonProps}>
+            <Button
+              onClick={handleProceed}
+              {...proceedButtonProps}
+              isLoading={isProcessing}
+            >
               Proceed
             </Button>
           </ModalFooter>
