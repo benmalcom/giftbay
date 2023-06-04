@@ -176,10 +176,10 @@ interface NavItemProps extends ChakraLinkProps {
 }
 const NavItem = ({ icon, children, isActive, ...rest }: NavItemProps) => {
   const activeStyles: StyleProps = {
-    bg: 'purple.100',
-    color: 'purple.600',
+    bg: 'purple.500',
+    color: 'white',
     borderLeft: '3px solid',
-    borderLeftColor: 'purple.600',
+    borderLeftColor: 'purple.900',
     borderTopRightRadius: '6px',
     borderBottomRightRadius: '6px',
   };
