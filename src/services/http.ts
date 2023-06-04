@@ -35,6 +35,13 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => response.data,
   error => {
+    if (error === null) throw new Error('Unrecoverable error!! Error is null!');
+
+    /*    const errorResponse = error?.response;
+    const request = error?.request;
+    const config = error?.config;
+    const statusCode = errorResponse?.status;*/
+
     if (error.response) {
       if (error.code === 'ECONNABORTED')
         throw new Error('Network timeout, please try again');

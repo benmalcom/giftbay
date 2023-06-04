@@ -42,7 +42,7 @@ const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
     <FlexColumn
       boxSizing="border-box"
       transition="3s ease"
-      bg="gray.50"
+      bg="white"
       borderRight="1px double"
       borderColor="rgba(0, 0, 0, .1)"
       w={{ base: 'full', xl: '260px' }}
@@ -62,8 +62,8 @@ const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
         <Logo />
         <CloseButton display={{ base: 'flex', xl: 'none' }} onClick={onClose} />
       </Flex>
-      <FlexColumn mt={5} flex={1}>
-        <FlexColumn w="full" rowGap={1} mt={5}>
+      <FlexColumn flex={1}>
+        <FlexColumn w="full" rowGap={1}>
           {AppLinkItems.map(link => (
             <Link href={link.path} key={link.name}>
               <NavItem
@@ -175,11 +175,18 @@ interface NavItemProps extends ChakraLinkProps {
   isActive: boolean;
 }
 const NavItem = ({ icon, children, isActive, ...rest }: NavItemProps) => {
-  const activeHoverStyles: StyleProps = {
+  const activeStyles: StyleProps = {
     bg: 'purple.100',
     color: 'purple.600',
-    borderLeft: '2px solid',
+    borderLeft: '3px solid',
     borderLeftColor: 'purple.600',
+    borderTopRightRadius: '6px',
+    borderBottomRightRadius: '6px',
+  };
+  const hoverStyles: StyleProps = {
+    bg: 'transparent',
+    color: 'purple.600',
+    border: 'none',
   };
   return (
     <ChakraLink
@@ -188,11 +195,12 @@ const NavItem = ({ icon, children, isActive, ...rest }: NavItemProps) => {
       _focus={{ boxShadow: 'none' }}
       alignItems="center"
       p="4"
-      mx="4"
+      mx={4}
       role="group"
       cursor="pointer"
-      _hover={activeHoverStyles}
-      sx={isActive ? activeHoverStyles : undefined}
+      _hover={!isActive ? hoverStyles : undefined}
+      sx={isActive ? activeStyles : undefined}
+      boxSizing="border-box"
       {...rest}
     >
       {icon && (

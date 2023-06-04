@@ -13,4 +13,5 @@ export type UploadedFile = File & {
 
 export type AppConfig = {
   layoutOrientation: 'vertical' | 'horizontal';
+  pageTitle?: string;
 };

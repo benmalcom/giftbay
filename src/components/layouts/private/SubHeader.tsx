@@ -1,19 +1,22 @@
 import { Flex } from '@chakra-ui/react';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-const SubHeader = () => {
+type SubHeaderProps = {
+  children: ReactNode;
+};
+const SubHeader: React.FC<SubHeaderProps> = ({ children }) => {
   return (
     <Flex
       w="full"
       minH="30px"
-      borderBottom="1px solid"
-      borderBottomColor="rgba(0, 0, 0, .1)"
       as="nav"
       align="center"
-      px={5}
-      bg="gray.50"
+      p={2}
+      bg="white"
       shadow="sm"
-    ></Flex>
+    >
+      {children}
+    </Flex>
   );
 };
 

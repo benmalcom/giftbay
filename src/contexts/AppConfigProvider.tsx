@@ -25,8 +25,8 @@ const reducer = (state: AppConfig, action: DispatchActionType): AppConfig => {
   }
 };
 
-const AppConfigProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const AppConfigProvider = ({ children, ...props }: { children: ReactNode }) => {
+  const [state, dispatch] = useReducer(reducer, { ...initialState, ...props });
 
   return (
     <DispatchAppConfigContext.Provider value={dispatch}>

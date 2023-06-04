@@ -36,6 +36,7 @@ const NavBar: React.FC<NavBarProps> = ({
   onOpen,
   layoutOrientation,
   user,
+  ...rest
 }) => {
   const handleLogOut = async () => {
     signOut({ callbackUrl: APP_BASE_URL });
@@ -57,7 +58,7 @@ const NavBar: React.FC<NavBarProps> = ({
         </DrawerContent>
       </Drawer>
       {layoutOrientation === 'vertical' ? (
-        <VerticalNavbar onOpen={onOpen} onLogout={handleLogOut} />
+        <VerticalNavbar onOpen={onOpen} onLogout={handleLogOut} {...rest} />
       ) : (
         <HorizontalNavbar onOpen={onOpen} user={user} />
       )}
@@ -139,53 +140,56 @@ type VerticalNavbarProps = NavBarVariantProps;
 const VerticalNavbar: React.FC<VerticalNavbarProps> = ({
   onOpen,
   onLogout,
-}) => (
-  <Flex
-    w="full"
-    minH="70px"
-    maxH="70px"
-    borderBottom="1px solid"
-    borderBottomColor="rgba(0, 0, 0, .1)"
-    as="nav"
-    align="center"
-    px={{ base: 4, md: 5 }}
-    bg="gray.50"
-    shadow="sm"
-  >
+}) => {
+  return (
     <Flex
-      as="nav"
-      justify={{ base: 'space-between', xl: 'end' }}
-      align="center"
       w="full"
-      h="full"
-      columnGap={5}
+      minH="70px"
+      maxH="70px"
+      borderBottom="1px solid"
+      borderBottomColor="rgba(0, 0, 0, .1)"
+      as="nav"
+      align="center"
+      px={{ base: 4, md: 5 }}
+      bg="white"
+      shadow="sm"
     >
-      {/* Display mobile menu button until large devices*/}
       <Flex
+        as="nav"
+        justify={{ xl: 'end', base: 'space-between' }}
         align="center"
+        w="full"
         h="full"
-        columnGap={3}
-        display={{ base: 'flex', xl: 'none' }}
+        columnGap={5}
+        px={{ md: 5, base: 0 }}
       >
-        <IconButton
-          onClick={onOpen}
-          variant="outline"
-          aria-label="open menu"
-          icon={<FiMenu />}
-        />
-        <Logo />
-      </Flex>
-      <Flex alignItems="center" h="full" columnGap={4}>
-        <Icon boxSize="1.2em" as={AiOutlineBell} color="gray.500" />
-        <IconButton
-          size="md"
-          icon={<AiOutlinePoweroff fontSize="2xl" />}
-          aria-label="dropdown-icon"
-          onClick={onLogout}
-          color="red"
-          title="Logout"
-        />
+        {/* Display mobile menu button until large devices*/}
+        <Flex
+          align="center"
+          h="full"
+          columnGap={3}
+          display={{ base: 'flex', xl: 'none' }}
+        >
+          <IconButton
+            onClick={onOpen}
+            variant="outline"
+            aria-label="open menu"
+            icon={<FiMenu />}
+          />
+          <Logo />
+        </Flex>
+        <Flex alignItems="center" h="full" columnGap={4}>
+          <Icon boxSize="1.2em" as={AiOutlineBell} color="gray.500" />
+          <IconButton
+            size="md"
+            icon={<AiOutlinePoweroff fontSize="2xl" />}
+            aria-label="dropdown-icon"
+            onClick={onLogout}
+            color="red"
+            title="Logout"
+          />
+        </Flex>
       </Flex>
     </Flex>
-  </Flex>
-);
+  );
+};

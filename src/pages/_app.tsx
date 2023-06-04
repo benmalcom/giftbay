@@ -69,7 +69,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
       <SessionProvider session={pageProps.session}>
         <UserProvider>
-          <AppConfigProvider>
+          <AppConfigProvider
+            {...{
+              pageTitle: pageProps.pageTitle,
+            }}
+          >
             <Layout>
               <Component {...pageProps} />
               <RefreshTokenHandler />

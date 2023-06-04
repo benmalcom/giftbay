@@ -8,22 +8,100 @@ import {
   Heading,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useCallback, useEffect, useState } from 'react';
 import { MdOutlineKeyboardBackspace } from 'react-icons/md';
 import { FlexColumn } from 'components/common/MotionContainers';
 import { EventsGridLayout } from 'components/events';
+import { parseEventFormValues } from 'components/events/utils';
 import { PrivateLayout } from 'components/layouts';
-import events from 'data/events.json';
-import { EventFormPayload } from 'types/event';
+import mockEvents from 'data/events.json';
+import {
+  createEvent,
+  deleteEvent,
+  getEvents,
+  updateEvent,
+} from 'services/event';
+import { EventFormValues, EventType } from 'types/event';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
 
 const Events = () => {
-  const onSaveEvent = (event: EventFormPayload) => {
-    console.log('event ', event);
+  const [inFlight, setInFlight] = useState({
+    get: true,
+    create: false,
+  });
+  const [events, setEvents] = useState<EventType[]>(mockEvents);
+
+  const fetchEvents = useCallback(
+    (signal: AbortSignal) => {
+      getEvents(signal)
+        .then(response => {
+          setEvents(response.data);
+        })
+        .catch(error => console.log('error ', error))
+        .finally(() => setInFlight(state => ({ ...state, get: false })));
+    },
+    [setInFlight]
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    fetchEvents(signal);
+    return () => {
+      controller.abort();
+    };
+  }, [fetchEvents]);
+
+  const onCreate = (values: Record<string, unknown>, cb?: () => void) => {
+    setInFlight(state => ({ ...state, create: true }));
+    const payload = parseEventFormValues(values as EventFormValues);
+    createEvent(payload)
+      .then(response => {
+        setEvents(list => [response.data, ...list]);
+        cb?.();
+      })
+      .catch(err => console.log('err ', err))
+      .finally(() => setInFlight(state => ({ ...state, create: false })));
   };
+
+  const onUpdate = (
+    id: string,
+    values: Record<string, unknown>,
+    cb?: () => void
+  ) => {
+    setInFlight(state => ({ ...state, [`update_${id}`]: true }));
+    const payload = parseEventFormValues(values as EventFormValues);
+    updateEvent(id, payload)
+      .then(response => {
+        const event = response.data;
+        setEvents(list =>
+          list.map(item => (item.id === event.id ? event : item))
+        );
+        cb?.();
+      })
+      .catch(err => console.log('err ', err))
+      .finally(() =>
+        setInFlight(state => ({ ...state, [`update_${id}`]: true }))
+      );
+  };
+
+  const onDelete = (id: string, cb?: () => void) => {
+    setInFlight(state => ({ ...state, [`delete_${id}`]: true }));
+    deleteEvent(id)
+      .then(() => {
+        setEvents(list => list.filter(item => item.id !== id));
+        cb?.();
+      })
+      .catch(err => console.log('err ', err))
+      .finally(() =>
+        setInFlight(state => ({ ...state, [`delete_${id}`]: true }))
+      );
+  };
+
   return (
     <Container py={1.5} maxW="7xl" h="full" alignItems="center">
-      <FlexColumn w="full" rowGap={8} mt={10} flexWrap="wrap">
-        <Box>
+      <FlexColumn w="full" rowGap={8} mt={5} flexWrap="wrap">
+        <Box mb={3}>
           <Link href="/" passHref>
             <Button
               leftIcon={<MdOutlineKeyboardBackspace />}
@@ -49,6 +127,7 @@ const Events = () => {
           w="full"
           bg="white"
           boxShadow="sm"
+          mb={4}
         >
           <AlertTitle mb={1} fontSize="md">
             Welcome to your personalized event list.
@@ -60,8 +139,10 @@ const Events = () => {
 
         <EventsGridLayout
           events={events}
-          onSave={onSaveEvent}
-          loading={false}
+          onCreate={onCreate}
+          onUpdate={onUpdate}
+          onDelete={onDelete}
+          loading={inFlight}
         />
       </FlexColumn>
     </Container>
@@ -74,7 +155,7 @@ export default Events;
 export const getServerSideProps = withAuthServerSideProps(() => {
   return {
     props: {
-      pageTitle: 'Events',
+      pageTitle: 'My special moments',
     },
   };
 });

@@ -7,6 +7,7 @@ import {
   AspectRatio,
   Badge,
 } from '@chakra-ui/react';
+import { sample } from 'lodash';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
@@ -16,21 +17,30 @@ import {
   MotionFlexColumn,
 } from 'components/common/MotionContainers';
 import wishlist from 'data/wishlist.json';
-import { EventFormPayload, EventType } from 'types/event';
+import { EventComponentProps, EventType } from 'types/event';
 import { WishlistFormPayload } from 'types/wishlist';
 import { CURRENCIES, EVENT_CATEGORIES } from 'utils/constants';
 import EventCardDropdownMenu from './EventCardDropdownMenu';
 import { ModalManager as WishlistModalManager } from './WishlistModal';
 
-type EventCardProps = {
-  event: EventType;
-};
-const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
-  const [event, setEvent] = useState(evt);
-  const [isMenuOpen, setMenuOpen] = useState(false);
+const imgFilenames = ['ear_buds.png', 'camera.png', 'gas_cooker.png'];
 
-  const handleEventSave = (values: Partial<EventFormPayload>) =>
-    setEvent(event => ({ ...event, ...values }));
+const getRandomImagePath = () => {
+  const filename = sample(imgFilenames);
+  return `/images/${filename}`;
+};
+
+type EventCardProps = Pick<EventComponentProps, 'loading' | 'onCreate'> & {
+  event: EventType;
+  onUpdate(id: string, values: Record<string, unknown>, cb: () => void): void;
+};
+const EventCard: React.FC<EventCardProps> = ({
+  event,
+  onUpdate,
+  onCreate,
+  loading,
+}) => {
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
   const handleWishlistSave = (values: Partial<WishlistFormPayload>) =>
     console.log('Wishlist ', values);
@@ -55,6 +65,7 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
       }}
       pos="relative"
       mx="auto"
+      w="full"
     >
       {isMenuOpen && (
         <Box
@@ -100,7 +111,9 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
                 onCloseMenu={() => setMenuOpen(false)}
                 onOpenMenu={() => setMenuOpen(true)}
                 event={event}
-                onSave={handleEventSave}
+                onUpdate={onUpdate}
+                onCreate={onCreate}
+                loading={loading}
               />
             </Flex>
             <WishlistModalManager
@@ -149,7 +162,7 @@ const EventCard: React.FC<EventCardProps> = ({ event: evt }) => {
           >
             <AspectRatio w="110px" ratio={4 / 3}>
               <Image
-                src={event.lastGiftImageUrl}
+                src={getRandomImagePath()}
                 alt="Gift item"
                 objectFit="cover"
               />

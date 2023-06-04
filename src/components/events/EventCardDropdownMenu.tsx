@@ -23,12 +23,14 @@ import {
 import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { transformEventToFormValues } from 'components/events/utils';
-import { EventFormPayload, EventType } from 'types/event';
+import { EventComponentProps, EventType } from 'types/event';
 import { EVENT_CARD_COLORS } from 'utils/constants';
 import { ModalManager as EventModalManager } from './AddEventModal';
 
-type ComponentProps = {
-  onSave(values: Partial<EventFormPayload>): void;
+type ComponentProps = Pick<
+  EventComponentProps,
+  'onUpdate' | 'onCreate' | 'loading'
+> & {
   event: EventType;
   onOpenMenu(): void;
   onCloseMenu(): void;
@@ -37,7 +39,9 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
   event,
   onCloseMenu,
   onOpenMenu,
-  onSave,
+  onCreate,
+  onUpdate,
+  loading,
 }) => {
   return (
     <Popover
@@ -50,7 +54,7 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
         <IconButton
           isRound
           icon={<Icon as={AiOutlinePlus} />}
-          onClick={event => event.stopPropagation()}
+          onClick={e => e.stopPropagation()}
           fontSize="lg"
           size="xs"
           variant="outline"
@@ -78,6 +82,9 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
                 <Flex w="full" h="fit-content" columnGap={2}>
                   <EventModalManager
                     initialValues={transformEventToFormValues(event)}
+                    onUpdate={onUpdate}
+                    onCreate={onCreate}
+                    loading={loading}
                     triggerFunc={({ trigger }) => (
                       <Button
                         onClick={() => trigger()}
@@ -89,7 +96,6 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
                         Edit
                       </Button>
                     )}
-                    onSave={onSave}
                   />
                   <Button
                     colorScheme="purple"
@@ -121,10 +127,14 @@ const EventCardDropdownMenu: React.FC<ComponentProps> = ({
                       align="center"
                       justify="center"
                       onClick={() =>
-                        onSave({
-                          backgroundColor: color.value,
-                          foregroundColor: color.complement,
-                        })
+                        onUpdate(
+                          event.id,
+                          {
+                            backgroundColor: color.value,
+                            foregroundColor: color.complement,
+                          },
+                          () => console.log('Color updated')
+                        )
                       }
                     >
                       {color.value === event.backgroundColor &&

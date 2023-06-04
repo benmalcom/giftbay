@@ -7,7 +7,7 @@ export const updateEvent = async (
   return await createRequest(
     composeRequestConfig({
       url: `/events/${eventId}`,
-      method: 'patch',
+      method: 'put',
       payload,
     })
   );
@@ -47,12 +47,11 @@ export const getEventById = async (
   );
 };
 
-export const getUserEvents = async (userId: string, signal: AbortSignal) => {
+export const getEvents = async (signal: AbortSignal) => {
   return await createRequest(
     composeRequestConfig({
       url: '/events',
       method: 'get',
-      params: { user: userId, sort: { updatedAt: -1 } },
       signal,
     })
   );

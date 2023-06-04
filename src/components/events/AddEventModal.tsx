@@ -43,22 +43,30 @@ import {
   useEventFormSchema,
 } from 'components/events/utils';
 import { useFileUpload } from 'hooks/index';
-import { EventFormPayload, EventFormValues } from 'types/event';
-import { CURRENCIES, EVENT_CATEGORIES } from 'utils/constants';
+import { EventComponentProps, EventFormValues } from 'types/event';
+import {
+  CURRENCIES,
+  EVENT_CARD_COLORS,
+  EVENT_CATEGORIES,
+} from 'utils/constants';
 import { removePreviewFromUploadedFiles } from 'utils/functions';
 
-type FormProps = {
-  onSave(values: EventFormPayload): void;
+type CommonProps = Pick<
+  EventComponentProps,
+  'onCreate' | 'onUpdate' | 'loading'
+> & {
   initialValues?: Partial<EventFormValues>;
+};
+type FormProps = CommonProps & {
   isOpen: boolean;
   onClose(): void;
-  loading?: boolean;
 };
 
 const STEPS = 3;
 const AddEventModal: React.FC<FormProps> = ({
   initialValues,
-  onSave,
+  onCreate,
+  onUpdate,
   isOpen,
   onClose,
   loading,
@@ -67,6 +75,7 @@ const AddEventModal: React.FC<FormProps> = ({
   const schema = useEventFormSchema({ step: currentStep });
   const [progress, setProgress] = useState(0);
   const [isBannerLoaded, setBannerLoaded] = useState(false);
+
   const {
     loading: inUploadFlight,
     url: coverPhotoUrl,
@@ -79,9 +88,11 @@ const AddEventModal: React.FC<FormProps> = ({
   const isLastStep = currentStep === LAST_STEP;
   const isFirstStep = currentStep === FIRST_STEP;
 
-  const defaultValues = {
+  const defaultValues: Partial<EventFormValues> = {
     isPublic: true,
     date: new Date(),
+    backgroundColor: EVENT_CARD_COLORS.purple.value,
+    foregroundColor: EVENT_CARD_COLORS.purple.complement,
     ...initialValues,
   };
 
@@ -92,8 +103,12 @@ const AddEventModal: React.FC<FormProps> = ({
   const onSubmitForm = (values: Record<string, unknown>) => {
     if (isLastStep) {
       const payload = parseEventFormValues(values as EventFormValues);
-      onSave(payload);
-      onClose();
+      const closeModal = () => onClose();
+      if (payload?.id) {
+        onUpdate(payload.id, values, closeModal);
+      } else {
+        onCreate(values, closeModal);
+      }
     } else {
       setCurrentStep(current => (current < LAST_STEP ? current + 1 : current));
     }
@@ -216,6 +231,26 @@ const AddEventModal: React.FC<FormProps> = ({
                               placeholder="Select category..."
                               isClearable
                               options={EVENT_CATEGORIES}
+                              styles={{
+                                control: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  height: '40px',
+                                  width: '100%',
+                                  borderRadius: '7px',
+                                  borderWidth: '2px',
+                                  boxShadow:
+                                    state.isFocused || state.menuIsOpen
+                                      ? 'none'
+                                      : undefined,
+                                  borderColor: errors?.currency
+                                    ? 'red'
+                                    : undefined,
+                                }),
+                                placeholder: baseStyles => ({
+                                  ...baseStyles,
+                                  fontSize: '16px',
+                                }),
+                              }}
                             />
                           )}
                           name="category"
@@ -237,10 +272,7 @@ const AddEventModal: React.FC<FormProps> = ({
                             <InputGroup size="md" zIndex={2}>
                               <SingleDatepicker
                                 name="date"
-                                onDateChange={date => {
-                                  setValue('date', date);
-                                  onChange(date);
-                                }}
+                                onDateChange={date => onChange(date)}
                                 date={value as Date}
                                 propsConfigs={{
                                   inputProps: {
@@ -254,6 +286,7 @@ const AddEventModal: React.FC<FormProps> = ({
                               <InputRightAddon
                                 border="1px solid"
                                 borderColor="gray.200"
+                                borderLeft="none"
                               >
                                 <CalendarIcon />
                               </InputRightAddon>
@@ -360,7 +393,7 @@ const AddEventModal: React.FC<FormProps> = ({
                       <FormControl>
                         {formValues.coverPhotoUrl ? (
                           <Flex
-                            h="90px"
+                            h="130px"
                             w="full"
                             pos="relative"
                             bg="white"
@@ -448,13 +481,27 @@ const AddEventModal: React.FC<FormProps> = ({
                 </Stack>
               </Box>
             </ModalBody>
-            <ModalFooter borderTop="1px solid" borderColor="gray.200">
+            <ModalFooter>
               {!isFirstStep && (
-                <Button colorScheme="gray" mr={3} onClick={onPreviousStep}>
+                <Button
+                  colorScheme="white"
+                  color="gray.800"
+                  border="1px solid"
+                  borderColor="gray.200"
+                  mr={3}
+                  onClick={onPreviousStep}
+                >
                   Previous
                 </Button>
               )}
-              <Button type="submit" colorScheme="purple" isLoading={loading}>
+              <Button
+                type="submit"
+                colorScheme="purple"
+                isLoading={
+                  loading.create ||
+                  (!!formValues?.id && loading[`update_${formValues.id}`])
+                }
+              >
                 {isLastStep ? 'Submit' : 'Continue'}
               </Button>
             </ModalFooter>
@@ -465,27 +512,19 @@ const AddEventModal: React.FC<FormProps> = ({
   );
 };
 
-type ModalManagerProps = {
-  onSave(values: EventFormPayload): void;
-  initialValues?: Partial<EventFormValues>;
+type ModalManagerProps = CommonProps & {
   triggerFunc({ trigger }: { trigger(): void }): React.ReactNode;
 };
 
 export const ModalManager: React.FC<ModalManagerProps> = ({
-  onSave,
-  initialValues,
   triggerFunc,
+  ...props
 }) => {
   const { isOpen, onToggle } = useDisclosure();
   return (
     <>
       {isOpen && (
-        <AddEventModal
-          isOpen={isOpen}
-          onClose={onToggle}
-          onSave={onSave}
-          initialValues={initialValues}
-        />
+        <AddEventModal isOpen={isOpen} onClose={onToggle} {...props} />
       )}
       {triggerFunc({
         trigger: onToggle,

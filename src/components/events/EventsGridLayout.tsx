@@ -1,20 +1,17 @@
 import { Grid } from '@chakra-ui/react';
 import React from 'react';
-import { EventFormPayload, EventType } from 'types/event';
+import { EventComponentProps } from 'types/event';
 import AddEventCard from './AddEventCard';
 import EventCard from './EventCard';
 import EventCardSkeleton from './EventCardSkeleton';
 
-type EventsGridLayoutProps = {
-  onSave(values: EventFormPayload): void;
-  events: EventType[];
-  loading?: boolean;
-};
+type EventsGridLayoutProps = EventComponentProps;
 
 const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({
-  onSave,
   events,
   loading,
+  onCreate,
+  onUpdate,
 }) => {
   return (
     <Grid
@@ -25,15 +22,29 @@ const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({
         lg: 'repeat(3, 1fr)',
         xl: 'repeat(4, 1fr)',
       }}
-      gridGap="6"
+      gridGap="8"
     >
-      <AddEventCard onSave={onSave} />
+      {!loading.get && (
+        <AddEventCard
+          loading={loading}
+          onCreate={onCreate}
+          onUpdate={onUpdate}
+        />
+      )}
 
-      {loading
+      {loading.get
         ? Array(4)
             .fill(0)
             .map((_, i) => <EventCardSkeleton key={i} />)
-        : events?.map(event => <EventCard key={event.id} event={event} />)}
+        : events?.map(event => (
+            <EventCard
+              key={event.id}
+              event={event}
+              loading={loading}
+              onCreate={onCreate}
+              onUpdate={onUpdate}
+            />
+          ))}
     </Grid>
   );
 };
