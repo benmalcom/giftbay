@@ -30,7 +30,7 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
-import { isEqual } from 'lodash';
+import { isEqual, sample } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BsImage } from 'react-icons/bs';
@@ -62,6 +62,11 @@ type FormProps = CommonProps & {
   onClose(): void;
 };
 
+const keys = Object.keys(EVENT_CARD_COLORS);
+const key = sample(keys)!;
+const CARD_COLOR = EVENT_CARD_COLORS[key];
+console.log('CARD_COLOR ', CARD_COLOR);
+
 const STEPS = 3;
 const AddEventModal: React.FC<FormProps> = ({
   initialValues,
@@ -91,8 +96,8 @@ const AddEventModal: React.FC<FormProps> = ({
   const defaultValues: Partial<EventFormValues> = {
     isPublic: true,
     date: new Date(),
-    backgroundColor: EVENT_CARD_COLORS.purple.value,
-    foregroundColor: EVENT_CARD_COLORS.purple.complement,
+    backgroundColor: CARD_COLOR.value,
+    foregroundColor: CARD_COLOR.complement,
     ...initialValues,
   };
 

@@ -30,6 +30,11 @@ export const EVENT_CARD_COLORS = {
     value: '#ffca0f',
     complement: '#0f161b',
   },
+} as {
+  [key: string]: {
+    value: string;
+    complement: string;
+  };
 };
 
 export const EVENT_CATEGORIES: { value: string; label: string }[] = [
