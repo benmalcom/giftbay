@@ -21,7 +21,6 @@ import {
 import React, { useState } from 'react';
 import { BsCardImage } from 'react-icons/bs';
 import { CiCirclePlus } from 'react-icons/ci';
-import { FaHandPointDown } from 'react-icons/fa';
 import { FiChevronRight, FiChevronDown } from 'react-icons/fi';
 import { GoKebabVertical } from 'react-icons/go';
 import {
@@ -299,20 +298,13 @@ const GiftItem: React.FC<GiftItemProps> = ({
             </Heading>
             {gift.externalUrl && (
               <Stack spacing={0}>
-                <Flex align="center" columnGap={1} mt={2} mb={1}>
-                  <Text fontSize="sm" noOfLines={1} fontWeight={600}>
-                    Link to item
-                  </Text>
-                  <Icon color="purple.500" as={FaHandPointDown} />
-                </Flex>
-
                 <ChakraLink
                   fontSize="sm"
                   href={gift.externalUrl}
                   isExternal
                   color="blue.500"
                 >
-                  <Text fontSize="sm">{gift.externalUrl}</Text>
+                  <Text fontSize="sm">Link to {gift.name}</Text>
                 </ChakraLink>
               </Stack>
             )}

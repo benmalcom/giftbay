@@ -46,6 +46,17 @@ const getTotalGiftsWorth = (gifts: GiftType[], currency: string) => {
   return nf.format(sum);
 };
 
+const getImageFromGifts = (gifts: GiftType[]) => {
+  let imageUrl;
+  for (let i = 0; i < gifts.length; i++) {
+    if (gifts[i].imageUrl) {
+      imageUrl = gifts[i].imageUrl;
+      break;
+    }
+  }
+  return imageUrl;
+};
+
 type EventCardProps = Pick<
   EventComponentProps,
   'loading' | 'onCreate' | 'onDelete' | 'onUpdate'
@@ -123,6 +134,7 @@ const EventCard: React.FC<EventCardProps> = ({
   const eventCategory = EVENT_CATEGORIES.find(
     item => item.value === event.category
   );
+
   return (
     <MotionFlexColumn
       bg={event.backgroundColor}
@@ -238,7 +250,7 @@ const EventCard: React.FC<EventCardProps> = ({
           >
             <AspectRatio w="110px" ratio={4 / 3}>
               <Image
-                src={getRandomImagePath()}
+                src={getImageFromGifts(gifts) ?? getRandomImagePath()}
                 alt="Gift item"
                 objectFit="cover"
               />
