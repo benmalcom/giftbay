@@ -46,19 +46,25 @@ export const theme = extendTheme({
   styles,
   components: {
     Textarea: {
-      baseStyle: {
-        fontSize: 'sm',
-        border: '1px solid',
-        borderColor: 'gray.200',
-        bg: 'gray.50',
-        _hover: {
+      baseStyle: {},
+      variants: {
+        defaultVariant: {
+          fontSize: 'sm',
           border: '1px solid',
-          borderColor: 'gray.300',
+          borderColor: 'gray.200',
+          bg: 'gray.50',
+          _hover: {
+            border: '1px solid',
+            borderColor: 'gray.300',
+          },
+          _focus: {
+            border: '1px solid',
+            borderColor: 'gray.300',
+          },
         },
-        _focus: {
-          border: '1px solid',
-          borderColor: 'gray.300',
-        },
+      },
+      defaultProps: {
+        variant: 'defaultVariant',
       },
     },
     Input: {

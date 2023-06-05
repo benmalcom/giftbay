@@ -248,12 +248,22 @@ const EventCard: React.FC<EventCardProps> = ({
             alignItems="flex-end"
             h="full"
           >
-            <AspectRatio w="110px" ratio={4 / 3}>
-              <Image
-                src={getImageFromGifts(gifts) ?? getRandomImagePath()}
-                alt="Gift item"
-                objectFit="cover"
-              />
+            <AspectRatio w="100px" ratio={4 / 3} pos="relative" py={2}>
+              <>
+                <Box
+                  pos="absolute"
+                  left={0}
+                  right={0}
+                  top={0}
+                  bottom={0}
+                  bg="rgba(0, 0, 0, 0.3)"
+                />
+                <Image
+                  src={getImageFromGifts(gifts) ?? getRandomImagePath()}
+                  alt="Gift item"
+                  objectFit="cover"
+                />
+              </>
             </AspectRatio>
           </Flex>
         </Flex>

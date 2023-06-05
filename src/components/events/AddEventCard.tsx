@@ -25,7 +25,7 @@ const AddEventCard: React.FC<AddEventCardProps> = ({
       loading={loading}
       triggerFunc={({ trigger }) => (
         <MotionFlexColumn
-          bg="gray.50"
+          bg="white"
           rounded="xl"
           shadow="md"
           h="300px"
