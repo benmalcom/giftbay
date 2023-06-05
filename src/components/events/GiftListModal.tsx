@@ -1,3 +1,4 @@
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import {
   Modal,
   ModalOverlay,
@@ -11,12 +12,11 @@ import {
   Image,
   Icon,
   Text,
-  Checkbox,
   Box,
-  Skeleton,
   Link as ChakraLink,
   Heading,
   Highlight,
+  Button,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { BsCardImage } from 'react-icons/bs';
@@ -28,7 +28,9 @@ import {
   Button as CustomButton,
   CustomModalCloseButton,
 } from 'components/common/Button';
+import { ModalManager as ConfirmationModalManager } from 'components/common/ConfirmationModal';
 import { ModalManager as GiftItemModalManager } from 'components/events/AddGiftItemModal';
+import { transformGiftToFormValues } from 'components/events/utils';
 import { CurrencyType } from 'types/common';
 import { GiftComponentProps, GiftType } from 'types/gift';
 
@@ -50,6 +52,7 @@ const GiftListModal: React.FC<GiftProps> = ({
   preferredCurrency,
   onCreateGift,
   onUpdateGift,
+  onDeleteGift,
 }) => {
   return (
     <Modal
@@ -67,23 +70,16 @@ const GiftListModal: React.FC<GiftProps> = ({
         <CustomModalCloseButton />
         <ModalBody pb={4} px={gifts.length > 0 ? 5 : 6}>
           <Stack spacing={0}>
-            {/*{loading
-              ? Array(4)
-                  .fill(0)
-                  .map((_, i) => <GiftItemSkeleton key={i} />)
-              : gifts.map(item => (
-                  <GiftItem
-                    key={item.id}
-                    gift={item}
-                    preferredCurrency={preferredCurrency}
-                  />
-                ))}*/}
             {gifts.length > 0 ? (
               gifts.map(item => (
                 <GiftItem
                   key={item.id}
                   gift={item}
                   preferredCurrency={preferredCurrency}
+                  onUpdateGift={onUpdateGift}
+                  onCreateGift={onCreateGift}
+                  onDeleteGift={onDeleteGift}
+                  loading={loading}
                 />
               ))
             ) : (
@@ -151,12 +147,25 @@ export const ModalManager: React.FC<ModalManagerProps> = ({
   );
 };
 
-type GiftItemProps = {
+type GiftItemProps = Pick<
+  GiftComponentProps,
+  'onCreateGift' | 'onDeleteGift' | 'onUpdateGift' | 'loading'
+> & {
   gift: GiftType;
   preferredCurrency: CurrencyType;
 };
-const GiftItem: React.FC<GiftItemProps> = ({ gift, preferredCurrency }) => {
-  const [showExtra, setShowExtra] = useState(false);
+const GiftItem: React.FC<GiftItemProps> = ({
+  gift,
+  preferredCurrency,
+  onDeleteGift,
+  onUpdateGift,
+  onCreateGift,
+  loading,
+}) => {
+  const [viewConfig, setViewConfig] = useState({
+    details: false,
+    ctas: false,
+  });
   const nf = new Intl.NumberFormat(navigator.language, {
     style: 'currency',
     currency: preferredCurrency.code,
@@ -168,27 +177,34 @@ const GiftItem: React.FC<GiftItemProps> = ({ gift, preferredCurrency }) => {
     <Stack
       borderBottom="1px solid"
       borderColor="gray.200"
-      pb={showExtra ? 3 : undefined}
+      pb={viewConfig.details ? 3 : undefined}
+      spacing={0}
     >
       <Flex
         align="center"
-        minH="60px"
+        h="60px"
         columnGap={2}
-        px={1}
+        bg={viewConfig.details || viewConfig.ctas ? 'gray.50' : 'transparent'}
         _hover={{
-          bg: showExtra ? undefined : 'gray.50',
+          bg: 'gray.50',
         }}
         mt={0}
       >
-        {!showExtra && <Checkbox colorScheme="purple" size="md" />}
+        {/*        <Checkbox colorScheme="purple" size="md" />*/}
 
         <Icon
-          as={showExtra ? FiChevronDown : FiChevronRight}
+          as={viewConfig.details ? FiChevronDown : FiChevronRight}
           boxSize="1.2em"
           cursor="pointer"
-          mx={3}
-          onClick={() => setShowExtra(visibility => !visibility)}
-          color={showExtra ? 'purple.300' : 'gray.500'}
+          mx={1}
+          onClick={() =>
+            setViewConfig(config => ({
+              ...config,
+              ctas: false,
+              details: !config.details,
+            }))
+          }
+          color={viewConfig.details ? 'purple.300' : 'gray.500'}
         />
         <Flex flex={1} flexDir="column">
           <Flex w="full" justify="space-between" columnGap={4}>
@@ -200,9 +216,57 @@ const GiftItem: React.FC<GiftItemProps> = ({ gift, preferredCurrency }) => {
             </Text>
           </Flex>
         </Flex>
-        <Icon as={GoKebabVertical} cursor="pointer" />
+        <Icon
+          as={GoKebabVertical}
+          cursor="pointer"
+          onClick={() =>
+            setViewConfig(config => ({
+              ...config,
+              ctas: !config.ctas,
+              details: false,
+            }))
+          }
+        />
       </Flex>
-      {showExtra && (
+      {viewConfig.ctas && (
+        <Flex columnGap={2} h="fit-content" justify="end" pb={2} bg="gray.50">
+          <GiftItemModalManager
+            loading={loading}
+            preferredCurrency={preferredCurrency!.symbol}
+            onCreateGift={onCreateGift}
+            onUpdateGift={onUpdateGift}
+            initialValues={transformGiftToFormValues(gift)}
+            triggerFunc={({ trigger }) => (
+              <Button
+                onClick={() => trigger()}
+                colorScheme="purple"
+                size="xs"
+                variant="outline"
+                leftIcon={<EditIcon />}
+              >
+                Edit
+              </Button>
+            )}
+          />
+
+          <ConfirmationModalManager
+            isProcessing={loading[`delete_${gift.id}`]}
+            onProceed={() => onDeleteGift(gift.id)}
+            message="Proceed to delete this gift item?"
+            triggerFunc={({ trigger }) => (
+              <Button
+                colorScheme="red"
+                size="xs"
+                leftIcon={<DeleteIcon />}
+                onClick={() => trigger()}
+              >
+                Delete
+              </Button>
+            )}
+          />
+        </Flex>
+      )}
+      {viewConfig.details && (
         <Flex columnGap={3}>
           <Box
             w="50px"

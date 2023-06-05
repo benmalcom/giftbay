@@ -96,6 +96,19 @@ const AddGiftItemModal: React.FC<FormProps> = ({
     defaultValues,
     resolver: yupResolver(getGiftFormSchema()),
   });
+
+  const prevInitialValues = usePrevious(initialValues);
+  useEffect(() => {
+    if (
+      (!prevInitialValues && initialValues) ||
+      (prevInitialValues &&
+        initialValues &&
+        !isEqual(prevInitialValues, initialValues))
+    ) {
+      reset(initialValues);
+    }
+  }, [initialValues, prevInitialValues, reset]);
+
   const formValues = watch() as GiftFormValues;
 
   const onSubmitForm = (values: Record<string, unknown>) => {

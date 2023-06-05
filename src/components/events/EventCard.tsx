@@ -7,9 +7,9 @@ import {
   AspectRatio,
   Badge,
 } from '@chakra-ui/react';
-import { sample } from 'lodash';
+import { isEqual, sample } from 'lodash';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 import { Button } from 'components/common/Button';
 import {
@@ -48,18 +48,18 @@ const getTotalGiftsWorth = (gifts: GiftType[], currency: string) => {
 
 type EventCardProps = Pick<
   EventComponentProps,
-  'loading' | 'onCreate' | 'onDelete'
+  'loading' | 'onCreate' | 'onDelete' | 'onUpdate'
 > & {
   event: EventWithGifts;
-  onUpdate(id: string, values: Record<string, unknown>, cb: () => void): void;
 };
 const EventCard: React.FC<EventCardProps> = ({
-  event,
+  event: evt,
   onUpdate,
   onCreate,
   onDelete,
   loading,
 }) => {
+  const [event, setEvent] = useState<EventWithGifts>(evt);
   const [inFlight, setInFlight] = useState({
     update: false,
     create: false,
@@ -110,6 +110,12 @@ const EventCard: React.FC<EventCardProps> = ({
         setInFlight(state => ({ ...state, [`delete_${id}`]: false }))
       );
   };
+
+  useEffect(() => {
+    if (!isEqual(gifts, event.gifts)) {
+      setEvent(event => ({ ...event, gifts }));
+    }
+  }, [event.gifts, gifts]);
 
   const preferredCurrency = CURRENCIES.find(
     item => item.value === event.currency
