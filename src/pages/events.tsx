@@ -14,14 +14,13 @@ import { FlexColumn } from 'components/common/MotionContainers';
 import { EventsGridLayout } from 'components/events';
 import { parseEventFormValues } from 'components/events/utils';
 import { PrivateLayout } from 'components/layouts';
-import mockEvents from 'data/events.json';
 import {
   createEvent,
   deleteEvent,
   getEvents,
   updateEvent,
 } from 'services/event';
-import { EventFormValues, EventType } from 'types/event';
+import { EventFormValues, EventWithGifts } from 'types/event';
 import { withAuthServerSideProps } from 'utils/serverSideProps';
 
 const Events = () => {
@@ -29,7 +28,7 @@ const Events = () => {
     get: true,
     create: false,
   });
-  const [events, setEvents] = useState<EventType[]>(mockEvents);
+  const [events, setEvents] = useState<EventWithGifts[]>([]);
 
   const fetchEvents = useCallback(
     (signal: AbortSignal) => {

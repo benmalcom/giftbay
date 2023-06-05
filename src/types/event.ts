@@ -1,5 +1,6 @@
+import { GiftType } from 'types/gift';
+
 export type EventType = {
-  lastGiftImageUrl: string | undefined;
   id: string;
   user: string;
   name: string;
@@ -14,6 +15,8 @@ export type EventType = {
   backgroundColor: string;
   foregroundColor: string;
 };
+
+export type EventWithGifts = EventType & { gifts: GiftType[] };
 
 // Values from event form
 export type EventFormValues = Pick<

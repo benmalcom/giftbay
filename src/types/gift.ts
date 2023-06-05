@@ -12,7 +12,22 @@ export type GiftType = {
 };
 
 // Values from wishlist form
-export type GiftFormValues = Omit<GiftType, 'eventId' | 'id'>;
+export type GiftFormValues = Omit<GiftType, 'eventId' | 'id'> & { id?: string };
 
 // Values to wishlist form
-export type GiftFormPayload = Omit<GiftType, 'eventId' | 'id'>;
+export type GiftFormPayload = Omit<GiftType, 'eventId' | 'id'> & {
+  id?: string;
+  eventId: string;
+};
+
+export type GiftComponentProps = {
+  onCreateGift(values: Record<string, unknown>, cb?: () => void): void;
+  onUpdateGift(
+    id: string,
+    values: Record<string, unknown>,
+    cb?: () => void
+  ): void;
+  onDeleteGift(id: string, cb?: () => void): void;
+  gifts: GiftType[];
+  loading: { create: boolean; update: boolean } & Record<string, boolean>;
+};

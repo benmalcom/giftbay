@@ -1,6 +1,6 @@
 import { Grid } from '@chakra-ui/react';
 import React from 'react';
-import { EventComponentProps } from 'types/event';
+import { EventComponentProps, EventWithGifts } from 'types/event';
 import AddEventCard from './AddEventCard';
 import EventCard from './EventCard';
 import EventCardSkeleton from './EventCardSkeleton';
@@ -40,7 +40,7 @@ const EventsGridLayout: React.FC<EventsGridLayoutProps> = ({
         : events?.map(event => (
             <EventCard
               key={event.id}
-              event={event}
+              event={event as EventWithGifts}
               loading={loading}
               onCreate={onCreate}
               onUpdate={onUpdate}

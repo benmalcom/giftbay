@@ -16,9 +16,10 @@ import {
   FlexColumn,
   MotionFlexColumn,
 } from 'components/common/MotionContainers';
-import gifts from 'data/gifts.json';
-import { EventComponentProps, EventType } from 'types/event';
-import { GiftFormPayload } from 'types/gift';
+import { parseGiftFormValues } from 'components/events/utils';
+import { createGift, deleteGift, updateGift } from 'services/gift';
+import { EventComponentProps, EventWithGifts } from 'types/event';
+import { GiftFormValues, GiftType } from 'types/gift';
 import { CURRENCIES, EVENT_CATEGORIES } from 'utils/constants';
 import EventCardDropdownMenu from './EventCardDropdownMenu';
 import { ModalManager as GiftModalManager } from './GiftListModal';
@@ -30,11 +31,26 @@ const getRandomImagePath = () => {
   return `/images/${filename}`;
 };
 
+const getTotalGiftsWorth = (gifts: GiftType[], currency: string) => {
+  const nf = new Intl.NumberFormat(navigator.language, {
+    style: 'currency',
+    currency,
+    currencyDisplay: 'narrowSymbol',
+    maximumFractionDigits: 0,
+  });
+  const sum = gifts.reduce((acc, gift) => {
+    acc += parseInt(String(gift.amount));
+    return acc;
+  }, 0);
+
+  return nf.format(sum);
+};
+
 type EventCardProps = Pick<
   EventComponentProps,
   'loading' | 'onCreate' | 'onDelete'
 > & {
-  event: EventType;
+  event: EventWithGifts;
   onUpdate(id: string, values: Record<string, unknown>, cb: () => void): void;
 };
 const EventCard: React.FC<EventCardProps> = ({
@@ -44,10 +60,56 @@ const EventCard: React.FC<EventCardProps> = ({
   onDelete,
   loading,
 }) => {
+  const [inFlight, setInFlight] = useState({
+    update: false,
+    create: false,
+  });
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [gifts, setGifts] = useState<GiftType[]>(event.gifts);
 
-  const handleGiftSave = (values: Partial<GiftFormPayload>) =>
-    console.log('Gift ', values);
+  const onCreateGift = (values: Record<string, unknown>, cb?: () => void) => {
+    setInFlight(state => ({ ...state, create: true }));
+    const payload = parseGiftFormValues(values as GiftFormValues);
+    createGift({ ...payload, eventId: event.id })
+      .then(response => {
+        setGifts(list => [response.data, ...list]);
+        cb?.();
+      })
+      .catch(err => console.log('err ', err))
+      .finally(() => setInFlight(state => ({ ...state, create: false })));
+  };
+
+  const onUpdateGift = (
+    id: string,
+    values: Record<string, unknown>,
+    cb?: () => void
+  ) => {
+    setInFlight(state => ({ ...state, update: true }));
+    const payload = parseGiftFormValues(values as GiftFormValues);
+    updateGift(id, payload)
+      .then(response => {
+        const event = response.data;
+        setGifts(list =>
+          list.map(item => (item.id === event.id ? event : item))
+        );
+        cb?.();
+      })
+      .catch(err => console.log('err ', err))
+      .finally(() => setInFlight(state => ({ ...state, update: false })));
+  };
+
+  const onDeleteGift = (id: string, cb?: () => void) => {
+    setInFlight(state => ({ ...state, [`delete_${id}`]: true }));
+    deleteGift(id)
+      .then(() => {
+        setGifts(list => list.filter(item => item.id !== id));
+        cb?.();
+      })
+      .catch(err => console.log('err ', err))
+      .finally(() =>
+        setInFlight(state => ({ ...state, [`delete_${id}`]: false }))
+      );
+  };
 
   const preferredCurrency = CURRENCIES.find(
     item => item.value === event.currency
@@ -122,7 +184,10 @@ const EventCard: React.FC<EventCardProps> = ({
               />
             </Flex>
             <GiftModalManager
-              onSaveGift={handleGiftSave}
+              onCreateGift={onCreateGift}
+              onUpdateGift={onUpdateGift}
+              onDeleteGift={onDeleteGift}
+              loading={inFlight}
               preferredCurrency={preferredCurrency!}
               triggerFunc={({ trigger }) => (
                 <Button
@@ -135,7 +200,7 @@ const EventCard: React.FC<EventCardProps> = ({
                   fontWeight={400}
                   size="sm"
                 >
-                  {preferredCurrency?.symbol}250,000
+                  {getTotalGiftsWorth(event.gifts, preferredCurrency!.code)}
                 </Button>
               )}
               gifts={gifts}

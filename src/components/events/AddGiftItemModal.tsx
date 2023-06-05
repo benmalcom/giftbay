@@ -1,4 +1,4 @@
-import { CloseIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronRightIcon, CloseIcon } from '@chakra-ui/icons';
 import {
   Modal,
   ModalOverlay,
@@ -25,6 +25,7 @@ import {
   Box,
   Checkbox,
   usePrevious,
+  Textarea,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { isEqual } from 'lodash';
@@ -37,31 +38,34 @@ import {
   CustomModalCloseButton,
 } from 'components/common/Button';
 import {
-  getWishlistFormSchema,
-  parseWishlistFormValues,
+  getGiftFormSchema,
+  parseGiftFormValues,
 } from 'components/events/utils';
 import useFileUpload from 'hooks/useFileUpload';
-import { WishlistFormPayload, WishlistFormValues } from 'types/gift';
+import { GiftComponentProps, GiftFormValues } from 'types/gift';
 import { GIFT_FORMAT } from 'utils/constants';
 import { removePreviewFromUploadedFiles } from 'utils/functions';
 
-type FormProps = {
-  onSave(values: WishlistFormPayload): void;
-  initialValues?: Partial<WishlistFormValues>;
+type FormProps = Pick<
+  GiftComponentProps,
+  'onCreateGift' | 'onUpdateGift' | 'loading'
+> & {
+  initialValues?: Partial<GiftFormValues>;
   isOpen: boolean;
   onClose(): void;
-  loading?: boolean;
   preferredCurrency: string;
 };
 
 const AddGiftItemModal: React.FC<FormProps> = ({
   initialValues,
-  onSave,
   isOpen,
   onClose,
   loading,
   preferredCurrency,
+  onUpdateGift,
+  onCreateGift,
 }) => {
+  const [showDesc, setShowDesc] = useState(false);
   const [isImageLoaded, setImageLoaded] = useState(false);
 
   const {
@@ -90,14 +94,17 @@ const AddGiftItemModal: React.FC<FormProps> = ({
   } = useForm({
     mode: 'onSubmit',
     defaultValues,
-    resolver: yupResolver(getWishlistFormSchema()),
+    resolver: yupResolver(getGiftFormSchema()),
   });
-  const formValues = watch();
+  const formValues = watch() as GiftFormValues;
 
   const onSubmitForm = (values: Record<string, unknown>) => {
-    const payload = parseWishlistFormValues(values as WishlistFormValues);
-    onSave(payload);
-    handleClose();
+    const payload = parseGiftFormValues(values as unknown as GiftFormValues);
+    if (values.id) {
+      onUpdateGift(values.id as string, payload, handleClose);
+    } else {
+      onCreateGift(payload, handleClose);
+    }
   };
 
   const handleClose = () => {
@@ -118,7 +125,11 @@ const AddGiftItemModal: React.FC<FormProps> = ({
   }, [uploadError]);
 
   const handleImageUpload = async (files: File[]) =>
-    uploadFile(removePreviewFromUploadedFiles(files)[0]);
+    uploadFile(removePreviewFromUploadedFiles(files)[0], {
+      resourceType: 'Gift',
+      resourceId: formValues.id,
+      oldUrl: formValues.imageUrl,
+    });
 
   return (
     <Modal
@@ -132,27 +143,47 @@ const AddGiftItemModal: React.FC<FormProps> = ({
       <ModalContent w={{ base: '98%', md: 'full' }} pos="relative">
         <form onSubmit={handleSubmit(onSubmitForm)}>
           <ModalHeader fontSize="xl" color="gray.500" px={5}>
-            Wishlist Item
+            Gift Item
           </ModalHeader>
           <CustomModalCloseButton />
 
           <ModalBody pb={5} px={5}>
             <Stack spacing={5}>
-              <FormControl isInvalid={Boolean(errors.name)}>
-                <FormLabel htmlFor="name" fontWeight={400}>
-                  Name of item
-                </FormLabel>
-                <Input
-                  id="name"
-                  type="text"
-                  {...register('name')}
-                  placeholder="E.g Gold Wristwatch"
-                  errorBorderColor="red.300"
-                />
-                <FormErrorMessage>
-                  {errors?.name?.message && errors.name.message.toString()}
-                </FormErrorMessage>
-              </FormControl>
+              <Flex w="full" columnGap={3} align="center">
+                <FormControl isInvalid={Boolean(errors.name)}>
+                  <FormLabel htmlFor="name" fontWeight={400}>
+                    Name of item
+                  </FormLabel>
+                  <Input
+                    id="name"
+                    type="text"
+                    {...register('name')}
+                    placeholder="E.g Gold Wristwatch"
+                    errorBorderColor="red.300"
+                  />
+                  <FormErrorMessage>
+                    {errors?.name?.message && errors.name.message.toString()}
+                  </FormErrorMessage>
+                </FormControl>
+
+                <FormControl isInvalid={Boolean(errors.quantity)} w="40%">
+                  <FormLabel htmlFor="name" fontWeight={400}>
+                    Quantity
+                  </FormLabel>
+                  <Input
+                    id="quantity"
+                    type="text"
+                    {...register('quantity')}
+                    placeholder="E.g 1"
+                    errorBorderColor="red.300"
+                  />
+                  <FormErrorMessage>
+                    {errors?.quantity?.message &&
+                      errors.quantity.message.toString()}
+                  </FormErrorMessage>
+                </FormControl>
+              </Flex>
+
               <FormControl isInvalid={Boolean(errors.giftType)} w="full">
                 <FormLabel htmlFor="giftFormat" fontWeight={400}>
                   Type
@@ -164,14 +195,12 @@ const AddGiftItemModal: React.FC<FormProps> = ({
                 >
                   {GIFT_FORMAT.map((item, index) => (
                     <Button
-                      colorScheme="gray"
+                      colorScheme={
+                        formValues.giftType === item.value ? 'purple' : 'gray'
+                      }
                       onClick={() => setValue('giftType', item.value)}
                       key={index}
-                      variant={
-                        formValues.giftType === item.value
-                          ? undefined
-                          : 'outline'
-                      }
+                      variant="solid"
                     >
                       {item.label}
                     </Button>
@@ -301,6 +330,36 @@ const AddGiftItemModal: React.FC<FormProps> = ({
                     errors.externalUrl.message.toString()}
                 </FormErrorMessage>
               </FormControl>
+              <Button
+                leftIcon={showDesc ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                iconSpacing={0.2}
+                size="sm"
+                colorScheme="purple"
+                variant="link"
+                w="fit-content"
+                onClick={() => setShowDesc(status => !status)}
+              >
+                {showDesc ? 'Hide description' : 'Add a little description'}
+              </Button>
+              {showDesc && (
+                <>
+                  <FormControl isInvalid={Boolean(errors.description)}>
+                    <FormLabel htmlFor="description">
+                      A little information about this gift?
+                    </FormLabel>
+                    <Textarea
+                      id="description"
+                      {...register('description')}
+                      placeholder="Enter a little description"
+                      errorBorderColor="red.300"
+                    />
+                    <FormErrorMessage>
+                      {errors?.description?.message &&
+                        errors.description.message.toString()}
+                    </FormErrorMessage>
+                  </FormControl>
+                </>
+              )}
             </Stack>
           </ModalBody>
           <ModalFooter>
@@ -311,7 +370,7 @@ const AddGiftItemModal: React.FC<FormProps> = ({
               type="submit"
               colorScheme="primary"
               w="50%"
-              isLoading={loading}
+              isLoading={loading.create || loading.update}
             >
               Submit
             </CustomButton>
@@ -322,10 +381,12 @@ const AddGiftItemModal: React.FC<FormProps> = ({
   );
 };
 
-type ModalManagerProps = {
+type ModalManagerProps = Pick<
+  GiftComponentProps,
+  'onCreateGift' | 'onUpdateGift' | 'loading'
+> & {
   preferredCurrency: string;
-  onSave(values: WishlistFormPayload): void;
-  initialValues?: Partial<WishlistFormValues>;
+  initialValues?: Partial<GiftFormValues>;
   triggerFunc({ trigger }: { trigger(): void }): React.ReactNode;
 };
 

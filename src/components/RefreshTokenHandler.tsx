@@ -9,7 +9,10 @@ const RefreshTokenHandler = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (session?.error === 'RefreshAccessTokenError') {
+    if (
+      session?.error === 'RefreshAccessTokenError' &&
+      router.asPath !== '/login'
+    ) {
       redirectToLogin();
     }
   }, [redirectToLogin, router.asPath, session]);

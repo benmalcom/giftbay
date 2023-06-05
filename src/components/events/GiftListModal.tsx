@@ -16,6 +16,7 @@ import {
   Skeleton,
   Link as ChakraLink,
   Heading,
+  Highlight,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { BsCardImage } from 'react-icons/bs';
@@ -29,15 +30,16 @@ import {
 } from 'components/common/Button';
 import { ModalManager as GiftItemModalManager } from 'components/events/AddGiftItemModal';
 import { CurrencyType } from 'types/common';
-import { GiftFormPayload, GiftType } from 'types/gift';
+import { GiftComponentProps, GiftType } from 'types/gift';
 
-type GiftProps = {
+type GiftProps = Pick<
+  GiftComponentProps,
+  'onCreateGift' | 'onDeleteGift' | 'onUpdateGift' | 'loading'
+> & {
   gifts: GiftType[];
   isOpen: boolean;
   onClose(): void;
-  loading?: boolean;
   preferredCurrency: CurrencyType;
-  onSaveGift(values: GiftFormPayload): void;
 };
 
 const GiftListModal: React.FC<GiftProps> = ({
@@ -46,7 +48,8 @@ const GiftListModal: React.FC<GiftProps> = ({
   onClose,
   loading,
   preferredCurrency,
-  onSaveGift,
+  onCreateGift,
+  onUpdateGift,
 }) => {
   return (
     <Modal
@@ -58,13 +61,13 @@ const GiftListModal: React.FC<GiftProps> = ({
     >
       <ModalOverlay />
       <ModalContent w={{ base: '99%', md: 'full' }} pos="relative">
-        <ModalHeader fontSize="xl" color="gray.500">
-          My Gift
+        <ModalHeader fontSize="xl" color="gray.700">
+          My Gifts
         </ModalHeader>
         <CustomModalCloseButton />
-        <ModalBody pb={5} px={4}>
-          <Stack spacing={loading ? 2 : 0}>
-            {loading
+        <ModalBody pb={4} px={gifts.length > 0 ? 5 : 6}>
+          <Stack spacing={0}>
+            {/*{loading
               ? Array(4)
                   .fill(0)
                   .map((_, i) => <GiftItemSkeleton key={i} />)
@@ -74,13 +77,34 @@ const GiftListModal: React.FC<GiftProps> = ({
                     gift={item}
                     preferredCurrency={preferredCurrency}
                   />
-                ))}
+                ))}*/}
+            {gifts.length > 0 ? (
+              gifts.map(item => (
+                <GiftItem
+                  key={item.id}
+                  gift={item}
+                  preferredCurrency={preferredCurrency}
+                />
+              ))
+            ) : (
+              <Text>
+                <Highlight
+                  query="+"
+                  styles={{ px: '1', fontSize: 'lg', fontWeight: 'bold' }}
+                >
+                  You don't have any wishlist yet. Use the + button below to add
+                  one.
+                </Highlight>
+              </Text>
+            )}
           </Stack>
         </ModalBody>
         <ModalFooter>
           <GiftItemModalManager
+            loading={loading}
             preferredCurrency={preferredCurrency!.symbol}
-            onSave={onSaveGift}
+            onCreateGift={onCreateGift}
+            onUpdateGift={onUpdateGift}
             triggerFunc={({ trigger }) => (
               <CustomButton
                 onClick={() => trigger()}
@@ -103,11 +127,13 @@ const GiftListModal: React.FC<GiftProps> = ({
   );
 };
 
-type ModalManagerProps = {
+type ModalManagerProps = Pick<
+  GiftComponentProps,
+  'onCreateGift' | 'onDeleteGift' | 'onUpdateGift' | 'loading'
+> & {
   triggerFunc({ trigger }: { trigger(): void }): React.ReactNode;
   gifts: GiftType[];
   preferredCurrency: CurrencyType;
-  onSaveGift(values: GiftFormPayload): void;
 };
 
 export const ModalManager: React.FC<ModalManagerProps> = ({
@@ -234,7 +260,7 @@ const GiftItem: React.FC<GiftItemProps> = ({ gift, preferredCurrency }) => {
   );
 };
 
-const GiftItemSkeleton = () => (
+/*const GiftItemSkeleton = () => (
   <Flex
     align="center"
     h="60px"
@@ -253,4 +279,4 @@ const GiftItemSkeleton = () => (
     </Flex>
     <Skeleton h="15px" w="3px" mr={2} />
   </Flex>
-);
+);*/

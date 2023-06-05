@@ -141,7 +141,11 @@ const AddEventModal: React.FC<FormProps> = ({
   const formValues = watch();
 
   const handleCoverPhotoUpload = async (files: File[]) =>
-    uploadFile(removePreviewFromUploadedFiles(files)[0]);
+    uploadFile(removePreviewFromUploadedFiles(files)[0], {
+      resourceType: 'Event',
+      resourceId: formValues.id,
+      oldUrl: formValues.coverPhotoUrl,
+    });
 
   const prevCoverPhotoUrl = usePrevious(coverPhotoUrl);
   useEffect(() => {

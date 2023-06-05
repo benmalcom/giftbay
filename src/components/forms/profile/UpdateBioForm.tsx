@@ -102,7 +102,11 @@ const UpdateBioForm: React.FC<FormProps> = ({
 
   const handleFileUpload = (items: UploadedFile[]) => {
     const files = removePreviewFromUploadedFiles(items);
-    uploadFile(files[0]);
+    uploadFile(files[0], {
+      resourceType: 'User',
+      resourceId: formValues.id,
+      oldUrl: formValues.avatarUrl,
+    });
   };
 
   return (

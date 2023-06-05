@@ -2,11 +2,7 @@ import { omit } from 'lodash';
 import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { EventFormPayload, EventFormValues, EventType } from 'types/event';
-import {
-  WishlistFormPayload,
-  WishlistFormValues,
-  WishlistType,
-} from 'types/gift';
+import { GiftFormPayload, GiftFormValues, GiftType } from 'types/gift';
 import { CURRENCIES, EVENT_CATEGORIES } from 'utils/constants';
 
 const getEventSchemaByStep = (step: number) => {
@@ -42,7 +38,7 @@ export const useEventFormSchema = ({ step }: { step: number }) => {
   return schema;
 };
 
-export const getWishlistFormSchema = () => {
+export const getGiftFormSchema = () => {
   return yup.object().shape({
     amount: yup.number().typeError('Valid amount required').required(),
     quantity: yup.number().required(),
@@ -79,8 +75,8 @@ export const transformEventToFormValues = (event: EventType) => {
   return payload;
 };
 
-export const parseWishlistFormValues = (values: WishlistFormValues) =>
-  values as WishlistFormPayload;
+export const parseGiftFormValues = (values: GiftFormValues) =>
+  values as GiftFormPayload;
 
-export const transformWishlistToFormValues = (wishlist: WishlistType) =>
-  wishlist as Partial<WishlistFormValues>;
+export const transformGiftToFormValues = (gift: GiftType) =>
+  gift as Partial<GiftFormValues>;
